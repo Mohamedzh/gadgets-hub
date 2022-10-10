@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Brand {
+  id        String   @id @default(uuid())
+  name      String
+  phonesNum Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  phones    Phone[]
+}
+
+model Phone {
+  id         String       @id @default(uuid())
+  name       String
+  imgUrl     String
+  brandId    String
+  brand      Brand        @relation(fields: [brandId], references: [id])
+  PhoneSpecs PhoneSpecs[]
+}
+
+model Network {
+  id     String @id @default(uuid())
+  band2G String
+  band3G String
+  band4G String
+  band5G String
+}
+
+model Spec {
+  id         String       @id @default(uuid())
+  name       String
+  categoryId String
+  category   Category     @relation(fields: [categoryId], references: [id])
+  PhoneSpecs PhoneSpecs[]
+}
+
+model Category {
+  id    String @id @default(uuid())
+  name  String
+  specs Spec[]
+}
+
+model PhoneSpecs {
+  id      String @id @default(uuid())
+  phoneId String
+  specId  String
+  phone   Phone  @relation(fields: [phoneId], references: [id])
+  spec    Spec   @relation(fields: [specId], references: [id])
+}
