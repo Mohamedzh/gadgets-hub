@@ -2,11 +2,12 @@ import { GetStaticProps } from 'next'
 import React from 'react'
 import axios from 'axios'
 import * as cheerio from 'cheerio'
+import { prisma } from '../../lib/db'
 
 export type Brand = {
     name: string
-    devices: string
-    url: string
+    phonesNum: number
+    gsmArenaUrl: string
 }
 
 function Phones({ name, json }: { name: string, json: Brand[] }) {
@@ -24,8 +25,8 @@ function Phones({ name, json }: { name: string, json: Brand[] }) {
                     >
                         {brand.name}
                     </h1>
-                    <p>no. of phones {brand.devices}</p>
-                    <p>{brand.url}</p>
+                    <p>no. of phones {brand.phonesNum}</p>
+                    <p>{brand.gsmArenaUrl}</p>
                 </div>
             )}
             <h1>Trial</h1>
@@ -37,7 +38,6 @@ export default Phones
 
 export const getStaticProps: GetStaticProps = async () => {
     const res = await axios.get('https://www.gsmarena.com/makers.php3')
-    console.log(res.data);
     let html = res.data
     const $ = cheerio.load(html)
     const json: Brand[] = []
@@ -46,11 +46,13 @@ export const getStaticProps: GetStaticProps = async () => {
         const aBlock = $(el).find('a')
         const brand = {
             name: aBlock.text().replace(' devices', '').replace(/[0-9]/g, ""),
-            devices: $(el).find('span').text().replace(' devices', ''),
-            url: aBlock.attr('href')!.replace('.php', '')
+            phonesNum: Number($(el).find('span').text().replace(' devices', '')),
+            gsmArenaUrl: aBlock.attr('href')!.replace('.php', '')
         }
         json.push(brand)
     })
+
+    const dbBrands = await prisma.brand.createMany({data:json})
 
     return { props: { name: 'trial', json } }
 }

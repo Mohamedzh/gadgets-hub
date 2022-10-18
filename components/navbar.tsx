@@ -2,14 +2,24 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { classNames } from '../lib/functions'
+import Link from 'next/link'
+import PopMenu from '../components/popover'
+import NewMenu from '../components/menu'
 
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ')
-}
+const navMenu = [
+    { name: 'News', current: false },
+    { name: 'Reviews', current: false },
+    { name: 'Phones', current: false },
+    { name: 'Brands', current: false },
+    { name: 'Comparison', current: false }
+]
 
 export default function Navbar() {
     return (
-        <div>
+        <div
+            className='sticky top-0 z-50'
+        >
             <Disclosure as="nav" className="bg-gray-800">
                 {({ open }) => (
                     <>
@@ -17,42 +27,39 @@ export default function Navbar() {
                             <div className="relative flex h-16 items-center justify-between">
                                 <div className="flex items-center px-2 lg:px-0">
                                     <div className="flex-shrink-0">
-                                        <img
-                                            className="block h-8 w-auto lg:hidden"
-                                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                                            alt="Your Company"
-                                        />
-                                        <img
-                                            className="hidden h-8 w-auto lg:block"
-                                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                                            alt="Your Company"
-                                        />
+                                        <Link href='/'>
+                                            <a>
+                                                <img
+                                                    className="block h-8 w-auto lg:hidden"
+                                                    src="/mobileLogo.png"
+                                                    alt="Your Company"
+                                                />
+                                            </a>
+                                        </Link>
+                                        <Link href='/'>
+                                            <a>
+                                                <img
+                                                    className="hidden h-8 w-auto lg:block"
+                                                    src="mobileLogo.png"
+                                                    alt="Your Company"
+                                                />
+                                            </a>
+                                        </Link>
                                     </div>
                                     <div className="hidden lg:ml-6 lg:block">
                                         <div className="flex space-x-4">
                                             {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-                                            <a href="#" className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">
-                                                Dashboard
-                                            </a>
-                                            <a
-                                                href="#"
-                                                className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                                            >
-                                                Team
-                                            </a>
-                                            <a
-                                                href="#"
-                                                className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                                            >
-                                                Projects
-                                            </a>
-                                            <a
-                                                href="#"
-                                                className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                                            >
-                                                Calendar
-                                            </a>
+                                            {navMenu.map((nav, i) =>
+                                                <Link key={i} href='#'>
+                                                    <a className={`${nav.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md px-3 py-2 text-sm font-medium text-white`}>
+                                                        {nav.name !== 'Brands' && nav.name}
+                                                        {nav.name === 'Brands' && <NewMenu nav={nav} />}
+                                                        {/* <PopMenu /> */}
+                                                    </a>
+                                                </Link>
+                                            )}
                                         </div>
+
                                     </div>
                                 </div>
                                 <div className="flex flex-1 justify-center px-2 lg:ml-6 lg:justify-end">
@@ -245,6 +252,6 @@ export default function Navbar() {
                     </>
                 )}
             </Disclosure>
-        </div>
+        </div >
     )
 }

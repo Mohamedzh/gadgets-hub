@@ -11,20 +11,21 @@ datasource db {
 }
 
 model Brand {
-  id        String   @id @default(uuid())
-  name      String
-  phonesNum Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  phones    Phone[]
+  id          String   @id @default(uuid())
+  name        String   @unique
+  phonesNum   Int
+  gsmArenaUrl String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  phones      Phone[]
 }
 
 model Phone {
-  id         String       @id @default(uuid())
-  name       String
+  id         Int          @id @default(autoincrement())
+  name       String       @unique
   imgUrl     String
-  brandId    String
-  brand      Brand        @relation(fields: [brandId], references: [id])
+  brandName  String
+  brand      Brand        @relation(fields: [brandName], references: [name])
   PhoneSpecs PhoneSpecs[]
 }
 
@@ -46,14 +47,17 @@ model Spec {
 
 model Category {
   id    String @id @default(uuid())
-  name  String
+  name  String @unique
   specs Spec[]
 }
 
 model PhoneSpecs {
-  id      String @id @default(uuid())
-  phoneId String
+  id      Int    @id @default(autoincrement())
+  phoneId Int
   specId  String
+  value   String
   phone   Phone  @relation(fields: [phoneId], references: [id])
   spec    Spec   @relation(fields: [specId], references: [id])
+
+  @@unique([phoneId, specId])
 }
