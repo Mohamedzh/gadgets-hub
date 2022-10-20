@@ -3,6 +3,8 @@ import { GetStaticProps } from 'next'
 import React from 'react'
 import * as cheerio from 'cheerio'
 import { prisma } from '../../lib/db'
+import { Page, PageData } from '../../types'
+import { getPages } from '../../lib/cheerio'
 
 type Phone = {
     name: string
@@ -12,13 +14,7 @@ type Phone = {
 }
 
 function PhoneDetails({ allPhones }: { allPhones: any[] }) {
-    console.log(allPhones);
-
-    // const recordBrandPhones = async () => {
-
-    // }
-
-
+    // console.log(allPhones);
 
     return (
         <div>
@@ -46,66 +42,148 @@ function PhoneDetails({ allPhones }: { allPhones: any[] }) {
 
 export default PhoneDetails
 
-export const getStaticProps: GetStaticProps = async () => {
-    // const res = await axios.get('https://www.gsmarena.com/apple-phones-48.php')
-    // let html = res.data
-
-    // const $ = cheerio.load(html)
-    // const json: Phone[] = []
-    // const phones = $('.makers').find('li')
-    // phones.each((i, el) => {
-    //     const imgBlock = $(el).find('img')
-    //     const phone = {
-    //         name: $(el).find('span').text(),
-    //         imgUrl: imgBlock.attr('src')!,
-    //         url: $(el).find('a').attr('href')!.replace('.php', ''),
-    //         description: imgBlock.attr('title')!
-    //     }
-    //     json.push(phone)
-    // })
+export const getStaticProps: GetStaticProps = async () => { //working but needs less requests
 
     let brands = await prisma.brand.findMany()
     let urls = brands.map(item => { return item.gsmArenaUrl })
-    console.log(urls);
 
     let allPhones: any = []
 
-    for (let i = 0; i < urls.length; i++) {
+    for (let i = 60; i < 80; i++) {
         let timeoutFunc = setTimeout(async () => {
             const res = await axios.get(`https://www.gsmarena.com/${urls[i]}.php`)
             let html = res.data
 
             const $ = cheerio.load(html)
+            // ////
+            // const pagesData: { number: number }[] = []
+            // const pages = $('.review-nav .nav-pages').find('a, strong')
+            // pages.each((i, el) => {
+            //     const page: Page = {
+            //         number: parseInt($(el).text()),
+            //     }
+            //     if (el.name !== 'strong') {
+            //         page.url = $(el).attr('href')?.replace('.php', '')
+            //     } else {
+
+            //         page.url = `${urls[i]}`
+
+            //         page.active = true
+            //     }
+            //     pagesData.push(page)
+            // })
+
+            // let nextPage = $('a.pages-next').attr('href')
+            // if (nextPage) {
+            //     if (nextPage.indexOf('#') >= 0) {
+            //         nextPage = ''
+            //     } else {
+            //         nextPage = nextPage.replace('.php', '')
+            //     }
+            // }
+
+            // let prevPage = $('a.pages-prev').attr('href')
+            // if (prevPage) {
+            //     if (prevPage.indexOf('#') >= 0) {
+            //         prevPage = ''
+            //     } else {
+            //         prevPage = prevPage.replace('.php', '')
+            //     }
+            // }
+
+            // const data: PageData = {
+            //     prev: '',
+            //     next: '',
+            //     pages: []
+            // }
+
+            // if (prevPage) {
+            //     data.prev = prevPage
+            // }
+            // if (nextPage) {
+            //     data.next = nextPage
+            // }
+
+            // if (pagesData.length) {
+            //     data.pages = pagesData
+            // }
+            const data: PageData = await getPages(urls[i])
+            // return data
+            // console.log(data.pages)
+            ////
             const json: Phone[] = []
-            const phones = $('.makers').find('li')
-            phones.each((i, el) => {
-                const imgBlock = $(el).find('img')
-                const phone = {
-                    name: $(el).find('span').text(),
-                    imgUrl: imgBlock.attr('src')!,
-                    url: $(el).find('a').attr('href')!.replace('.php', ''),
-                    description: imgBlock.attr('title')!
+
+            if (data.pages.length > 0) {
+                for (let j = 0; j < data.pages.length; j++) {
+                    setTimeout(async () => {
+                        const res = await axios.get(`https://www.gsmarena.com/${data.pages[j].url}.php`)
+                        let html = res.data
+
+                        const $ = cheerio.load(html)
+
+
+                        const phones = $('.makers').find('li')
+                        phones.each((l, el) => {
+                            const imgBlock = $(el).find('img')
+                            const phone = {
+                                name: $(el).find('span').text(),
+                                imgUrl: imgBlock.attr('src')!,
+                                url: $(el).find('a').attr('href')!.replace('.php', ''),
+                                description: imgBlock.attr('title')!
+                            }
+                            json.push(phone)
+                        })
+
+                        if (j === data.pages.length - 1) {
+                            let brandArray = urls[i].split("-")
+                            brandArray.splice(-2)
+                            const capitalize = (s: string) => s && s[0].toUpperCase() + s.slice(1)
+                            // let brandString = capitalize(brandArray.join())
+                            let brandString = brandArray.join()
+
+
+                            let detailedPhone = json.map(phone => { return { ...phone, brandName: brandString } })
+                            // allPhones.push(detailedPhone)
+                            // for (let i = 0; i < detailedPhone.length; i++) {
+                            console.log(json.length);
+
+                            await prisma.phone.createMany({ data: detailedPhone, skipDuplicates: true })
+                        }
+
+                    }, 1000 * (i + 1))
                 }
-                json.push(phone)
-            })
-            // let brandString = urls[i].split("-").splice(-2).join("-")
-            let brandArray = urls[i].split("-")
-            brandArray.splice(-2)
-            const capitalize = (s: string) => s && s[0].toUpperCase() + s.slice(1)
-            let brandString = capitalize(brandArray.join())
-
-            let detailedPhone = json.map(phone => { return { name: phone.name, imgUrl: phone.imgUrl, brandName: brandString } })
-            // console.log(detailedPhone);
-
-            // allPhones.push(detailedPhone)
-            console.log(detailedPhone);
-            // console.log(allPhones);
-            for (let i = 0; i < detailedPhone.length; i++) {
-                await prisma.phone.create({ data: detailedPhone[i] })
             }
-            // await prisma.phone.createMany({ data: detailedPhone })
-        }, 1000 * (i + 1));
+            else {
+                const phones = $('.makers').find('li')
+                phones.each((i, el) => {
+                    const imgBlock = $(el).find('img')
+                    const phone = {
+                        name: $(el).find('span').text(),
+                        imgUrl: imgBlock.attr('src')!,
+                        url: $(el).find('a').attr('href')!.replace('.php', ''),
+                        description: imgBlock.attr('title')!
+                    }
+                    json.push(phone)
+                })
+                let brandArray = urls[i].split("-")
+                brandArray.splice(-2)
+                const capitalize = (s: string) => s && s[0].toUpperCase() + s.slice(1)
+                // let brandString = capitalize(brandArray.join())
+                let brandString = brandArray.join()
 
+
+                let detailedPhone = json.map(phone => { return { ...phone, brandName: brandString } })
+                // allPhones.push(detailedPhone)
+                // for (let i = 0; i < detailedPhone.length; i++) {
+                await prisma.phone.createMany({ data: detailedPhone, skipDuplicates: true })
+            }
+
+            // let brandString = urls[i].split("-").splice(-2).join("-")
+
+
+            // }
+
+        }, 1000 * (i + 10));
     }
     return { props: { name: 'trial', allPhones } }
 }

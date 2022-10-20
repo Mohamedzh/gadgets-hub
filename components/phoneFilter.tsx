@@ -6,6 +6,7 @@ import { classNames } from '../lib/functions'
 import PhoneList from './phoneList'
 import { PhoneSummary } from '../pages/brands/[brand]'
 import Price from './priceFilter'
+import DateFilter from './dateFilter'
 
 const sortOptions = [
     { name: 'Most Popular', href: '#', current: true },
@@ -243,7 +244,8 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
                                         </li>
                                     ))}
                                 </ul> */}
-                                <Price/>
+                                <Price />
+                                <DateFilter />
                                 {filters.map((section) => (
                                     <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
                                         {({ open }) => (

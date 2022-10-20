@@ -21,12 +21,15 @@ model Brand {
 }
 
 model Phone {
-  id         Int          @id @default(autoincrement())
-  name       String       @unique
-  imgUrl     String
-  brandName  String
-  brand      Brand        @relation(fields: [brandName], references: [name])
-  PhoneSpecs PhoneSpecs[]
+  id              Int               @id @default(autoincrement())
+  name            String            @unique
+  imgUrl          String
+  url             String
+  brandName       String
+  description     String
+  brand           Brand             @relation(fields: [brandName], references: [name])
+  PhoneSpecs      PhoneSpecs[]
+  PhoneQuickSpecs PhoneQuickSpecs[]
 }
 
 model Network {
@@ -38,11 +41,14 @@ model Network {
 }
 
 model Spec {
-  id         String       @id @default(uuid())
-  name       String
-  categoryId String
-  category   Category     @relation(fields: [categoryId], references: [id])
-  PhoneSpecs PhoneSpecs[]
+  id           String       @id @default(uuid())
+  name         String
+  categoryName String
+  alias        String       @unique
+  category     Category     @relation(fields: [categoryName], references: [name])
+  PhoneSpecs   PhoneSpecs[]
+
+  @@unique(fields: [alias, categoryName], name: "detailedSpec")
 }
 
 model Category {
@@ -52,12 +58,29 @@ model Category {
 }
 
 model PhoneSpecs {
-  id      Int    @id @default(autoincrement())
-  phoneId Int
-  specId  String
-  value   String
-  phone   Phone  @relation(fields: [phoneId], references: [id])
-  spec    Spec   @relation(fields: [specId], references: [id])
+  id        Int    @id @default(autoincrement())
+  phoneId   Int
+  specAlias String
+  value     String
+  phone     Phone  @relation(fields: [phoneId], references: [id])
+  spec      Spec   @relation(fields: [specAlias], references: [alias])
 
-  @@unique([phoneId, specId])
+  @@unique([phoneId, specAlias])
+}
+
+model QuickSpec {
+  id              String            @id @default(uuid())
+  name            String            @unique
+  PhoneQuickSpecs PhoneQuickSpecs[]
+}
+
+model PhoneQuickSpecs {
+  id            Int       @id @default(autoincrement())
+  phoneId       Int
+  quickspecName String
+  value         String
+  phone         Phone     @relation(fields: [phoneId], references: [id])
+  spec          QuickSpec @relation(fields: [quickspecName], references: [name])
+
+  @@unique([phoneId, quickspecName])
 }

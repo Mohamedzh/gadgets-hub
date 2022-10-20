@@ -43,7 +43,9 @@ export const getStaticProps: GetStaticProps = async ({ params }: { params?: Pars
     let newBrand = params?.brand as string
     newBrand = newBrand.slice(0, 1).toUpperCase() + params?.brand?.slice(1)
 
-    let phones = await prisma.phone.findMany({ where: { brandName: newBrand }, select: { name: true, imgUrl: true, brandName: true } })
+    let phones = []
+    phones = await prisma.phone.findMany({ where: { brandName: newBrand }, select: { name: true, imgUrl: true, brandName: true } })
+    console.log(phones);
 
     return { props: { phones, brand: params?.brand } }
 }

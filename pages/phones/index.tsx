@@ -11,7 +11,7 @@ export type Brand = {
 }
 
 function Phones({ name, json }: { name: string, json: Brand[] }) {
-    console.log(json);
+    // console.log(json);
 
     return (
         <div className='mx-10 grid grid-cols-3'>
@@ -52,7 +52,12 @@ export const getStaticProps: GetStaticProps = async () => {
         json.push(brand)
     })
 
-    const dbBrands = await prisma.brand.createMany({data:json})
+    let allBrands = json.map(brand => { return { ...brand, name: brand.name.toLowerCase() } })
+    console.log(allBrands);
+
+
+    const dbBrands = await prisma.brand.createMany({ data: allBrands, skipDuplicates: true })
+
 
     return { props: { name: 'trial', json } }
 }
