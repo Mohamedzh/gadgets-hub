@@ -4,6 +4,7 @@ import axios from 'axios'
 import * as cheerio from 'cheerio'
 import { prisma } from '../../lib/db'
 import Link from 'next/link'
+import SearchBar from '../../components/brandSearchBar'
 
 export type Brand = {
     name: string
@@ -11,28 +12,30 @@ export type Brand = {
     gsmArenaUrl: string
 }
 
-function Phones({ name, json }: { name: string, json: Brand[] }) {
-    // console.log(json);
+function Phones({ dbBrands }: { dbBrands: Brand[] }) {
 
     return (
-        <div className='mx-10 grid grid-cols-3'>
-            {json.map((brand, idx) =>
-                <div
-                    className='m-3'
-                    key={idx}
-                >
-                    <Link href={`/brands/${brand.name.toLowerCase()}`}>
-                        <a
-                            className='text-3xl font-semibold text-white'
-                        >
-                            {brand.name}
-                        </a>
-                    </Link>
-                    <p className='text-white'>no. of phones {brand.phonesNum}</p>
-                    <p className='text-white'>{brand.gsmArenaUrl}</p>
-                </div>
-            )}
-            <h1>Trial</h1>
+        <div className='mx-10 my-5'>
+            <p className='m-2 text-white text-base'>Brand search by name</p>
+            <SearchBar dbBrands={dbBrands} />
+            <div className='mx-10 grid grid-cols-3'>
+                {dbBrands.map((brand, idx) =>
+                    <div
+                        className='m-3'
+                        key={idx}
+                    >
+                        <Link href={`/brands/${brand.name.toLowerCase()}`}>
+                            <a
+                                className='text-3xl font-semibold text-white'
+                            >
+                                {brand.name.toUpperCase()}
+                            </a>
+                        </Link>
+                        <p className='text-white'>no. of phones {brand.phonesNum}</p>
+                        {/* <p className='text-white'>{brand.gsmArenaUrl}</p> */}
+                    </div>
+                )}
+            </div>
         </div>
     )
 }
@@ -46,5 +49,5 @@ export const getStaticProps: GetStaticProps = async () => {
     })
     // console.log(dbBrands);
 
-    return { props: { name: 'trial', json: dbBrands } }
+    return { props: { dbBrands } }
 }

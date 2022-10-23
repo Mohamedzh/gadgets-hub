@@ -1,12 +1,13 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
-import { classNames } from '../lib/functions'
+import { classNames, paginate } from '../lib/functions'
 import PhoneList from './phoneList'
 import { PhoneSummary } from '../pages/brands/[brand]'
 import Price from './priceFilter'
 import DateFilter from './dateFilter'
+import Pagination from './brandPhonesPagination'
 
 const sortOptions = [
     { name: 'Most Popular', href: '#', current: true },
@@ -62,6 +63,13 @@ const filters = [
 
 export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[], brand: string }) {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+    const [page, setPage] = useState(1)
+    const [pageNo, setPageNo] = useState(1)
+    const currentPhones = paginate(page, 40, phones)
+    console.log(currentPhones);
+
+    useEffect(() => { setPageNo(Math.ceil(phones.length / 40)) }, [])
+
 
     return (
         <div className="bg-white">
@@ -295,7 +303,8 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
                                 {/* Replace with your content */}
                                 {/* <div className="h-96 rounded-lg border-4 border-dashed border-gray-200 lg:h-full" /> */}
                                 {/* /End replace */}
-                                <PhoneList phones={phones} />
+                                <PhoneList currentPhones={currentPhones} />
+                                <Pagination setPage={setPage} pageNo={pageNo} page={page} phones={phones} />
                             </div>
                         </div>
                     </section>

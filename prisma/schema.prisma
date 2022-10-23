@@ -26,18 +26,16 @@ model Phone {
   imgUrl          String
   url             String
   brandName       String
+  year            Int               @default(1970)
   description     String
   brand           Brand             @relation(fields: [brandName], references: [name])
   PhoneSpecs      PhoneSpecs[]
   PhoneQuickSpecs PhoneQuickSpecs[]
-}
-
-model Network {
-  id     String @id @default(uuid())
-  band2G String
-  band3G String
-  band4G String
-  band5G String
+  USDPrice        USDPrice?
+  GBPPrice        GBPPrice?
+  EURPrice        EURPrice?
+  IndianPrice     IndianPrice?
+  EGPPrice        EGPPrice?
 }
 
 model Spec {
@@ -83,4 +81,39 @@ model PhoneQuickSpecs {
   spec          QuickSpec @relation(fields: [quickspecName], references: [name])
 
   @@unique([phoneId, quickspecName])
+}
+
+model USDPrice {
+  id      Int   @id @default(autoincrement())
+  phoneId Int   @unique
+  value   Int
+  phone   Phone @relation(fields: [phoneId], references: [id])
+}
+
+model GBPPrice {
+  id      Int   @id @default(autoincrement())
+  phoneId Int   @unique
+  value   Int
+  phone   Phone @relation(fields: [phoneId], references: [id])
+}
+
+model EURPrice {
+  id      Int   @id @default(autoincrement())
+  phoneId Int   @unique
+  value   Int
+  phone   Phone @relation(fields: [phoneId], references: [id])
+}
+
+model IndianPrice {
+  id      Int   @id @default(autoincrement())
+  phoneId Int   @unique
+  value   Int
+  phone   Phone @relation(fields: [phoneId], references: [id])
+}
+
+model EGPPrice {
+  id      Int   @id @default(autoincrement())
+  phoneId Int   @unique
+  value   Int
+  phone   Phone @relation(fields: [phoneId], references: [id])
 }

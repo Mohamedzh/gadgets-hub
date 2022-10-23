@@ -90,5 +90,5 @@ export const updateSpecs = async (spec_detail: SpecDetail[]) => {
             alias: spec.alias
         }))
     }
-    await prisma.spec.createMany({ data: newSpecs })
+    await prisma.spec.createMany({ data: newSpecs, skipDuplicates:true })
 }

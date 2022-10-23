@@ -49,7 +49,7 @@ export const getStaticProps: GetStaticProps = async () => { //working but needs 
 
     let allPhones: any = []
 
-    for (let i = 60; i < 80; i++) {
+    for (let i = 75; i < 100; i++) {
         let timeoutFunc = setTimeout(async () => {
             const res = await axios.get(`https://www.gsmarena.com/${urls[i]}.php`)
             let html = res.data
@@ -150,7 +150,7 @@ export const getStaticProps: GetStaticProps = async () => { //working but needs 
                             await prisma.phone.createMany({ data: detailedPhone, skipDuplicates: true })
                         }
 
-                    }, 1000 * (i + 1))
+                    }, 1000 * (i + 2))
                 }
             }
             else {

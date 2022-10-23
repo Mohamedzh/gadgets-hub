@@ -41,7 +41,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }: { params?: ParsedUrlQuery }) => {
     console.log(params);
     let newBrand = params?.brand as string
-    newBrand = newBrand.slice(0, 1).toUpperCase() + params?.brand?.slice(1)
+    // newBrand = newBrand.slice(0, 1).toUpperCase() + params?.brand?.slice(1)
 
     let phones = []
     phones = await prisma.phone.findMany({ where: { brandName: newBrand }, select: { name: true, imgUrl: true, brandName: true } })

@@ -1,3 +1,5 @@
+import { Category, Phone } from "@prisma/client"
+
 export type Page = {
     url?: string
     active?: boolean
@@ -37,4 +39,13 @@ export type PhoneDetails = {
     img: string
     spec_detail: SpecDetail[]
     quick_spec: QuickSpecs[]
+}
+
+export interface DetailedPhone extends Phone {
+    PhoneQuickSpecs: { quickspecName: string, value: string }[]
+    PhoneSpecs: { specAlias: string, value: string }[]
+}
+
+export interface DetailedCategory extends Category {
+    specs: {name:string, alias:string}[]
 }
