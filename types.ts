@@ -43,9 +43,14 @@ export type PhoneDetails = {
 
 export interface DetailedPhone extends Phone {
     PhoneQuickSpecs: { quickspecName: string, value: string }[]
-    PhoneSpecs: { specAlias: string, value: string }[]
+    PhoneSpecs: DetailedPhoneSpecs[]
 }
 
+export interface DetailedPhoneSpecs {
+    specAlias: string
+    value: string
+    spec:{name:string, categoryName:string, alias:string}
+}
 export interface DetailedCategory extends Category {
     specs: {name:string, alias:string}[]
 }

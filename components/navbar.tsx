@@ -8,11 +8,11 @@ import PopMenu from '../components/popover'
 import NewMenu from '../components/menu'
 
 const navMenu = [
-    { name: 'News', current: false },
-    { name: 'Reviews', current: false },
-    { name: 'Phones', current: false },
-    { name: 'Brands', current: false },
-    { name: 'Comparison', current: false }
+    { name: 'News', current: false, href:'/' },
+    { name: 'Reviews', current: false, href:'/' },
+    { name: 'Phones', current: false, href:'/' },
+    { name: 'Brands', current: false, href:'#' },
+    { name: 'Comparison', current: false, href:'/compare' }
 ]
 
 export default function Navbar() {
@@ -50,7 +50,7 @@ export default function Navbar() {
                                         <div className="flex space-x-4">
                                             {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
                                             {navMenu.map((nav, i) =>
-                                                <Link key={i} href='#'>
+                                                <Link key={i} href={nav.href}>
                                                     <a className={`${nav.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md ${nav.name !== 'Brands' ? 'px-3 py-2' : ''} text-sm font-medium text-white place-self-center`}>
                                                         {nav.name !== 'Brands' && nav.name}
                                                         {nav.name === 'Brands' && <NewMenu nav={nav} />}

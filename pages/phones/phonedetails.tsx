@@ -152,8 +152,8 @@ export const getStaticProps: GetStaticProps = async () => {
             let gbpPrice = Math.round(Number(price.slice(price.indexOf('£') + 2, price.indexOf('/', price.indexOf('£') + 2) - 2).replace(',', '')))
             let indianPrice = Math.round(Number(price.slice(price.indexOf('₹') + 2).replace(',', '')))
             let uniPrice: number;
-            if (price.indexOf('$') === -1) {
-                uniPrice = Number(price.slice(6, price.indexOf(' ') - 1))
+            if (price.indexOf('About') === 0) {
+                uniPrice = Number(price.slice(6, price.indexOf(' ', 6) - 1))
                 if (uniPrice > 0) {
                     await prisma.eURPrice.create({ data: { phoneId: allPhones[i].id, value: uniPrice } })
                 }

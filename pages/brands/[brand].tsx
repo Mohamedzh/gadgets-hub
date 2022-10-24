@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import Page404 from '../../components/page404'
 import { ParsedUrlQuery } from 'querystring'
 import PhoneFilter from '../../components/phoneFilter'
+import _ from 'lodash'
 
 export type PhoneSummary = {
     name: string
@@ -14,15 +15,15 @@ export type PhoneSummary = {
     brandName: string
 }
 
-function PhoneDetails({ phones, brand }: { phones: PhoneSummary[], brand: string }) {
-
+function PhoneDetails({ phones, brand, specs }: { phones: PhoneSummary[], brand: string, specs: any[] }) {
+    // let s = _.uniqWith(specs, _.isEqual)
     // const router = useRouter()
     // useEffect(() => { console.log(router.isFallback) }, [router.isFallback])
     return (
         <div>
-            {phones.length === 0 ? <Page404 /> :
-                <PhoneFilter phones={phones} brand={brand} />
-            }
+            {/* {phones.length === 0 ? <Page404 /> : */}
+            <PhoneFilter phones={phones} brand={brand} />
+            {/* } */}
         </div>
     )
     // }
@@ -39,13 +40,14 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }: { params?: ParsedUrlQuery }) => {
-    console.log(params);
     let newBrand = params?.brand as string
     // newBrand = newBrand.slice(0, 1).toUpperCase() + params?.brand?.slice(1)
 
     let phones = []
-    phones = await prisma.phone.findMany({ where: { brandName: newBrand }, select: { name: true, imgUrl: true, brandName: true } })
-    console.log(phones);
+    phones = await prisma.phone.findMany({ where: { brandName: newBrand }, include: { GBPPrice: true, USDPrice: true, EURPrice: true, PhoneQuickSpecs: true } })
 
-    return { props: { phones, brand: params?.brand } }
+    const specs = await prisma.phoneQuickSpecs.findMany({ select: { quickspecName: true, value: true } })
+    // console.log(new Set(specs))
+
+    return { props: { phones, brand: params?.brand, specs } }
 }

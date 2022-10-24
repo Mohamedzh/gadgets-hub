@@ -2,19 +2,22 @@ import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
-import { classNames, paginate } from '../lib/functions'
+import { classNames, paginate, phoneSortAZ } from '../lib/functions'
 import PhoneList from './phoneList'
 import { PhoneSummary } from '../pages/brands/[brand]'
 import Price from './priceFilter'
 import DateFilter from './dateFilter'
 import Pagination from './brandPhonesPagination'
+import _ from 'lodash'
 
 const sortOptions = [
-    { name: 'Most Popular', href: '#', current: true },
-    { name: 'Best Rating', href: '#', current: false },
-    { name: 'Newest', href: '#', current: false },
-    { name: 'Price: Low to High', href: '#', current: false },
-    { name: 'Price: High to Low', href: '#', current: false },
+    { name: 'A-Z', function: 'sort', current: false },
+    { name: 'Z-A', function: 'sort', current: false },
+    { name: 'Most Popular', function: '#', current: true },
+    { name: 'Best Rating', function: '#', current: false },
+    { name: 'Newest', function: '#', current: false },
+    { name: 'Price: Low to High', function: '#', current: false },
+    { name: 'Price: High to Low', function: '#', current: false },
 ]
 const subCategories = [
     { name: 'Totes', href: '#' },
@@ -25,15 +28,13 @@ const subCategories = [
 ]
 const filters = [
     {
-        id: 'color',
-        name: 'Color',
+        id: 'ram',
+        name: 'RAM size',
         options: [
-            { value: 'white', label: 'White', checked: false },
-            { value: 'beige', label: 'Beige', checked: false },
-            { value: 'blue', label: 'Blue', checked: true },
-            { value: 'brown', label: 'Brown', checked: false },
-            { value: 'green', label: 'Green', checked: false },
-            { value: 'purple', label: 'Purple', checked: false },
+            { value: '2GB RAM', label: '2GB RAM', checked: false },
+            { value: '4GB RAM', label: '4GB RAM', checked: false },
+            { value: '6GB RAM', label: '6GB RAM', checked: false },
+            { value: '8GB RAM', label: '8GB RAM', checked: false },
         ],
     },
     {
@@ -65,11 +66,18 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
     const [page, setPage] = useState(1)
     const [pageNo, setPageNo] = useState(1)
-    const currentPhones = paginate(page, 40, phones)
-    console.log(currentPhones);
+    const [sortedPhones, setSortedPhones] = useState(phones)
+    const currentPhones = paginate(page, 40, sortedPhones)
 
     useEffect(() => { setPageNo(Math.ceil(phones.length / 40)) }, [])
 
+    const sorting = (phones: PhoneSummary[], option: string) => {
+        if (option === 'A-Z') {
+            setSortedPhones(_.sortBy(phones, ['name']))
+        } else if (option === 'Z-A') {
+            setSortedPhones(_.orderBy(phones, 'name', 'desc'))
+        }
+    }
 
     return (
         <div className="bg-white">
@@ -203,8 +211,9 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
                                             {sortOptions.map((option) => (
                                                 <Menu.Item key={option.name}>
                                                     {({ active }) => (
-                                                        <a
-                                                            href={option.href}
+                                                        <button
+                                                            onClick={() => sorting(currentPhones, option.name)}
+                                                            // href={option.href}
                                                             className={classNames(
                                                                 option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                                                                 active ? 'bg-gray-100' : '',
@@ -212,7 +221,7 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
                                                             )}
                                                         >
                                                             {option.name}
-                                                        </a>
+                                                        </button>
                                                     )}
                                                 </Menu.Item>
                                             ))}
@@ -253,7 +262,7 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
                                     ))}
                                 </ul> */}
                                 <Price />
-                                <DateFilter />
+                                <DateFilter phones={phones} />
                                 {filters.map((section) => (
                                     <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
                                         {({ open }) => (

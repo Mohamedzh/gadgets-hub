@@ -30,7 +30,7 @@ export default function Pagination(
                             {page * 40 - 39} </span>
                         to{' '}
                         <span className="font-medium">
-                            {page * 40}
+                            {(page * 40 > phones.length ? phones.length : page * 40)}
                         </span> of{' '}
                         <span className="font-medium">{phones.length}</span> results
                     </p>

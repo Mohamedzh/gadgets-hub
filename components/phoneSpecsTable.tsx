@@ -1,17 +1,18 @@
 import { Category } from '@prisma/client'
 import { Fragment } from 'react'
-import { classNames } from '../lib/functions'
+import { classNames, createPhoneData } from '../lib/functions'
 import { DetailedCategory, DetailedPhone } from '../types'
 
 export default function SpecsTable(
     { currentPhone, categories }: { currentPhone: DetailedPhone, categories: DetailedCategory[] }
 ) {
-
+    let specs = currentPhone.PhoneSpecs
+   
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
-                    <h1 className="text-xl font-semibold text-gray-900">{currentPhone.name}</h1>
+                    {/* <h1 className="text-xl font-semibold text-gray-900">{currentPhone.name}</h1> */}
                     {/* <p className="mt-2 text-sm text-gray-700">
                         A list of all the users in your account including their name, title, email and role.
                     </p> */}
@@ -27,58 +28,48 @@ export default function SpecsTable(
             </div>
             <div className="mt-8 flex flex-col">
                 <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                        <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                            <table className="min-w-full">
+                    <div className="inline-block max-w-full py-2 align-middle md:px-6 lg:px-8">
+                        <div className="shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                            <table className="max-w-full">
                                 {/* <thead className="bg-white">
                                     <tr>
-                                        <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                                            Name
+                                        <th scope="col"  className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                                            <img className='mx-auto' src={currentPhone.imgUrl} />
                                         </th>
-                                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                            Title
-                                        </th>
-                                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                            Email
-                                        </th>
-                                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                            Role
-                                        </th>
-                                        <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                                            <span className="sr-only">Edit</span>
+                                        <th scope="col" className="px-3 py-3.5 text-left  font-semibold text-gray-900">
+                                            <p className='m-3 text-3xl font-bold text-center'>Quick Specifications</p>
+                                            {currentPhone?.PhoneQuickSpecs.map((spec, idx) =>
+                                                <div className='grid grid-cols-2 text-center' key={idx}>
+                                                    <p>{spec.quickspecName}</p>
+                                                    <p>{spec.value}</p>
+                                                </div>
+                                            )}
                                         </th>
                                     </tr>
                                 </thead> */}
                                 <tbody className="bg-white">
-                                    {categories.map((location, idx) => (
+                                    {createPhoneData(categories, specs).map((category, idx) => (
                                         <Fragment key={idx}>
                                             <tr className="border-t border-gray-200">
                                                 <th
-                                                    colSpan={5}
+                                                    colSpan={4}
                                                     scope="colgroup"
-                                                    className="bg-gray-50 px-4 py-2 text-left text-sm font-semibold text-gray-900 sm:px-6"
+                                                    className="bg-gray-200 px-4 py-2 text-left text-lg font-semibold text-gray-900 sm:px-6"
                                                 >
-                                                    {location.name}
+                                                    {category.name}
                                                 </th>
                                             </tr>
-                                            {location.specs.map((person, i) => (
+                                            {category.specs.map((spec, i) => (
                                                 <tr
                                                     key={i}
                                                     className={classNames(i === 0 ? 'border-gray-300' : 'border-gray-200', 'border-t')}
                                                 >
-                                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                                        {person.name}
+                                                    <td className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                                        {spec.spec}
                                                     </td>
-                                                    {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                        {person.title}
-                                                    </td> */}
-                                                    {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.email}</td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.role}</td> */}
-                                                    {/* <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                        <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                                                            Edit<span className="sr-only">, {person.name}</span>
-                                                        </a>
-                                                    </td> */}
+                                                    <td className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                                        {spec.value}
+                                                    </td>
                                                 </tr>
                                             ))}
                                         </Fragment>

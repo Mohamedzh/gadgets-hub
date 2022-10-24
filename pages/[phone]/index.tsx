@@ -10,7 +10,7 @@ import { PhoneSummary } from '../brands/[brand]'
 
 type Props = {
     currentPhone?: any
-    categories:DetailedCategory[]
+    categories: DetailedCategory[]
 }
 
 function Index({ currentPhone, categories }: Props) {
@@ -31,7 +31,8 @@ export default Index
 export const getStaticPaths: GetStaticPaths = async () => {
     const brands = await prisma.brand.findMany({ include: { phones: { select: { name: true } } } })
 
-    let paths: { params: { phone: string } }[];
+
+    let paths: { params: { phone: string } }[] = []
     for (let i = 0; i < brands.length; i++) {
         paths = brands[i].phones.map(phone => ({
             params: { phone: phone.name }
@@ -41,7 +42,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     // const paths = brands.map(brand => ({
     //     params: { brand: brand.name.toLowerCase() }
     // }))
-    return { paths: paths, fallback: true }
+    return { paths, fallback: true }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }: { params?: ParsedUrlQuery }) => {
@@ -52,9 +53,9 @@ export const getStaticProps: GetStaticProps = async ({ params }: { params?: Pars
         // newPhone = newPhone.slice(0, 1).toUpperCase() + params?.phone?.slice(1)
         // console.log(newPhone, params?.phone);
 
-        currentPhone = await prisma.phone.findFirst({ where: { name: newPhone }, include: { PhoneSpecs: {include:{spec:{include:{category:true}}}}, PhoneQuickSpecs: true } })
+        currentPhone = await prisma.phone.findFirst({ where: { name: newPhone }, include: { PhoneSpecs: { include: { spec: { include: { category: true } } } }, PhoneQuickSpecs: true } })
         // console.log(currentPhone);
-        categories = await prisma.category.findMany({include:{specs:true}})
+        categories = await prisma.category.findMany({ include: { specs: true } })
     } catch (error) {
         console.log(error)
     }
