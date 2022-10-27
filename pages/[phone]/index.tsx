@@ -19,9 +19,7 @@ function Index({ currentPhone, categories }: Props) {
     return (
         <div>
             <PhoneDetails currentPhone={currentPhone} categories={categories} />
-            {/* <p>{currentPhone.name}</p> */}
-            {/* <p>Phone</p> */}
-
+            
         </div>
     )
 }

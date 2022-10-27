@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
+import { ThemeProvider } from '@mui/material/styles';
+import { theme } from '../lib/functions';
 
 function valuetext(value: number) {
   return `${value}°C`;
@@ -17,20 +19,22 @@ export default function RangeSlider() {
   };
 
   return (
-    <Box sx={{ width: 300 }}>
-      <p className='mb-8 text-xl font-semibold'>Filter by Price</p>
-      <Slider
-        sx={{ color: 'blue' }}
-        getAriaLabel={() => 'Temperature range'}
-        value={value}
-        onChange={handleChange}
-        valueLabelDisplay="on"
-        getAriaValueText={valuetext}
-        disableSwap
-        step={2}
-        min={1}
-        max={200}
-      />
-    </Box>
+    <ThemeProvider theme={theme}>
+      <Box sx={{ width: { xs: 100, sm: 150, md: 200, lg: 275} }}>
+        <p className='mb-8 text-xl font-semibold'>Filter by Price</p>
+        <Slider
+          sx={{ color: 'blue' }}
+          getAriaLabel={() => 'Temperature range'}
+          value={value}
+          onChange={handleChange}
+          valueLabelDisplay="on"
+          getAriaValueText={valuetext}
+          disableSwap
+          step={2}
+          min={1}
+          max={200}
+        />
+      </Box>
+    </ThemeProvider>
   );
 }

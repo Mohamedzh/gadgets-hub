@@ -7,15 +7,14 @@ export default function SpecsTable(
     { currentPhone, categories }: { currentPhone: DetailedPhone, categories: DetailedCategory[] }
 ) {
     let specs = currentPhone.PhoneSpecs
-   
+
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
-                    {/* <h1 className="text-xl font-semibold text-gray-900">{currentPhone.name}</h1> */}
-                    {/* <p className="mt-2 text-sm text-gray-700">
-                        A list of all the users in your account including their name, title, email and role.
-                    </p> */}
+                    <p className='text-3xl font-bold m-5 font-serif text-amber-800'>
+                        Detailed Specifications
+                    </p>
                 </div>
                 {/* <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                     <button

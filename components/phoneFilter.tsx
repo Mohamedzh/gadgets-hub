@@ -19,48 +19,7 @@ const sortOptions = [
     { name: 'Price: Low to High', function: '#', current: false },
     { name: 'Price: High to Low', function: '#', current: false },
 ]
-const subCategories = [
-    { name: 'Totes', href: '#' },
-    { name: 'Backpacks', href: '#' },
-    { name: 'Travel Bags', href: '#' },
-    { name: 'Hip Bags', href: '#' },
-    { name: 'Laptop Sleeves', href: '#' },
-]
-const filters = [
-    {
-        id: 'ram',
-        name: 'RAM size',
-        options: [
-            { value: '2GB RAM', label: '2GB RAM', checked: false },
-            { value: '4GB RAM', label: '4GB RAM', checked: false },
-            { value: '6GB RAM', label: '6GB RAM', checked: false },
-            { value: '8GB RAM', label: '8GB RAM', checked: false },
-        ],
-    },
-    {
-        id: 'category',
-        name: 'Category',
-        options: [
-            { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-            { value: 'sale', label: 'Sale', checked: false },
-            { value: 'travel', label: 'Travel', checked: true },
-            { value: 'organization', label: 'Organization', checked: false },
-            { value: 'accessories', label: 'Accessories', checked: false },
-        ],
-    },
-    {
-        id: 'size',
-        name: 'Size',
-        options: [
-            { value: '2l', label: '2L', checked: false },
-            { value: '6l', label: '6L', checked: false },
-            { value: '12l', label: '12L', checked: false },
-            { value: '18l', label: '18L', checked: false },
-            { value: '20l', label: '20L', checked: false },
-            { value: '40l', label: '40L', checked: true },
-        ],
-    },
-]
+
 
 export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[], brand: string }) {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
@@ -80,7 +39,7 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
     }
 
     return (
-        <div className="bg-white">
+        <div className="bg-gray-900">
             <div>
                 {/* Mobile filter dialog */}
                 <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -121,8 +80,8 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
                                     </div>
 
                                     {/* Filters */}
-                                    <form className="mt-4 border-t border-gray-200">
-                                        {/* <h3 className="sr-only">Categories</h3>
+                                    {/* <form className="mt-4 border-t border-gray-200">
+                                        <h3 className="sr-only">Categories</h3>
                                         <ul role="list" className="px-2 py-3 font-medium text-gray-900">
                                             {subCategories.map((category) => (
                                                 <li key={category.name}>
@@ -131,7 +90,7 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
                                                     </a>
                                                 </li>
                                             ))}
-                                        </ul> */}
+                                        </ul>
 
                                         {filters.map((section) => (
                                             <Disclosure as="div" key={section.id} className="border-t border-gray-200 px-4 py-6">
@@ -175,7 +134,7 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
                                                 )}
                                             </Disclosure>
                                         ))}
-                                    </form>
+                                    </form> */}
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>
@@ -184,7 +143,7 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
 
                 <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex items-baseline justify-between border-b border-gray-200 pt-24 pb-6">
-                        <h1 className="text-4xl font-bold tracking-tight text-gray-900">{phones[0].brandName}</h1>
+                        <h1 className="text-4xl font-bold tracking-tight text-blue-900">{phones[0].brandName.toUpperCase()}</h1>
 
                         <div className="flex items-center">
                             <Menu as="div" className="relative inline-block text-left">
@@ -263,7 +222,7 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
                                 </ul> */}
                                 <Price />
                                 <DateFilter phones={phones} />
-                                {filters.map((section) => (
+                                {/* {filters.map((section) => (
                                     <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
                                         {({ open }) => (
                                             <>
@@ -304,7 +263,7 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
                                             </>
                                         )}
                                     </Disclosure>
-                                ))}
+                                ))} */}
                             </form>
 
                             {/* Product grid */}
@@ -312,6 +271,10 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
                                 {/* Replace with your content */}
                                 {/* <div className="h-96 rounded-lg border-4 border-dashed border-gray-200 lg:h-full" /> */}
                                 {/* /End replace */}
+                                <div className='lg:hidden'>
+                                    <Price />
+                                    <DateFilter phones={phones} />
+                                </div>
                                 <PhoneList currentPhones={currentPhones} />
                                 <Pagination setPage={setPage} pageNo={pageNo} page={page} phones={phones} />
                             </div>

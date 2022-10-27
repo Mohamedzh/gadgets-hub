@@ -49,8 +49,33 @@ export interface DetailedPhone extends Phone {
 export interface DetailedPhoneSpecs {
     specAlias: string
     value: string
-    spec:{name:string, categoryName:string, alias:string}
+    spec: { name: string, categoryName: string, alias: string }
 }
 export interface DetailedCategory extends Category {
-    specs: {name:string, alias:string}[]
+    specs: { name: string, alias: string }[]
+}
+
+export type NewsType = {
+    title: string
+    body: string
+    link: string
+    imgUrl: string
+    imgAlt: string
+    newsDate: string
+}
+
+export type ReviewType = {
+    title: string
+    link: string
+    imgUrl: string
+    reviewDate: string
+    brandName?: string
+}
+
+export type BrandPhone = {
+    name: string;
+    imgUrl: string;
+    url: string;
+    year: number;
+    description: string;
 }

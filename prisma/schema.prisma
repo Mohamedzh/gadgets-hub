@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -18,6 +15,7 @@ model Brand {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   phones      Phone[]
+  Reviews     Review[]
 }
 
 model Phone {
@@ -26,7 +24,7 @@ model Phone {
   imgUrl          String
   url             String
   brandName       String
-  year            Int               @default(1970)
+  year            Int
   description     String
   brand           Brand             @relation(fields: [brandName], references: [name])
   PhoneSpecs      PhoneSpecs[]
@@ -116,4 +114,16 @@ model EGPPrice {
   phoneId Int   @unique
   value   Int
   phone   Phone @relation(fields: [phoneId], references: [id])
+}
+
+model Review {
+  id         Int      @id @default(autoincrement())
+  title      String   @unique
+  imgUrl     String
+  link       String
+  reviewDate String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  brandName  String?
+  brand      Brand?   @relation(fields: [brandName], references: [name])
 }

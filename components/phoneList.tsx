@@ -11,7 +11,7 @@ function PhoneList({ currentPhones }: { currentPhones: PhoneSummary[] }) {
                 {currentPhones.map((phone, i) =>
                     <Link href={`/${phone.name}`} key={i}>
                         <a
-                            className='m-4 p-3 border border-solid flex flex-col place-items-center hover:scale-125 hover:opacity-75'
+                            className='bg-white m-4 p-3 border border-solid flex flex-col place-items-center hover:scale-125 hover:opacity-75'
                         >
                             <img className='' src={phone.imgUrl} />
                             <p className='text-center text-xl font-semibold'>{phone.name}</p>

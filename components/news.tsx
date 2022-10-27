@@ -1,20 +1,27 @@
+import Link from 'next/link'
 import React from 'react'
+import { NewsType } from '../types'
 
-type Props = {}
+type Props = {
+    news: NewsType[]
+}
 
-function News({ }: Props) {
+function News({ news }: Props) {
+    const latestNews = news.filter((item, i) => i < 6)
     return (
-        <div>
-            <p className='text-4xl font-semibold m-3 text-white'>Latest news</p>
-            <div className='grid grid-cols-2'>
-                {Array.from(Array(4)).map((item, i) =>
-                    <div key={i} className='m-3'>
-                        <img src='https://m-cdn.phonearena.com/images/article/143165-wide-two_800/Apple-has-no-short-term-iPhone-Fold-launch-plans-iPad-Fold-instead-likely-coming-in-2024.webp?1666081471' />
-                        <div className='text-white'>
-                            Apple has no short-term iPhone Fold launch plans, iPad Fold instead likely coming in 2024
-                            Adrian Diaconescu • 3m ago
-                        </div>
-                    </div>
+        <div className='mb-10'>
+            <p className='text-4xl font-semibold m-3 text-white'>Latest News</p>
+            <div className='grid grid-cols-3'>
+                {latestNews.map((item, i) =>
+                    <Link key={i} href={`https://gsmarena.com/${item.link}`}>
+                        <a className='m-3 flex flex-col'>
+                            <img className='w-full' src={item.imgUrl} alt={item.imgAlt} />
+                            <div className='text-white'>
+                                {item.title}
+                            </div>
+                            <p className='text-white place-self-end'>{item.newsDate}</p>
+                        </a>
+                    </Link>
                 )}
             </div>
         </div>

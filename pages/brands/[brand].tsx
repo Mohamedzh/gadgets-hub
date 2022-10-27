@@ -15,7 +15,7 @@ export type PhoneSummary = {
     brandName: string
 }
 
-function PhoneDetails({ phones, brand, specs }: { phones: PhoneSummary[], brand: string, specs: any[] }) {
+function PhoneDetails({ phones, brand }: { phones: PhoneSummary[], brand: string }) {
     // let s = _.uniqWith(specs, _.isEqual)
     // const router = useRouter()
     // useEffect(() => { console.log(router.isFallback) }, [router.isFallback])
@@ -43,11 +43,7 @@ export const getStaticProps: GetStaticProps = async ({ params }: { params?: Pars
     let newBrand = params?.brand as string
     // newBrand = newBrand.slice(0, 1).toUpperCase() + params?.brand?.slice(1)
 
-    let phones = []
-    phones = await prisma.phone.findMany({ where: { brandName: newBrand }, include: { GBPPrice: true, USDPrice: true, EURPrice: true, PhoneQuickSpecs: true } })
+    let phones = await prisma.phone.findMany({ where: { brandName: newBrand }, include: { GBPPrice: true, USDPrice: true, EURPrice: true } })
 
-    const specs = await prisma.phoneQuickSpecs.findMany({ select: { quickspecName: true, value: true } })
-    // console.log(new Set(specs))
-
-    return { props: { phones, brand: params?.brand, specs } }
+    return { props: { phones, brand: params?.brand } }
 }
