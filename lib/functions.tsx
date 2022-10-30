@@ -97,3 +97,7 @@ export const theme = createTheme({
 });
 
 export const capitalize = (s: string) => s && s[0].toUpperCase() + s.slice(1)
+
+export const monthNumberFromString = (str: string) => {
+    return new Date(`${str} 01 2000`).toLocaleDateString(`en`, { month: `2-digit` })
+}

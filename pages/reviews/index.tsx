@@ -43,7 +43,7 @@ export const getStaticProps: GetStaticProps = async () => {
         reviews = await prisma.review.findMany({ select: { title: true, link: true, imgUrl: true, reviewDate: true } })
         const brands = await prisma.brand.findMany({ select: { name: true } })
 
-        let latestReviews = await getLatestReviews(brands)
+        let latestReviews = await getLatestReviews()
         await prisma.review.createMany({ data: latestReviews, skipDuplicates: true })
 
     } catch (error) {

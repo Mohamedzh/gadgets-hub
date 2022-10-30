@@ -24,7 +24,7 @@ export default function RangeSlider({ phones }: { phones: any[] }) {
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ width: { xs: 100, sm: 150, md: 200, lg: 275 } }}>
-                <p className='lg:mb-8 text-sm lg:text-xl font-semibold'>Filter by Year</p>
+                <p className='lg:mb-4 lg:mt-10 text-sm lg:text-xl font-semibold text-gray-200'>Filter by Year</p>
                 <Slider
                     sx={{ color: 'blue' }}
                     getAriaLabel={() => 'Temperature range'}

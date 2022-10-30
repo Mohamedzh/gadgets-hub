@@ -8,7 +8,7 @@ type Props = {
 function NewsPage({ news }: Props) {
     const router = useRouter()
     return (
-        <div className='m-5 pt-5'>
+        <div className='my-5 pt-5'>
             {news.map((subject, i) =>
                 <div key={i} className='grid grid-cols-3 my-5 pt-7 border-white rounded-lg border p-2'>
                     <div className='col-span-1 mx-3'>

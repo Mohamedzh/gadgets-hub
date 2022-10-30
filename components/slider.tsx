@@ -70,8 +70,8 @@ export default function Slider({
                     Latest Phones
                 </p>
                 {latestPhones.map((phone, i) =>
-                    <Link href={`/${phone.name}`}>
-                        <a key={i} className='text-white mx-5'>
+                    <Link key={i} href={`/${phone.name}`}>
+                        <a className='text-white mx-5'>
                             <img className='rounded-lg' src={phone.imgUrl} />
                             <p className="p-2 bottom-2 left-2">{phone.name}</p>
                         </a>

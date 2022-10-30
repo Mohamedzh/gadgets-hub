@@ -21,7 +21,7 @@ export default function RangeSlider() {
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ width: { xs: 100, sm: 150, md: 200, lg: 275} }}>
-        <p className='mb-8 text-xl font-semibold'>Filter by Price</p>
+        <p className='mb-4 text-xl font-semibold text-gray-200'>Filter by Price</p>
         <Slider
           sx={{ color: 'blue' }}
           getAriaLabel={() => 'Temperature range'}

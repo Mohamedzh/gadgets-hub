@@ -3,28 +3,30 @@ import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { Combobox } from '@headlessui/react'
 import { classNames } from '../lib/functions'
 import { Brand } from '../pages/brands'
+import Link from 'next/link'
+import _ from 'lodash'
 import { useDispatch } from 'react-redux'
-import { addToBrands } from '../redux/slices/brandFilterSlice'
+import { addToOS } from '../redux/slices/osFilterSlice'
 import { addToFilters } from '../redux/slices/activeFiltersSlice'
-import { useAppSelector } from '../redux/hooks'
 
 
-export default function BrandSearchBar({ dbBrands }: { dbBrands: { name: string }[] }) {
+export default function OsSearchBar({ os }: { os: any[] }) {
     const dispatch = useDispatch()
-    
+
     const [query, setQuery] = useState('')
     const [selectedPerson, setSelectedPerson] = useState(null)
+    let dbBrands = _.uniqBy(os, 'name')
 
-    const [currentBrands, setCurrentBrands] = useState<{ name: string }[]>(dbBrands)
+    const [currentSystems, setCurrentSystems] = useState<{ name: string }[]>(dbBrands)
 
-    const filterBrandsMenu = (current: string) => {
-        setCurrentBrands(currentBrands.filter(brand => brand.name !== current))
+    const filterSystemsMenu = (current: string) => {
+        setCurrentSystems(currentSystems.filter(system => system.name !== current))
     }
 
     const filteredBrands =
         query === ''
-            ? currentBrands
-            : currentBrands.filter((brand) => {
+            ? currentSystems
+            : currentSystems.filter((brand) => {
                 return brand.name.toLowerCase().includes(query.toLowerCase())
             })
 
@@ -58,9 +60,9 @@ export default function BrandSearchBar({ dbBrands }: { dbBrands: { name: string 
                                     <>
                                         <button
                                             onClick={() => {
-                                                dispatch(addToBrands(brand.name));
+                                                dispatch(addToOS(brand.name));
                                                 dispatch(addToFilters({ label: brand.name.toUpperCase(), value: brand.name }));
-                                                filterBrandsMenu(brand.name)
+                                                filterSystemsMenu(brand.name)
                                             }}
                                             className="flex items-center">
                                             {/* <img src={person.imageUrl} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" /> */}

@@ -1,11 +1,23 @@
-import { Fragment, useState } from 'react'
+import { Fragment, PropsWithRef, useState } from 'react'
 import { Dialog, Disclosure, Menu, Popover, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import { classNames } from '../lib/functions'
+import { classNames, monthNumberFromString } from '../lib/functions'
 import _ from 'lodash'
 import { Brand, PhoneQuickSpecs } from '@prisma/client'
 import BrandSearchBar from './phoneFinderBrandSearchBar'
+import OsSearchBar from './phoneFinderOsSearchBar'
+import { PhoneFilter } from '../types'
+import PhoneResultList from './phoneFinderResultsList'
+import { convertBatterySize, convertDate, convertDisplaySize, convertOS, convertRAM, filterSearch } from '../lib/filterFunctions'
+import { useAppSelector } from '../redux/hooks'
+import { useDispatch } from 'react-redux'
+import { addToFilters, clearActiveFilters, removeFromFilters } from '../redux/slices/activeFiltersSlice'
+import { addToRam, clearRamFilter, removeFromRam } from '../redux/slices/ramFilterSlice'
+import { addToDisplaySize, clearDisplaySizeFilter, removeFromDisplaySize } from '../redux/slices/displaySizeFilterSlice'
+import { addToBatterySize, clearBatterySizeFilter, removeFromBatterySize } from '../redux/slices/batterySizeFilterSlice'
+import { clearBrandFilter } from '../redux/slices/brandFilterSlice'
+import { clearOSFilter } from '../redux/slices/osFilterSlice'
 
 
 const sortOptions = [
@@ -18,41 +30,103 @@ const filters = [
         id: 'ramSize',
         name: 'RAM Size',
         options: [
-            { value: 'tees', label: 'Less than 4GB', checked: false },
-            { value: 'new-arrivals', label: '4 - 8GB', checked: false },
-            { value: 'objects', label: '8 - 12GB', checked: true },
-            { value: 'objects', label: 'More than 12GB', checked: true },
+            { value: '<4', label: 'Less than 4GB', checked: false },
+            { value: '4-8', label: '4 - 8GB', checked: false },
+            { value: '8-12', label: '8 - 12GB', checked: false },
+            { value: '>12', label: 'More than 12GB', checked: false },
         ],
     },
     {
         id: 'batterySize',
         name: 'Battery Size',
         options: [
-            { value: 'tees', label: 'Less than 3000maH', checked: false },
-            { value: 'new-arrivals', label: '3000 - 4500mAH', checked: false },
-            { value: 'objects', label: '4500 - 5000mAH', checked: true },
-            { value: 'objects', label: 'More than 5000mAH', checked: true },
+            { value: '<3000', label: 'Less than 3000maH', checked: false },
+            { value: '3000-4500', label: '3000 - 4500mAH', checked: false },
+            { value: '4500-5000', label: '4500 - 5000mAH', checked: false },
+            { value: '>5000', label: 'More than 5000mAH', checked: false },
         ],
     },
     {
         id: 'displaySize',
         name: 'Display Size',
         options: [
-            { value: 'tees', label: 'Less than 4"', checked: false },
-            { value: 'objects', label: '4 - 6"', checked: true },
-            { value: 'objects', label: 'More than 6"', checked: true },
+            { value: '<4', label: 'Less than 4"', checked: false },
+            { value: '4-6', label: '4 - 6"', checked: false },
+            { value: '6-8', label: '6 - 8"', checked: false },
+            { value: '>6', label: 'More than 6"', checked: false },
         ],
     },
 ]
-const activeFilters = [{ value: 'objects', label: 'Objects' }]
+// const activeFilters = [{ value: 'objects', label: 'Objects' }]
 
+type Props = {
+    quickSpecs: PhoneQuickSpecs[]
+    brands: { name: string }[]
+    phones: PhoneFilter[]
+}
 
-export default function Filters({ quickSpecs, brands }: { quickSpecs: PhoneQuickSpecs[], brands: { name: string }[] }) {
+export default function Filters({ quickSpecs, brands, phones }: Props) {
     const [open, setOpen] = useState(false)
 
-    let monthNumberFromString = (str: string) => {
-        return new Date(`${str} 01 2000`).toLocaleDateString(`en`, { month: `2-digit` })
+    const [showResults, setShowResults] = useState<boolean>(false)
+
+    const dispatch = useDispatch()
+
+    const activeFilters = useAppSelector(state => state.activeFilters)
+    const filterBrands = useAppSelector(state => state.brandFilter)
+    const filterOS = useAppSelector(state => state.osFilter)
+    const filterRam = useAppSelector(state => state.ramFilter)
+    const filterDisplaySize = useAppSelector(state => state.displaySizeFilter)
+    const filterBatterySize = useAppSelector(state => state.batterySizeFilter)
+
+    const [currentPhones, setCurrentPhones] = useState<PhoneFilter[]>([])
+
+
+    const setFilterChoices = (sectionName: string, option: string) => {
+        if (sectionName === 'ramSize') {
+            if (filterRam.includes(option)) { dispatch(removeFromRam(option)) } else {
+                dispatch(addToRam(option))
+            }
+        } else if (sectionName === 'displaySize') {
+            if (filterDisplaySize.includes(option)) { dispatch(removeFromDisplaySize(option)) } else {
+                dispatch(addToDisplaySize(option))
+            }
+        } else if (sectionName === 'batterySize') {
+            if (filterBatterySize.includes(option)) { dispatch(removeFromBatterySize(option)) } else {
+                dispatch(addToBatterySize(option))
+            }
+        }
     }
+
+    const setFilterNumber = (sectionName: string) => {
+        let arr: string[] = []
+        if (sectionName === 'ramSize') {
+            arr = filterRam
+        } else if (sectionName === 'displaySize') {
+            arr = filterDisplaySize
+        } else if (sectionName === 'batterySize') {
+            arr = filterBatterySize
+        }
+        return arr.length
+    }
+
+    for (let i = 0; i < phones.length; i++) {
+        phones[i].PhoneQuickSpecs.map(quickSpec => {
+            if (quickSpec.quickspecName === 'RAM size' && quickSpec.value.length > 0) {
+                quickSpec.value = convertRAM(quickSpec.value)
+            } else if (quickSpec.quickspecName === 'Display size' && quickSpec.value.length > 0) {
+                quickSpec.value = convertDisplaySize(quickSpec.value)
+            } else if (quickSpec.quickspecName === 'Battery size' && quickSpec.value.length > 0) {
+                quickSpec.value = convertBatterySize(quickSpec.value)
+            } else if (quickSpec.quickspecName === 'Release date' && quickSpec.value && quickSpec.value.length > 0) {
+                quickSpec.value = convertDate(quickSpec.value)
+            } else if (quickSpec.quickspecName === 'OS' && quickSpec.value.length > 0) {
+                quickSpec.value = convertOS(quickSpec.value)
+            }
+        })
+    }
+
+
 
     const uniqueSpecNames = _.uniqBy(quickSpecs, 'quickspecName')
     const uniqueValues = _.uniqBy(quickSpecs, 'value')
@@ -73,7 +147,6 @@ export default function Filters({ quickSpecs, brands }: { quickSpecs: PhoneQuick
             option: Number(option.slice(0, option.indexOf('"')))
         }
     })
-    console.log(displaySize);
 
 
     let date = uniquesSpecs.find(spec => spec.name === 'Release date')?.options.map(option => {
@@ -110,7 +183,7 @@ export default function Filters({ quickSpecs, brands }: { quickSpecs: PhoneQuick
             system = option.slice(0, option.indexOf(','))
         }
         return {
-            option: system
+            name: system
         }
     })
     console.log(uniquesSpecs);
@@ -141,11 +214,10 @@ export default function Filters({ quickSpecs, brands }: { quickSpecs: PhoneQuick
             option: Number(system)
         }
     })
-    // console.log(batterySize);
 
 
     return (
-        <div className="bg-white">
+        <div className="">
             {/* Mobile filter dialog */}
             <Transition.Root show={open} as={Fragment}>
                 <Dialog as="div" className="relative z-40 sm:hidden" onClose={setOpen}>
@@ -234,11 +306,8 @@ export default function Filters({ quickSpecs, brands }: { quickSpecs: PhoneQuick
                 </Dialog>
             </Transition.Root>
 
-            <div className="mx-auto max-w-7xl py-16 px-4 sm:px-6 lg:px-8">
-                <h1 className="text-3xl font-bold tracking-tight text-gray-900 font-serif">
-                    Phone Finder
-                </h1>
-                <p className="mt-4 max-w-xl text-gray-700">
+            <div className="mx-auto max-w-7xl pb-8 sm:px-2">
+                <p className="mt-4 max-w-xl text-gray-300">
                     Find your phone using a combination of brand and specifications filters.
                 </p>
             </div>
@@ -249,11 +318,11 @@ export default function Filters({ quickSpecs, brands }: { quickSpecs: PhoneQuick
                     Filters
                 </h2>
 
-                <div className="border-b border-gray-200 bg-white pb-4">
+                <div className="border-b border-gray-200 pb-4">
                     <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                         <Menu as="div" className="relative inline-block text-left">
                             <div>
-                                <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+                                <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-gray-400">
                                     Sort
                                     <ChevronDownIcon
                                         className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
@@ -302,8 +371,14 @@ export default function Filters({ quickSpecs, brands }: { quickSpecs: PhoneQuick
                             Filters
                         </button>
                         <div className='flex'>
-                            <p className='mx-2 place-self-center font-semibold text-blue-800'>Brands</p>
+                            <p className='mx-2 place-self-center font-semibold text-blue-300'>Brands</p>
                             <BrandSearchBar dbBrands={brands} />
+                        </div>
+                        <div className='flex'>
+                            <p className='mx-2 place-self-center font-semibold text-blue-300'>OS</p>
+                            {os &&
+                                <OsSearchBar os={os} />
+                            }
                         </div>
                         <div className="hidden sm:block">
 
@@ -311,13 +386,13 @@ export default function Filters({ quickSpecs, brands }: { quickSpecs: PhoneQuick
                                 <Popover.Group className="-mx-4 flex items-center divide-x divide-gray-200">
                                     {filters.map((section, sectionIdx) => (
                                         <Popover key={section.name} className="relative inline-block px-4 text-left">
-                                            <Popover.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+                                            <Popover.Button className="group inline-flex justify-center text-sm font-medium text-white hover:text-gray-300">
                                                 <span>{section.name}</span>
-                                                {sectionIdx === 0 ? (
-                                                    <span className="ml-1.5 rounded bg-gray-200 py-0.5 px-1.5 text-xs font-semibold tabular-nums text-gray-700">
-                                                        1
-                                                    </span>
-                                                ) : null}
+                                                {/* {sectionIdx === 0 ? ( */}
+                                                <span className="ml-1.5 rounded bg-gray-200 py-0.5 px-1.5 text-xs font-semibold tabular-nums text-gray-700">
+                                                    {setFilterNumber(section.id)}
+                                                </span>
+                                                {/* ) : null} */}
                                                 <ChevronDownIcon
                                                     className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                                                     aria-hidden="true"
@@ -333,8 +408,8 @@ export default function Filters({ quickSpecs, brands }: { quickSpecs: PhoneQuick
                                                 leaveFrom="transform opacity-100 scale-100"
                                                 leaveTo="transform opacity-0 scale-95"
                                             >
-                                                <Popover.Panel className="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                                    <form className="space-y-4">
+                                                <Popover.Panel className="absolute right-0 z-10 mt-2 origin-top-right rounded-md p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                    <form className="space-y-4 z-50 bg-gray-800 p-3 rounded-lg">
                                                         {section.options.map((option, optionIdx) => (
                                                             <div key={option.value} className="flex items-center">
                                                                 <input
@@ -343,11 +418,16 @@ export default function Filters({ quickSpecs, brands }: { quickSpecs: PhoneQuick
                                                                     defaultValue={option.value}
                                                                     type="checkbox"
                                                                     defaultChecked={option.checked}
+                                                                    onChange={() => {
+                                                                        setFilterChoices(section.id, option.value);
+                                                                        dispatch(addToFilters({ label: option.label, value: option.value }))
+                                                                        option.checked = !option.checked
+                                                                    }}
                                                                     className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                                                 />
                                                                 <label
                                                                     htmlFor={`filter-${section.id}-${optionIdx}`}
-                                                                    className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900"
+                                                                    className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-300"
                                                                 >
                                                                     {option.label}
                                                                 </label>
@@ -365,9 +445,9 @@ export default function Filters({ quickSpecs, brands }: { quickSpecs: PhoneQuick
                 </div>
 
                 {/* Active filters */}
-                <div className="bg-gray-100">
+                <div className="border-b-gray-300 border-b">
                     <div className="mx-auto max-w-7xl py-3 px-4 sm:flex sm:items-center sm:px-6 lg:px-8">
-                        <h3 className="text-sm font-medium text-gray-500">
+                        <h3 className="text-sm font-medium text-gray-400">
                             Filters
                             <span className="sr-only">, active</span>
                         </h3>
@@ -376,13 +456,14 @@ export default function Filters({ quickSpecs, brands }: { quickSpecs: PhoneQuick
 
                         <div className="mt-2 sm:mt-0 sm:ml-4">
                             <div className="-m-1 flex flex-wrap items-center">
-                                {activeFilters.map((activeFilter) => (
+                                {activeFilters.map((activeFilter, i) => (
                                     <span
-                                        key={activeFilter.value}
+                                        key={i}
                                         className="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900"
                                     >
                                         <span>{activeFilter.label}</span>
                                         <button
+                                            onClick={() => dispatch(removeFromFilters(activeFilter))}
                                             type="button"
                                             className="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
                                         >
@@ -395,9 +476,52 @@ export default function Filters({ quickSpecs, brands }: { quickSpecs: PhoneQuick
                                 ))}
                             </div>
                         </div>
+                        <button
+                            onClick={() => {
+                                setCurrentPhones([]);
+                                setShowResults(false)
+                                dispatch(clearBatterySizeFilter())
+                                dispatch(clearBrandFilter())
+                                dispatch(clearDisplaySizeFilter())
+                                dispatch(clearRamFilter())
+                                dispatch(clearOSFilter())
+                                dispatch(clearActiveFilters())
+                                console.log(currentPhones)
+                            }}
+                            className='font-semibold hover:bg-red-600 hover:text-white active:scale-95 duration-50 transition text-lg mx-10 p-3 text-red-600 bg-white rounded-lg self-end'>
+                            Clear search fields
+                        </button>
                     </div>
                 </div>
             </section>
+            <div>
+                <div className='flex flex-col place-content-center place-items-center'>
+                    <button
+                        onClick={() => {
+                            setCurrentPhones(filterSearch(phones, filterBrands, filterOS, filterRam, filterDisplaySize, filterBatterySize));
+                            setShowResults(true)
+                        }}
+                        className='h-16 active:scale-95 hover:bg-blue-800 hover:text-white font-semibold text-3xl px-20 bg-white my-5 rounded-lg w-max'>
+                        Search Now
+                    </button>
+                    {/* <button
+                        onClick={() => {
+                            setCurrentPhones([]);
+                            setShowResults(false)
+                            dispatch(clearBatterySizeFilter())
+                            dispatch(clearBrandFilter())
+                            dispatch(clearDisplaySizeFilter())
+                            dispatch(clearRamFilter())
+                            dispatch(clearOSFilter())
+                            dispatch(clearActiveFilters())
+                            console.log(currentPhones)
+                        }}
+                        className='h-16 font-semibold text-xl px-10 bg-white my-5 rounded-lg'>
+                        Clear search fields
+                    </button> */}
+                </div>
+                <PhoneResultList currentPhones={currentPhones} />
+            </div>
         </div>
     )
 }

@@ -5,9 +5,12 @@ import { classNames } from '../lib/functions'
 import { Brand } from '../pages/brands'
 import Link from 'next/link'
 import { DetailedPhone } from '../types'
+import { useDispatch } from 'react-redux'
+import { addToComparison } from '../redux/slices/compareSlice'
 
 
 export default function SearchBar({ allPhones, i }: { allPhones: DetailedPhone[], i: number }) {
+    const dispatch = useDispatch()
     const [query, setQuery] = useState('')
     const [selectedPhone, setSelectedPhone] = useState(null)
 
@@ -21,7 +24,7 @@ export default function SearchBar({ allPhones, i }: { allPhones: DetailedPhone[]
     return (
         <Combobox as="div" value={selectedPhone} onChange={setSelectedPhone}>
             <Combobox.Label className="block text-sm font-medium text-gray-700">
-                Phone {i+1}
+                Phone {i + 1}
             </Combobox.Label>
             <div className="relative mt-1 p-2">
                 <Combobox.Input
@@ -35,10 +38,10 @@ export default function SearchBar({ allPhones, i }: { allPhones: DetailedPhone[]
 
                 {filteredPhones.length > 0 && (
                     <Combobox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                        {filteredPhones.map((brand, i) => (
+                        {filteredPhones.map((phone, i) => (
                             <Combobox.Option
                                 key={i}
-                                value={brand}
+                                value={phone}
                                 className={({ active }) =>
                                     classNames(
                                         'relative cursor-default select-none py-2 pl-3 pr-9',
@@ -49,11 +52,11 @@ export default function SearchBar({ allPhones, i }: { allPhones: DetailedPhone[]
                                 {({ active, selected }) => (
                                     <>
                                         <button
-                                            onClick={() => console.log(brand.name)}
+                                            onClick={() => dispatch(addToComparison(phone))}
                                             className="flex items-center">
-                                            <img src={brand.imgUrl} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                            <img src={phone.imgUrl} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
                                             <span className={classNames('ml-3 truncate', selected && 'font-semibold')}>
-                                                {brand.name}
+                                                {phone.name}
                                             </span>
                                         </button>
 

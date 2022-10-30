@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next'
 import React from 'react'
 import { getAllPhonesDetails } from '../../lib/cheerio'
-import { QuickSpecs, PhoneDetails, SpecDetail, Spec, PhoneSpec } from '../../types'
+import { QuickSpecs, SpecDetail, Spec, PhoneSpec } from '../../types'
 import { prisma } from '../../lib/db'
 
 
@@ -19,7 +19,7 @@ export default PhoneDetails
 export const getStaticProps: GetStaticProps = async () => {
     const allPhones = await prisma.phone.findMany()
 
-    getAllPhonesDetails(700, allPhones.length)
+    getAllPhonesDetails(1000, allPhones.length)
 
     return { props: {} }
 }

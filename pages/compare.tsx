@@ -12,7 +12,7 @@ type Props = {
     categories: DetailedCategory[]
     phones: DetailedPhone[]
     allPhones: DetailedPhone[]
-    quickSpecs:QuickSpec[]
+    quickSpecs: QuickSpec[]
 }
 
 function Compare({ categories, phones, allPhones, quickSpecs }: Props) {
@@ -21,7 +21,7 @@ function Compare({ categories, phones, allPhones, quickSpecs }: Props) {
     return (
         <div>
             {/* <CompareTable2 categories={categories} phones={phones} /> */}
-            <CompareTable categories={categories} phones={phones} allPhones={allPhones} quickSpecs={quickSpecs}/>
+            <CompareTable categories={categories} phones={phones} allPhones={allPhones} quickSpecs={quickSpecs} />
         </div>
     )
 }
@@ -37,7 +37,7 @@ export const getStaticProps: GetStaticProps = async () => {
         phones = await prisma.phone.findMany({ where: { OR: [{ id: 5555 }, { id: 5556 }, { id: 5557 }] }, include: { PhoneSpecs: { include: { spec: { include: { category: true } } } } } })
         categories = await prisma.category.findMany({ include: { specs: true } })
         quickSpecs = await prisma.quickSpec.findMany()
-        allPhones = await prisma.phone.findMany()
+        allPhones = await prisma.phone.findMany({ include: { PhoneSpecs: { include: { spec: { include: { category: true } } } }, PhoneQuickSpecs: true } })
     } catch (error) {
         console.log(error)
     }

@@ -8,11 +8,11 @@ import PopMenu from '../components/popover'
 import NewMenu from '../components/menu'
 
 const navMenu = [
-    { name: 'News', current: false, href:'/news' },
-    { name: 'Reviews', current: false, href:'/reviews' },
-    { name: 'Phones', current: false, href:'/phonefinder' },
-    { name: 'Brands', current: false, href:'#' },
-    { name: 'Comparison', current: false, href:'/compare' }
+    { name: 'News', current: false, href: '/news' },
+    { name: 'Reviews', current: false, href: '/reviews' },
+    { name: 'Phone Finder', current: false, href: '/phonefinder' },
+    { name: 'Brands', current: false, href: '#' },
+    { name: 'Comparison', current: false, href: '/compare' }
 ]
 
 export default function Navbar() {

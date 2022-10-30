@@ -15,7 +15,7 @@ export const compareSlice = createSlice({
             state.push(action.payload)
         },
         removeFromComparison: (state, action: PayloadAction<DetailedPhone>) => {
-            state.filter(item => item !== action.payload)
+         state.splice(state.indexOf(action.payload), 1)
         },
     },
 })
