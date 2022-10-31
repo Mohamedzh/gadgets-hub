@@ -11,10 +11,10 @@ export const brandFilterSlice = createSlice({
             state.push(action.payload)
         },
         removeFromBrands: (state, action: PayloadAction<string>) => {
-            state.splice(state.indexOf(action.payload, 1))
+            return state.filter(item => item !== action.payload)
         },
         clearBrandFilter: (state) => {
-            return []
+            return initialState
         }
     },
 })

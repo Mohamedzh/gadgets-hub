@@ -11,7 +11,7 @@ export const ramFilterSlice = createSlice({
             state.push(action.payload)
         },
         removeFromRam: (state, action: PayloadAction<string>) => {
-            state.splice(state.indexOf(action.payload, 1))
+            return state.filter(item => item !== action.payload)
         },
         clearRamFilter: (state) => {
             return initialState

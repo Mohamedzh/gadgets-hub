@@ -12,7 +12,7 @@ const Home: NextPage = ({
     news?: NewsType[], reviews?: ReviewType[], latestPhones?: Phone[]
   }) => {
   return (
-    <div className='bg-gray-900 container mx-10'>
+    <div className='bg-gray-900 container lg:mx-10'>
       <Head>
         <title>Tech Advisor</title>
         <meta name="description" content="Mobile phone database" />

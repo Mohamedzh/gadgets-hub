@@ -2,9 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
+html,
+body {
   background-color: rgb(17 24 39);
 }
+
+html {
+  overflow-y: scroll !important;
+}
+
 /* html,
 body {
   padding: 0;

@@ -4,7 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { classNames, monthNumberFromString } from '../lib/functions'
 import _ from 'lodash'
-import { Brand, PhoneQuickSpecs } from '@prisma/client'
+import { Brand, Phone, PhoneQuickSpecs } from '@prisma/client'
 import BrandSearchBar from './phoneFinderBrandSearchBar'
 import OsSearchBar from './phoneFinderOsSearchBar'
 import { PhoneFilter } from '../types'
@@ -57,7 +57,6 @@ const filters = [
         ],
     },
 ]
-// const activeFilters = [{ value: 'objects', label: 'Objects' }]
 
 type Props = {
     quickSpecs: PhoneQuickSpecs[]
@@ -95,6 +94,7 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
             if (filterBatterySize.includes(option)) { dispatch(removeFromBatterySize(option)) } else {
                 dispatch(addToBatterySize(option))
             }
+            console.log(filterBatterySize);
         }
     }
 
@@ -126,8 +126,6 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
         })
     }
 
-
-
     const uniqueSpecNames = _.uniqBy(quickSpecs, 'quickspecName')
     const uniqueValues = _.uniqBy(quickSpecs, 'value')
 
@@ -142,38 +140,6 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
             }
         })
     }
-    let displaySize = uniquesSpecs.find(spec => spec.name === 'Display size')?.options.map(option => {
-        return {
-            option: Number(option.slice(0, option.indexOf('"')))
-        }
-    })
-
-
-    let date = uniquesSpecs.find(spec => spec.name === 'Release date')?.options.map(option => {
-        let year = option.slice(option.indexOf(' '), option.indexOf(' ') + 5)
-        let month = option.slice(option.indexOf(',') + 2, option.lastIndexOf(" ")).slice(0, 3)
-        month = monthNumberFromString(month.toLowerCase())
-        let day = (option.slice(option.lastIndexOf(' ') + 1).length === 0 ? '00' : option.slice(option.lastIndexOf(' ') + 1))
-        let dateNum
-        if (option === 'Cancelled') {
-            dateNum = null
-        } else if (option.indexOf('Exp') === 0) {
-            year = option.slice(option.indexOf('2'), option.indexOf('2') + 4)
-            month = monthNumberFromString(option.slice(option.lastIndexOf(' ')).toLowerCase())
-            dateNum = year + month + '00'
-        } else if (option.slice(option.lastIndexOf(' ')).length > 2) {
-            year = option.slice(option.indexOf(' '), option.indexOf(' ') + 5)
-            month = option.slice(option.indexOf(',') + 2).slice(0, 3)
-            month = monthNumberFromString(month.toLowerCase())
-            dateNum = year + month + '00'
-        }
-        else {
-            dateNum = year + month + day
-        }
-        return {
-            option: (dateNum)
-        }
-    })
 
     let os = uniquesSpecs.find(spec => spec.name === 'OS')?.options.map(option => {
         let system
@@ -187,33 +153,6 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
         }
     })
     console.log(uniquesSpecs);
-
-    let ramSize = uniquesSpecs.find(spec => spec.name === 'RAM size')?.options.map(option => {
-        let system
-        if (option.indexOf('/') !== -1) {
-            system = option.slice(0, option.indexOf('/'))
-        } else if (option.indexOf('-') !== -1) {
-            system = option.slice(0, option.indexOf('-'))
-        } else if (option.indexOf('MB') !== -1) {
-            system = '0.' + option.slice(0, option.indexOf('MB'))
-        } else {
-            system = option.slice(0, option.indexOf('G'))
-        }
-        return {
-            option: (system)
-        }
-    })
-
-    let batterySize = uniquesSpecs.find(spec => spec.name === 'Battery size')?.options.map(option => {
-        let system
-        system = option.slice(0, option.indexOf('m'))
-        if (system === '') {
-            system = null
-        }
-        return {
-            option: Number(system)
-        }
-    })
 
 
     return (
@@ -244,7 +183,7 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
                             leaveTo="translate-x-full"
                         >
                             <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
-                                <div className="flex items-center justify-between px-4">
+                                <div className="flex items-center justify-between px-4 mt-16">
                                     <h2 className="text-lg font-medium text-gray-900">Filters</h2>
                                     <button
                                         type="button"
@@ -283,6 +222,11 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
                                                                         defaultValue={option.value}
                                                                         type="checkbox"
                                                                         defaultChecked={option.checked}
+                                                                        onChange={() => {
+                                                                            setFilterChoices(section.id, option.value);
+                                                                            dispatch(addToFilters({ label: option.label, value: option.value }))
+                                                                            option.checked = !option.checked
+                                                                        }}
                                                                         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                                                     />
                                                                     <label
@@ -307,7 +251,7 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
             </Transition.Root>
 
             <div className="mx-auto max-w-7xl pb-8 sm:px-2">
-                <p className="mt-4 max-w-xl text-gray-300">
+                <p className="mt-4 text-center lg:text-left max-w-xl text-gray-300">
                     Find your phone using a combination of brand and specifications filters.
                 </p>
             </div>
@@ -319,62 +263,64 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
                 </h2>
 
                 <div className="border-b border-gray-200 pb-4">
-                    <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-                        <Menu as="div" className="relative inline-block text-left">
-                            <div>
-                                <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-gray-400">
-                                    Sort
-                                    <ChevronDownIcon
-                                        className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                                        aria-hidden="true"
-                                    />
-                                </Menu.Button>
-                            </div>
-
-                            <Transition
-                                as={Fragment}
-                                enter="transition ease-out duration-100"
-                                enterFrom="transform opacity-0 scale-95"
-                                enterTo="transform opacity-100 scale-100"
-                                leave="transition ease-in duration-75"
-                                leaveFrom="transform opacity-100 scale-100"
-                                leaveTo="transform opacity-0 scale-95"
-                            >
-                                <Menu.Items className="absolute left-0 z-10 mt-2 w-40 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                    <div className="py-1">
-                                        {sortOptions.map((option) => (
-                                            <Menu.Item key={option.name}>
-                                                {({ active }) => (
-                                                    <a
-                                                        href={option.href}
-                                                        className={classNames(
-                                                            option.current ? 'font-medium text-gray-900' : 'text-gray-500',
-                                                            active ? 'bg-gray-100' : '',
-                                                            'block px-4 py-2 text-sm'
-                                                        )}
-                                                    >
-                                                        {option.name}
-                                                    </a>
-                                                )}
-                                            </Menu.Item>
-                                        ))}
-                                    </div>
-                                </Menu.Items>
-                            </Transition>
-                        </Menu>
-
-                        <button
-                            type="button"
-                            className="inline-block text-sm font-medium text-gray-700 hover:text-gray-900 sm:hidden"
-                            onClick={() => setOpen(true)}
-                        >
-                            Filters
-                        </button>
+                    <div className="mx-auto flex flex-col lg:flex-row max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                         <div className='flex'>
+                            <Menu as="div" className="relative inline-block text-left">
+                                <div>
+                                    <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-gray-400">
+                                        Sort
+                                        <ChevronDownIcon
+                                            className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                                            aria-hidden="true"
+                                        />
+                                    </Menu.Button>
+                                </div>
+
+                                <Transition
+                                    as={Fragment}
+                                    enter="transition ease-out duration-100"
+                                    enterFrom="transform opacity-0 scale-95"
+                                    enterTo="transform opacity-100 scale-100"
+                                    leave="transition ease-in duration-75"
+                                    leaveFrom="transform opacity-100 scale-100"
+                                    leaveTo="transform opacity-0 scale-95"
+                                >
+                                    <Menu.Items className="absolute left-0 z-10 mt-2 w-40 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                        <div className="py-1">
+                                            {sortOptions.map((option) => (
+                                                <Menu.Item key={option.name}>
+                                                    {({ active }) => (
+                                                        <a
+                                                            href={option.href}
+                                                            className={classNames(
+                                                                option.current ? 'font-medium text-gray-900' : 'text-gray-500',
+                                                                active ? 'bg-gray-100' : '',
+                                                                'block px-4 py-2 text-sm'
+                                                            )}
+                                                        >
+                                                            {option.name}
+                                                        </a>
+                                                    )}
+                                                </Menu.Item>
+                                            ))}
+                                        </div>
+                                    </Menu.Items>
+                                </Transition>
+                            </Menu>
+
+                            <button
+                                type="button"
+                                className="inline-block text-sm font-medium ml-40 text-gray-200 hover:text-gray-500 sm:hidden"
+                                onClick={() => setOpen(true)}
+                            >
+                                Filters
+                            </button>
+                        </div>
+                        <div className='flex flex-col lg:flex-row mt-10 lg:mt-0'>
                             <p className='mx-2 place-self-center font-semibold text-blue-300'>Brands</p>
                             <BrandSearchBar dbBrands={brands} />
                         </div>
-                        <div className='flex'>
+                        <div className='flex flex-col lg:flex-row mt-5 lg:mt-0'>
                             <p className='mx-2 place-self-center font-semibold text-blue-300'>OS</p>
                             {os &&
                                 <OsSearchBar os={os} />
@@ -454,12 +400,12 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
 
                         <div aria-hidden="true" className="hidden h-5 w-px bg-gray-300 sm:ml-4 sm:block" />
 
-                        <div className="mt-2 sm:mt-0 sm:ml-4">
+                        <div className="mt-2 sm:mt-0 sm:ml-4 mb-3 lg:mb-0">
                             <div className="-m-1 flex flex-wrap items-center">
                                 {activeFilters.map((activeFilter, i) => (
                                     <span
                                         key={i}
-                                        className="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900"
+                                        className="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-xs font-semibold lg:text-sm lg:font-medium text-gray-900"
                                     >
                                         <span>{activeFilter.label}</span>
                                         <button
@@ -501,7 +447,7 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
                             setCurrentPhones(filterSearch(phones, filterBrands, filterOS, filterRam, filterDisplaySize, filterBatterySize));
                             setShowResults(true)
                         }}
-                        className='h-16 active:scale-95 hover:bg-blue-800 hover:text-white font-semibold text-3xl px-20 bg-white my-5 rounded-lg w-max'>
+                        className='h-16 active:scale-95 hover:bg-blue-800 hover:text-white font-semibold text-3xl px-10 lg:px-20 bg-white my-5 rounded-lg w-max'>
                         Search Now
                     </button>
                     {/* <button

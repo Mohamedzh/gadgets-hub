@@ -11,7 +11,7 @@ export const activeFiltersSlice = createSlice({
             state.push(action.payload)
         },
         removeFromFilters: (state, action: PayloadAction<{ value: string, label: string }>) => {
-            state.splice(state.indexOf(action.payload), 1)
+            return state.filter(item => item.value !== action.payload.value)
         },
         clearActiveFilters: (state) => {
             return initialState

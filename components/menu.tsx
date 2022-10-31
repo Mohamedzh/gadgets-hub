@@ -5,10 +5,10 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 const brandsMenu = [
-    { name: 'Apple', url: '/brands/apple' },
-    { name: 'Samsung', url: '/brands/samsung' },
-    { name: 'Xiaomi', url: '/brands/xiaomi' },
-    { name: 'OnePlus', url: '/brands/oneplus' },
+    { name: 'Apple', url: '/brands/apple', img: '/appleLogo.png' },
+    { name: 'Samsung', url: '/brands/samsung', img: '/samsungLogo.png' },
+    { name: 'Xiaomi', url: '/brands/xiaomi', img: '/xiaomiLogo.png' },
+    { name: 'OnePlus', url: '/brands/oneplus', img: '/oneplusLogo.png' },
 ]
 
 export default function NavMenu({ nav }: { nav: { name: string, current: boolean } }) {
@@ -45,7 +45,7 @@ export default function NavMenu({ nav }: { nav: { name: string, current: boolean
                                                     className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
                                                         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                                 >
-                                                    {active ? (
+                                                    {/* {active ? (
                                                         <EditActiveIcon
                                                             className="mr-2 h-5 w-5"
                                                             aria-hidden="true"
@@ -55,7 +55,8 @@ export default function NavMenu({ nav }: { nav: { name: string, current: boolean
                                                             className="mr-2 h-5 w-5"
                                                             aria-hidden="true"
                                                         />
-                                                    )}
+                                                    )} */}
+                                                    <img className='h-7 w-7 mr-2' src={brand.img} />
                                                     {brand.name}
                                                 </button>
                                             )}
@@ -63,69 +64,7 @@ export default function NavMenu({ nav }: { nav: { name: string, current: boolean
                                     </a>
                                 </Link>
                             )}
-                            {/* <Menu.Item>
-                                {({ active }) => (
-                                    <button
-                                        className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                    >
-                                        {active ? (
-                                            <DuplicateActiveIcon
-                                                className="mr-2 h-5 w-5"
-                                                aria-hidden="true"
-                                            />
-                                        ) : (
-                                            <DuplicateInactiveIcon
-                                                className="mr-2 h-5 w-5"
-                                                aria-hidden="true"
-                                            />
-                                        )}
-                                        Samsung
-                                    </button>
-                                )}
-                            </Menu.Item>
-                            <Menu.Item>
-                                {({ active }) => (
-                                    <button
-                                        className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                    >
-                                        {active ? (
-                                            <ArchiveActiveIcon
-                                                className="mr-2 h-5 w-5"
-                                                aria-hidden="true"
-                                            />
-                                        ) : (
-                                            <ArchiveInactiveIcon
-                                                className="mr-2 h-5 w-5"
-                                                aria-hidden="true"
-                                            />
-                                        )}
-                                        Xiaomi
-                                    </button>
-                                )}
-                            </Menu.Item>
-                            <Menu.Item>
-                                {({ active }) => (
-                                    <button
-                                        className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                    >
-                                        {active ? (
-                                            <MoveActiveIcon
-                                                className="mr-2 h-5 w-5"
-                                                aria-hidden="true"
-                                            />
-                                        ) : (
-                                            <MoveInactiveIcon
-                                                className="mr-2 h-5 w-5"
-                                                aria-hidden="true"
-                                            />
-                                        )}
-                                        OnePlus
-                                    </button>
-                                )}
-                            </Menu.Item> */}
+                            
                         </div>
                         <div className="px-1 py-1">
                             <Link href={'/brands'}>
@@ -136,7 +75,7 @@ export default function NavMenu({ nav }: { nav: { name: string, current: boolean
                                                 className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
                                                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                             >
-                                                {active ? (
+                                                {/* {active ? (
                                                     <DeleteActiveIcon
                                                         className="mr-2 h-5 w-5 text-violet-400"
                                                         aria-hidden="true"
@@ -146,7 +85,7 @@ export default function NavMenu({ nav }: { nav: { name: string, current: boolean
                                                         className="mr-2 h-5 w-5 text-violet-400"
                                                         aria-hidden="true"
                                                     />
-                                                )}
+                                                )} */}
                                                 Show All Brands
                                             </button>
                                         )}

@@ -127,3 +127,10 @@ model Review {
   brandName  String?
   brand      Brand?   @relation(fields: [brandName], references: [name])
 }
+
+model User {
+  id       String  @id
+  name     String
+  nickName String  @unique
+  email    String  @unique
+}

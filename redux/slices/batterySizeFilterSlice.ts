@@ -11,7 +11,7 @@ export const batterySizeFilterSlice = createSlice({
             state.push(action.payload)
         },
         removeFromBatterySize: (state, action: PayloadAction<string>) => {
-            state.splice(state.indexOf(action.payload, 1))
+            return state.filter(item => item !== action.payload)
         },
         clearBatterySizeFilter: (state) => {
             return initialState

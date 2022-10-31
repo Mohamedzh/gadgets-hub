@@ -11,7 +11,7 @@ export const displaySizeFilterSlice = createSlice({
             state.push(action.payload)
         },
         removeFromDisplaySize: (state, action: PayloadAction<string>) => {
-            state.splice(state.indexOf(action.payload, 1))
+            return state.filter(item => item !== action.payload)
         },
         clearDisplaySizeFilter: (state) => {
             return initialState

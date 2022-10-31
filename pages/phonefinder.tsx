@@ -17,7 +17,7 @@ function PhoneFinder({ quickSpecs, brands, phones }: Props) {
         <div className='mx-10'>
             <div
                 style={{ backgroundImage: `url('https://images.unsplash.com/photo-1516382799247-87df95d790b7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=874&q=80')` }}
-                className='text-black flex bg-[bottom] bg-[length:1269px_450px] h-72 rounded-xl mt-10 py-10 px-10 text-5xl font-bold font-serif'>
+                className='text-gray-200 lg:text-black flex bg-[bottom] bg-[length:1269px_450px] lg:h-72 rounded-xl mt-10 pt-20 pb-3 lg:py-10 px-3 lg:px-10 text-2xl lg:text-5xl font-bold font-serif'>
                 <p className='mt-auto'>Phone Finder</p>
             </div>
             <Filters quickSpecs={quickSpecs} brands={brands} phones={phones} />

@@ -11,7 +11,7 @@ export const osFilterSlice = createSlice({
             state.push(action.payload)
         },
         removeFromOS: (state, action: PayloadAction<string>) => {
-            state.splice(state.indexOf(action.payload, 1))
+            return state.filter(item => item !== action.payload)
         },
         clearOSFilter: (state) => {
             return initialState

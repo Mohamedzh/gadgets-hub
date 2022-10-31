@@ -48,11 +48,13 @@ function CompareTable({ categories, phones, allPhones, quickSpecs }: Props) {
                 </div>
 
             </div>
-            <div style={{ maxHeight: '84vh' }} className="mt-8 flex flex-col">
-                <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div
+                // style={{ maxHeight: '84vh' }}
+                className="mt-8 max-h-[84vh] flex flex-col">
+                <div className="-my-2 -mx-4 lg:overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                         <div className="shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                            <table className="min-w-full overflow-scroll">
+                            <table className="lg:min-w-full overflow-scroll">
                                 <thead className="bg-white sticky top-0 z-40">
                                     <tr>
                                         <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-lg font-semibold text-gray-900 sm:pl-6 ">
@@ -78,7 +80,7 @@ function CompareTable({ categories, phones, allPhones, quickSpecs }: Props) {
                                         )}
                                         {Array.from(Array(setTableColumns(currentPhones.length)).keys()).map((item, i) =>
                                             <th key={i}>
-                                                <CompareSearchBar allPhones={allPhones} i={i}/>
+                                                <CompareSearchBar allPhones={allPhones} i={i} />
                                             </th>
                                         )}
                                     </tr>

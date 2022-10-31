@@ -29,13 +29,13 @@ function Phones({ dbBrands }: { dbBrands: Brand[] }) {
                     >
                         <Link href={`/brands/${brand.name.toLowerCase()}`}>
                             <a
-                                className='text-3xl font-semibold text-slate-400 font-mono'
+                                className='text-xl lg:text-3xl font-semibold text-slate-400 font-mono'
                             >
                                 {brand.name.toUpperCase()}
                             </a>
                         </Link>
-                        {brand.phones.length > 0 && <p className='text-white'>{brand.phones.length} {brand.phones.length === 1 ? 'phone' : 'phones'}</p>}
-                        {brand.Reviews.length > 0 && <p className='text-white'>{brand.Reviews.length} {brand.Reviews.length === 1 ? 'review' : 'reviews'}</p>}
+                        {brand.phones.length > 0 && <p className='text-white text-sm lg:text-base'>{brand.phones.length} {brand.phones.length === 1 ? 'phone' : 'phones'}</p>}
+                        {brand.Reviews.length > 0 && <p className='text-white text-sm lg:text-base'>{brand.Reviews.length} {brand.Reviews.length === 1 ? 'review' : 'reviews'}</p>}
                     </div>
                 )}
             </div>

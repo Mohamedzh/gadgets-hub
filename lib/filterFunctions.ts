@@ -13,20 +13,20 @@ export const convertRAM = (option: string) => {
         system = option.slice(0, option.indexOf('G'))
     }
 
-    return Number(system)
+    return system
 }
 
 export const convertDisplaySize = (option: string) => {
-    return Number(option.slice(0, option.indexOf('"')))
+    return option.slice(0, option.indexOf('"'))
 }
 
 export const convertBatterySize = (option: string) => {
     let system
     system = option.slice(0, option.indexOf('m'))
     if (system === '') {
-        system = null
+        system = ''
     }
-    return Number(system)
+    return system
 }
 
 export const convertDate = (option: string) => {
@@ -36,7 +36,7 @@ export const convertDate = (option: string) => {
     let day = (option.slice(option.lastIndexOf(' ') + 1).length === 0 ? '00' : option.slice(option.lastIndexOf(' ') + 1))
     let dateNum
     if (option === 'Cancelled') {
-        dateNum = null
+        dateNum = ''
     } else if (option.indexOf('Exp') === 0) {
         year = option.slice(option.indexOf('2'), option.indexOf('2') + 4)
         month = monthNumberFromString(option.slice(option.lastIndexOf(' ')).toLowerCase())
@@ -50,7 +50,7 @@ export const convertDate = (option: string) => {
     else {
         dateNum = year + month + day
     }
-    return Number(dateNum)
+    return dateNum
 }
 
 export const convertOS = (option: string) => {
@@ -103,13 +103,13 @@ export const filterSearch = (
             let ram = []
             for (let i = 0; i < ramFilter.length; i++) {
                 if (ramFilter[i] === '<4') {
-                    ram.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'RAM size' && spec.value < 4)))
+                    ram.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'RAM size' && Number(spec.value) < 4)))
                 } else if (ramFilter[i] === '4-8') {
-                    ram.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'RAM size' && (spec.value <= 8 || spec.value >= 4))))
+                    ram.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'RAM size' && (Number(spec.value) <= 8 || Number(spec.value) >= 4))))
                 } else if (ramFilter[i] === '8-12') {
-                    ram.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'RAM size' && (spec.value <= 12 || spec.value >= 8))))
+                    ram.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'RAM size' && (Number(spec.value) <= 12 || Number(spec.value) >= 8))))
                 } else if (ramFilter[i] === '>12') {
-                    ram.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'RAM size' && spec.value > 12)))
+                    ram.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'RAM size' && Number(spec.value) > 12)))
                 }
             }
             return ram
@@ -121,14 +121,14 @@ export const filterSearch = (
             let displaySize = []
             for (let i = 0; i < displaySizeFilter.length; i++) {
                 if (displaySizeFilter[i] === '<4') {
-                    displaySize.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'Display size' && spec.value < 4)))
+                    displaySize.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'Display size' && Number(spec.value) < 4)))
                 } else if (displaySizeFilter[i] === '4-6') {
-                    displaySize.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'Display size' && spec.value <= 6 && spec.value >= 4)))
+                    displaySize.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'Display size' && Number(spec.value) <= 6 && Number(spec.value) >= 4)))
                 } else if (displaySizeFilter[i] === '6-8') {
-                    displaySize.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'Display size' && spec.value <= 8 && spec.value >= 6)))
+                    displaySize.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'Display size' && Number(spec.value) <= 8 && Number(spec.value) >= 6)))
                 }
                 else if (displaySizeFilter[i] === '>6') {
-                    displaySize.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'Display size' && spec.value > 6)))
+                    displaySize.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'Display size' && Number(spec.value) > 6)))
                 }
             }
             return displaySize
@@ -140,13 +140,13 @@ export const filterSearch = (
             let batterySize = []
             for (let i = 0; i < batterySizeFilter.length; i++) {
                 if (batterySizeFilter[i] === '<3000') {
-                    batterySize.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'Battery size' && spec.value < 3000)))
+                    batterySize.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'Battery size' && Number(spec.value) < 3000)))
                 } else if (batterySizeFilter[i] === '3000-4500') {
-                    batterySize.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'Battery size' && spec.value <= 4500 && spec.value >= 3000)))
+                    batterySize.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'Battery size' && Number(spec.value) <= 4500 && Number(spec.value) >= 3000)))
                 } else if (batterySizeFilter[i] === '4500-5000') {
-                    batterySize.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'Battery size' && spec.value <= 5000 && spec.value >= 4500)))
+                    batterySize.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'Battery size' && Number(spec.value) <= 5000 && Number(spec.value) >= 4500)))
                 } else if (batterySizeFilter[i] === '>5000') {
-                    batterySize.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'Battery size' && spec.value > 5000)))
+                    batterySize.push(...phones.filter(phone => phone.PhoneQuickSpecs.find(spec => spec.quickspecName === 'Battery size' && Number(spec.value) > 5000)))
                 }
             }
             return batterySize
