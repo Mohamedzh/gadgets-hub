@@ -4,6 +4,7 @@ import { BrandPhone, Page, PageData, PhoneSpec, QuickSpecs, ReviewType, Spec, Sp
 import { prisma } from './db'
 import wretch from 'wretch'
 import { Brand } from "../pages/phones"
+import { Phone } from "@prisma/client"
 
 export const getPages = async (url: string) => {
     const res = await axios.get(`https://www.gsmarena.com/${url}.php`)
@@ -253,8 +254,7 @@ export const getBrandsDetails = async () => {
     }
 }
 
-export const getAllPhonesDetails = async (min: number, max: number) => {
-    const allPhones = await prisma.phone.findMany()
+export const getAllPhonesDetails = async (min: number, max: number, allPhones: Phone[]) => {
 
     let j = 0
 

@@ -169,15 +169,16 @@ export default function Navbar() {
                                                         <Menu.Item key={i}>
                                                             {({ active }) => (
                                                                 i === 0 ?
-                                                                    <a
-                                                                        href="#"
-                                                                        className={classNames(
-                                                                            active ? 'bg-gray-100' : '',
-                                                                            'block px-4 py-2 text-sm text-gray-700'
-                                                                        )}
-                                                                    >
-                                                                        {item.name}
-                                                                    </a> :
+                                                                    <Link href="/profile">
+                                                                        <a
+                                                                            className={classNames(
+                                                                                active ? 'bg-gray-100' : '',
+                                                                                'block px-4 py-2 text-sm text-gray-700'
+                                                                            )}
+                                                                        >
+                                                                            {item.name}
+                                                                        </a>
+                                                                    </Link> :
                                                                     <a
                                                                         onClick={() => supabaseClient.auth.signOut()}
                                                                         className={classNames(
@@ -244,14 +245,26 @@ export default function Navbar() {
                                 </div>
                                 <div className="mt-3 space-y-1 px-2">
                                     {profileMenu.map((item, i) =>
-                                        <Disclosure.Button
-                                            key={i}
-                                            as="a"
-                                            href="#"
-                                            className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                                        >
-                                            {item.name}
-                                        </Disclosure.Button>
+                                        i === 0 ?
+                                            <Link href='/profile'>
+                                                <Disclosure.Button
+                                                    key={i}
+                                                    as="a"
+
+                                                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                                                >
+                                                    {item.name}
+                                                </Disclosure.Button>
+                                            </Link>
+                                            :
+                                            <Disclosure.Button
+                                                onClick={() => supabaseClient.auth.signOut()}
+                                                key={i}
+                                                as="a"
+                                                className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                                            >
+                                                {item.name}
+                                            </Disclosure.Button>
                                     )}
                                 </div>
                             </div>

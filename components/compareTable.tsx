@@ -50,12 +50,12 @@ function CompareTable({ categories, phones, allPhones, quickSpecs }: Props) {
             </div>
             <div
                 // style={{ maxHeight: '84vh' }}
-                className="mt-8 max-h-[84vh] flex flex-col">
+                className="mt-8 lg:max-h-[84vh] flex flex-col">
                 <div className="-my-2 -mx-4 lg:overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                         <div className="shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                            <table className="lg:min-w-full overflow-scroll">
-                                <thead className="bg-white sticky top-0 z-40">
+                            <table className="lg:min-w-full overflow-scroll mb-10">
+                                <thead className="bg-gray-300 sticky top-0 z-40">
                                     <tr>
                                         <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-lg font-semibold text-gray-900 sm:pl-6 ">
                                             Phones
@@ -85,7 +85,7 @@ function CompareTable({ categories, phones, allPhones, quickSpecs }: Props) {
                                         )}
                                     </tr>
                                 </thead>
-                                <tbody className="bg-white">
+                                <tbody className="bg-gray-700">
                                     <tr className="border-t border-gray-200">
                                         <th
                                             colSpan={4}
@@ -100,11 +100,11 @@ function CompareTable({ categories, phones, allPhones, quickSpecs }: Props) {
                                             <tr
                                                 className={classNames(i === 0 ? 'border-gray-300' : 'border-gray-200', 'border-t divide-x-2')}
                                             >
-                                                <td className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                                <td className=" py-4 pl-4 pr-3 text-sm font-medium text-yellow-400 text-center sm:pl-6">
                                                     {quickSpec.name}
                                                 </td>
                                                 {currentPhones.map((phone, i) =>
-                                                    <td key={i} className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 text-center">
+                                                    <td key={i} className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-300 sm:pl-6 text-center">
                                                         {(phone.PhoneQuickSpecs.find(x => x.quickspecName === quickSpec.name))?.value || 'NA'}
                                                     </td>
                                                 )}
@@ -143,11 +143,11 @@ function CompareTable({ categories, phones, allPhones, quickSpecs }: Props) {
                                                     key={i}
                                                     className={classNames(i === 0 ? 'border-gray-300' : 'border-gray-200', 'border-t')}
                                                 >
-                                                    <td className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                                    <td className=" py-4 pl-4 pr-3 text-sm font-medium text-yellow-400 sm:pl-6">
                                                         {spec.name}
                                                     </td>
                                                     {currentPhones.map(phone =>
-                                                        <td className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 text-center">
+                                                        <td className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-100 sm:pl-6 text-center">
                                                             {(phone.PhoneSpecs.find(x => x.spec.alias === spec.alias))?.value || 'NA'}
                                                         </td>
                                                     )}

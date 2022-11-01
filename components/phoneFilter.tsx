@@ -9,6 +9,8 @@ import Price from './priceFilter'
 import DateFilter from './dateFilter'
 import Pagination from './brandPhonesPagination'
 import _ from 'lodash'
+import { EURPrice, Phone } from '@prisma/client'
+import { PhoneWithPrice } from '../types'
 
 const sortOptions = [
     { name: 'A-Z', function: 'sort', current: false },
@@ -21,20 +23,21 @@ const sortOptions = [
 ]
 
 
-export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[], brand: string }) {
+export default function PhoneFilter({ phones, brand }: { phones: PhoneWithPrice[], brand: string }) {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
     const [page, setPage] = useState(1)
     const [pageNo, setPageNo] = useState(1)
-    const [sortedPhones, setSortedPhones] = useState(phones)
+    const [sortedPhones, setSortedPhones] = useState<PhoneWithPrice[]>(phones)
     const currentPhones = paginate(page, 40, sortedPhones)
 
-    useEffect(() => { setPageNo(Math.ceil(phones.length / 40)) }, [])
+    useEffect(() => { setPageNo(Math.ceil(sortedPhones.length / 40)) }, [sortedPhones])
 
-    const sorting = (phones: PhoneSummary[], option: string) => {
+    const sorting = (sortedPhones: PhoneWithPrice[], option: string) => {
         if (option === 'A-Z') {
-            setSortedPhones(_.sortBy(phones, ['name']))
+            setSortedPhones(_.sortBy(sortedPhones, ['name']))
+
         } else if (option === 'Z-A') {
-            setSortedPhones(_.orderBy(phones, 'name', 'desc'))
+            setSortedPhones(_.orderBy(sortedPhones, 'name', 'desc'))
         }
     }
 
@@ -91,7 +94,7 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
                         <div className="flex items-center">
                             <Menu as="div" className="relative inline-block text-left">
                                 <div>
-                                    <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+                                    <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-100 hover:text-gray-400">
                                         Sort
                                         <ChevronDownIcon
                                             className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
@@ -132,10 +135,10 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
                                 </Transition>
                             </Menu>
 
-                            <button type="button" className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7">
+                            {/* <button type="button" className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7">
                                 <span className="sr-only">View grid</span>
                                 <Squares2X2Icon className="h-5 w-5" aria-hidden="true" />
-                            </button>
+                            </button> */}
                             <button
                                 type="button"
                                 className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
@@ -154,8 +157,8 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
 
                         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                             <form className="hidden lg:block">
-                                <Price />
-                                <DateFilter phones={phones} />
+                                {/* <Price phones={phones} setSortedPhones={setSortedPhones} sortedPhones={sortedPhones} /> */}
+                                <DateFilter sortedPhones={sortedPhones} phones={phones} setSortedPhones={setSortedPhones} />
                             </form>
 
                             {/* Product grid */}
@@ -164,11 +167,11 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneSummary[],
                                 {/* <div className="h-96 rounded-lg border-4 border-dashed border-gray-200 lg:h-full" /> */}
                                 {/* /End replace */}
                                 <div className='lg:hidden'>
-                                    <Price />
-                                    <DateFilter phones={phones} />
+                                    {/* <Price phones={phones} setSortedPhones={setSortedPhones} sortedPhones={sortedPhones} /> */}
+                                    <DateFilter phones={phones} sortedPhones={sortedPhones} setSortedPhones={setSortedPhones} />
                                 </div>
                                 <PhoneList currentPhones={currentPhones} />
-                                <Pagination setPage={setPage} pageNo={pageNo} page={page} phones={phones} />
+                                <Pagination setPage={setPage} pageNo={pageNo} page={page} phones={sortedPhones} />
                             </div>
                         </div>
                     </section>

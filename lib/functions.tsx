@@ -17,9 +17,6 @@ export const paginate = (selectedPage: number, elementsPerPage: number, arrayToP
     return paginatedArray
 }
 
-export const phoneSortAZ = (phones: []) => {
-    phones.sort()
-}
 
 export const createPhoneData = (categories: DetailedCategory[], specs: DetailedPhoneSpecs[]) => {
     let detailedCategories: { name: string, specs: { spec: string, value: string }[] }[] = []
@@ -67,7 +64,7 @@ export const AddButton = () => {
 export const AddToComparison = (
     { dispatch, phone, setShow }: { dispatch: Dispatch, phone: DetailedPhone, setShow: React.Dispatch<React.SetStateAction<boolean>> }) => {
     return (
-        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+        <div className="mt-4 sm:mt-0 sm:flex-none">
             <button
                 onClick={() => { dispatch(addToComparison(phone)); setShow(true) }}
                 type="button"

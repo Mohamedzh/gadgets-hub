@@ -2,15 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { GetStaticProps } from 'next'
 import { prisma } from '../../lib/db'
 import ReviewsPage from '../../components/reviewsPage'
-import wretch from 'wretch'
 import { Review } from '@prisma/client'
 import Pagination from '../../components/reviewsPagination'
-import { paginate } from '../../lib/functions'
+import { monthNumberFromString, paginate } from '../../lib/functions'
 import { getLatestReviews } from '../../lib/cheerio'
+import SearchBar from '../../components/reviewSearchBar'
+import _ from 'lodash'
 
-type Props = { reviews: Review[] }
+type Props = {
+    reviews: Review[]
+    brands: { name: string }[]
+}
 
-function Reviews({ reviews }: Props) {
+function Reviews({ reviews, brands }: Props) {
     const [page, setPage] = useState(1)
     const [pageNo, setPageNo] = useState(1)
     const currentReviews = paginate(page, 30, reviews)
@@ -27,6 +31,7 @@ function Reviews({ reviews }: Props) {
             </div>
             {reviews.length > 0 &&
                 <div>
+                    <SearchBar brands={brands} />
                     <ReviewsPage reviews={currentReviews} />
                     <Pagination setPage={setPage} pageNo={pageNo} page={page} reviews={reviews} />
                 </div>
@@ -39,16 +44,20 @@ export default Reviews
 
 export const getStaticProps: GetStaticProps = async () => {
     let reviews
+    let brands
     try {
-        reviews = await prisma.review.findMany({ select: { title: true, link: true, imgUrl: true, reviewDate: true } })
-        const brands = await prisma.brand.findMany({ select: { name: true } })
+
+        brands = await prisma.brand.findMany({ select: { name: true } })
 
         let latestReviews = await getLatestReviews()
         await prisma.review.createMany({ data: latestReviews, skipDuplicates: true })
+
+        reviews = await prisma.review.findMany({ select: { title: true, link: true, imgUrl: true, reviewDate: true } })
+        
 
     } catch (error) {
         console.log(error)
     }
 
-    return { props: { reviews }, revalidate: 86400 }
+    return { props: { reviews, brands }, revalidate: 86400 }
 }

@@ -3,13 +3,22 @@ import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from '../lib/functions';
+import { Dispatch, SetStateAction } from 'react';
+import { EURPrice, Phone } from '@prisma/client';
+import { PhoneWithPrice } from '../types';
 
 
 function valuetext(value: number) {
-    return `${value}°C`;
+    return `Year ${value}`;
 }
 
-export default function RangeSlider({ phones }: { phones: any[] }) {
+type Props = {
+    phones: PhoneWithPrice[]
+    sortedPhones: PhoneWithPrice[]
+    setSortedPhones: Dispatch<SetStateAction<PhoneWithPrice[]>>
+}
+
+export default function RangeSlider({ phones, setSortedPhones, sortedPhones }: Props) {
     const years = phones.map(phone => { return phone.year })
 
     let min = Math.min(...years)
@@ -18,8 +27,13 @@ export default function RangeSlider({ phones }: { phones: any[] }) {
 
     const handleChange = (event: Event, newValue: number | number[]) => {
         setValue(newValue as number[]);
-        console.log(newValue)
+        setYearFilter(newValue as number[])
     };
+
+    const setYearFilter = (newValue: number[]) => {
+        setSortedPhones(phones.filter(phone => phone.year >= newValue[0] && phone.year <= newValue[1]))
+        console.log(phones.filter(phone => phone.year >= newValue[0] && phone.year <= newValue[1]));
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -27,13 +41,13 @@ export default function RangeSlider({ phones }: { phones: any[] }) {
                 <p className='lg:mb-4 lg:mt-10 text-sm lg:text-xl font-semibold text-gray-200'>Filter by Year</p>
                 <Slider
                     sx={{ color: 'blue' }}
-                    getAriaLabel={() => 'Temperature range'}
+                    getAriaLabel={() => 'Year range'}
                     value={value}
                     onChange={handleChange}
                     valueLabelDisplay="auto"
                     getAriaValueText={valuetext}
                     disableSwap
-                    step={2}
+                    step={1}
                     min={min}
                     max={max}
                 />

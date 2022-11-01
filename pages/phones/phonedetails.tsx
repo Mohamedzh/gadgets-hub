@@ -19,7 +19,7 @@ export default PhoneDetails
 export const getStaticProps: GetStaticProps = async () => {
     const allPhones = await prisma.phone.findMany()
 
-    getAllPhonesDetails(1800, allPhones.length)
+    getAllPhonesDetails(1800, allPhones.length, allPhones)
 
     return { props: {} }
 }

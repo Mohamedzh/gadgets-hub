@@ -1,4 +1,4 @@
-import { Category } from '@prisma/client'
+import { Category, Phone } from '@prisma/client'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
@@ -11,15 +11,15 @@ import { PhoneSummary } from '../brands/[brand]'
 type Props = {
     currentPhone?: any
     categories: DetailedCategory[]
+    otherPhones: Phone[]
 }
 
-function Index({ currentPhone, categories }: Props) {
+function Index({ currentPhone, categories, otherPhones }: Props) {
     const router = useRouter()
 
     return (
         <div>
-            <PhoneDetails currentPhone={currentPhone} categories={categories} />
-            
+            <PhoneDetails currentPhone={currentPhone} categories={categories} otherPhones={otherPhones} />
         </div>
     )
 }
@@ -36,27 +36,26 @@ export const getStaticPaths: GetStaticPaths = async () => {
             params: { phone: phone.name }
         }))
     }
-
-    // const paths = brands.map(brand => ({
-    //     params: { brand: brand.name.toLowerCase() }
-    // }))
     return { paths, fallback: true }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }: { params?: ParsedUrlQuery }) => {
     let currentPhone;
     let categories;
+    let otherPhones;
     try {
         let newPhone = params?.phone as string
         // newPhone = newPhone.slice(0, 1).toUpperCase() + params?.phone?.slice(1)
         // console.log(newPhone, params?.phone);
 
         currentPhone = await prisma.phone.findFirst({ where: { name: newPhone }, include: { PhoneSpecs: { include: { spec: { include: { category: true } } } }, PhoneQuickSpecs: true } })
-        // console.log(currentPhone);
+        
+        otherPhones = await prisma.phone.findMany({ where: { brandName: currentPhone?.brandName }, take: 4 })
+
         categories = await prisma.category.findMany({ include: { specs: true } })
     } catch (error) {
         console.log(error)
     }
 
-    return { props: { phone: params?.phone, currentPhone, categories } }
+    return { props: { phone: params?.phone, currentPhone, categories, otherPhones } }
 }
