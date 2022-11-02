@@ -14,7 +14,7 @@ const Home: NextPage = ({
   return (
     <div className='bg-gray-900 container lg:mx-10'>
       <Head>
-        <title>Tech Advisor</title>
+        <title>Gadgets Hub</title>
         <meta name="description" content="Mobile phone database" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

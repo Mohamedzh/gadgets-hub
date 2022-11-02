@@ -3,8 +3,15 @@ import * as cheerio from 'cheerio'
 import { BrandPhone, Page, PageData, PhoneSpec, QuickSpecs, ReviewType, Spec, SpecDetail } from "../types"
 import { prisma } from './db'
 import wretch from 'wretch'
-import { Brand } from "../pages/phones"
+// import { Brand } from "../pages/phones"
 import { Phone } from "@prisma/client"
+import { Brand } from "../pages/brands"
+
+type newBrand = {
+    name: string
+    phonesNum: number
+    gsmArenaUrl: string
+}
 
 export const getPages = async (url: string) => {
     const res = await axios.get(`https://www.gsmarena.com/${url}.php`)
@@ -158,7 +165,7 @@ export const getAllBrandNames = async () => {
     const res = await axios.get('https://www.gsmarena.com/makers.php3')
     let html = res.data
     const $ = cheerio.load(html)
-    const json: Brand[] = []
+    const json: newBrand[] = []
     const brands = $('table').find('td')
     brands.each((i, el) => {
         const aBlock = $(el).find('a')
@@ -344,7 +351,7 @@ export const getAllPhonesDetails = async (min: number, max: number, allPhones: P
             let indianPrice = Math.round(Number(price.slice(price.indexOf('₹') + 2).replace(',', '')))
             let uniPrice: number;
             if (price.indexOf('About') === 0) {
-                uniPrice = Number(price.slice(6, price.indexOf(' ', 6) - 1))
+                uniPrice = Number(price.slice(6, price.indexOf(' ', 6)))
                 if (uniPrice > 0) {
                     await prisma.eURPrice.create({ data: { phoneId: allPhones[i].id, value: uniPrice } })
                 }

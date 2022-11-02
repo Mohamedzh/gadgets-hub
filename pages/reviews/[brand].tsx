@@ -47,7 +47,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     const paths = brands.map(brand => ({
         params: { brand: brand.name.toLowerCase() }
     }))
-    return { paths, fallback: true }
+    return { paths, fallback: false }
 }
 
 

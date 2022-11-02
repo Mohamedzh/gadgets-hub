@@ -2,24 +2,22 @@ import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
-import { classNames, paginate, phoneSortAZ } from '../lib/functions'
+import { classNames, paginate } from '../lib/functions'
 import PhoneList from './phoneList'
-import { PhoneSummary } from '../pages/brands/[brand]'
-import Price from './priceFilter'
 import DateFilter from './dateFilter'
 import Pagination from './brandPhonesPagination'
 import _ from 'lodash'
 import { EURPrice, Phone } from '@prisma/client'
 import { PhoneWithPrice } from '../types'
 
-const sortOptions = [
-    { name: 'A-Z', function: 'sort', current: false },
-    { name: 'Z-A', function: 'sort', current: false },
-    { name: 'Most Popular', function: '#', current: true },
-    { name: 'Best Rating', function: '#', current: false },
-    { name: 'Newest', function: '#', current: false },
-    { name: 'Price: Low to High', function: '#', current: false },
-    { name: 'Price: High to Low', function: '#', current: false },
+let sortOptions = [
+    { name: 'A-Z', current: false },
+    { name: 'Z-A', current: false },
+    { name: 'Most Popular', current: true },
+    // { name: 'Best Rating', function: '#', current: false },
+    // { name: 'Newest', function: '#', current: false },
+    // { name: 'Price: Low to High', function: '#', current: false },
+    // { name: 'Price: High to Low', function: '#', current: false },
 ]
 
 
@@ -27,6 +25,8 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneWithPrice[
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
     const [page, setPage] = useState(1)
     const [pageNo, setPageNo] = useState(1)
+
+    useEffect(() => { setSortedPhones(phones) }, [phones])
     const [sortedPhones, setSortedPhones] = useState<PhoneWithPrice[]>(phones)
     const currentPhones = paginate(page, 40, sortedPhones)
 
@@ -38,6 +38,16 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneWithPrice[
 
         } else if (option === 'Z-A') {
             setSortedPhones(_.orderBy(sortedPhones, 'name', 'desc'))
+        }
+    }
+
+    const setActiveFilter = (sortingOptions: { name: string, current: boolean }[], option: { name: string, current: boolean }) => {
+        for (let i = 0; i < sortingOptions.length; i++) {
+            if (sortingOptions[i].name === option.name) {
+                sortingOptions[i].current = true
+            } else {
+                sortingOptions[i].current = false
+            }
         }
     }
 
@@ -117,12 +127,15 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneWithPrice[
                                                 <Menu.Item key={option.name}>
                                                     {({ active }) => (
                                                         <button
-                                                            onClick={() => sorting(currentPhones, option.name)}
+                                                            onClick={(e) => {
+                                                                sorting(currentPhones, option.name);
+                                                                setActiveFilter(sortOptions, option)
+                                                            }}
                                                             // href={option.href}
                                                             className={classNames(
                                                                 option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                                                                 active ? 'bg-gray-100' : '',
-                                                                'block px-4 py-2 text-sm'
+                                                                'block px-4 py-2 text-sm w-full text-left'
                                                             )}
                                                         >
                                                             {option.name}
@@ -161,11 +174,8 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneWithPrice[
                                 <DateFilter sortedPhones={sortedPhones} phones={phones} setSortedPhones={setSortedPhones} />
                             </form>
 
-                            {/* Product grid */}
                             <div className="lg:col-span-3">
-                                {/* Replace with your content */}
                                 {/* <div className="h-96 rounded-lg border-4 border-dashed border-gray-200 lg:h-full" /> */}
-                                {/* /End replace */}
                                 <div className='lg:hidden'>
                                     {/* <Price phones={phones} setSortedPhones={setSortedPhones} sortedPhones={sortedPhones} /> */}
                                     <DateFilter phones={phones} sortedPhones={sortedPhones} setSortedPhones={setSortedPhones} />

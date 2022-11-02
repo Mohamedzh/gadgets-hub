@@ -3,19 +3,18 @@ import * as Yup from 'yup'
 import { Dispatch, Fragment, SetStateAction, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/24/outline'
-import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
-import axios from 'axios'
+import { createBrowserSupabaseClient, User } from '@supabase/auth-helpers-nextjs'
 
 type Props = {
     openLogin: boolean
     setOpenLogin: Dispatch<SetStateAction<boolean>>
     setOpenSignUp: Dispatch<SetStateAction<boolean>>
+    setCurrentUser: Dispatch<SetStateAction<User | undefined>>
 }
 
-export default function Login({ openLogin, setOpenLogin, setOpenSignUp }: Props) {
+export default function Login({ openLogin, setOpenLogin, setOpenSignUp, setCurrentUser }: Props) {
 
     const [supabaseClient] = useState(() => createBrowserSupabaseClient())
-
 
     const formData = [
         { name: 'email', type: 'email', label: 'Email Address' },
@@ -28,27 +27,22 @@ export default function Login({ openLogin, setOpenLogin, setOpenSignUp }: Props)
             password: ''
         },
         onSubmit: async (values) => {
-            console.log(values);
             const { data, error } = await supabaseClient.auth.signInWithPassword({
                 email: values.email,
                 password: values.password,
             })
-            console.log(data);
-
+            if (data?.user) {
+                setCurrentUser(data.user);
+                setOpenLogin(false)
+            }
             if (error) {
                 console.log(error);
             }
-            // const newUser = await supabaseClient.auth.signUp({ email: values.email, password: values.password, options: { data: { nickName: values.nickName } } })
-            // const { data, error } = newUser
-            // console.log(data);
-            // if (data.user) {
-            //     const { id } = data.user
-            //     const userData = { ...values, id }
-            //     await axios.post(`/api/signup`, userData)
-            // }
+
         },
         validationSchema: Yup.object({
-
+            email: Yup.string().required("Please enter your email address"),
+            password: Yup.string().required("Please enter your password"),
         })
     })
     return (
@@ -84,8 +78,8 @@ export default function Login({ openLogin, setOpenLogin, setOpenSignUp }: Props)
                                         <div className="sm:mx-auto sm:w-full sm:max-w-md">
                                             <img
                                                 className="mx-auto h-12 w-auto"
-                                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                                                alt="Your Company"
+                                                src="/mobileLogo.png"
+                                                alt="Gadgets Hub"
                                             />
                                             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Sign in to your account</h2>
                                         </div>
@@ -110,6 +104,8 @@ export default function Login({ openLogin, setOpenLogin, setOpenSignUp }: Props)
                                                                         required
                                                                         className="block appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                                                     />
+                                                                    {data.name === "email" ? (formik.touched.email && formik.errors.email ? <p className="text-red-500 text-sm">{formik.errors.email}</p> : null) :
+                                                                        (formik.touched.password && formik.errors.password ? <p className="text-red-500 text-sm">{formik.errors.password}</p> : null)}
                                                                 </div>
                                                             </div>
                                                         )}

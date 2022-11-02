@@ -20,11 +20,4 @@ export default Profile
 
 export const getServerSideProps = withPageAuth({
     redirectTo: '/',
-    // async getServerSideProps(ctx, supabase) {
-    //     // Access the user object
-    //     const {
-    //         data: { user },
-    //     } = await supabase.auth.getUser()
-    //     return { props: { email: user?.email } }
-    // },
 })

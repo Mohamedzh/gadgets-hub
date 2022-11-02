@@ -36,7 +36,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
             params: { phone: phone.name }
         }))
     }
-    return { paths, fallback: true }
+    return { paths, fallback: false }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }: { params?: ParsedUrlQuery }) => {
@@ -49,8 +49,8 @@ export const getStaticProps: GetStaticProps = async ({ params }: { params?: Pars
         // console.log(newPhone, params?.phone);
 
         currentPhone = await prisma.phone.findFirst({ where: { name: newPhone }, include: { PhoneSpecs: { include: { spec: { include: { category: true } } } }, PhoneQuickSpecs: true } })
-        
-        otherPhones = await prisma.phone.findMany({ where: { brandName: currentPhone?.brandName }, take: 4 })
+
+        otherPhones = await prisma.phone.findMany({ where: { brandName: currentPhone?.brandName }, take: 4, skip: 1, cursor: { id: currentPhone?.id } })
 
         categories = await prisma.category.findMany({ include: { specs: true } })
     } catch (error) {

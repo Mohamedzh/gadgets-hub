@@ -94,7 +94,7 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
             if (filterBatterySize.includes(option)) { dispatch(removeFromBatterySize(option)) } else {
                 dispatch(addToBatterySize(option))
             }
-            console.log(filterBatterySize);
+            // console.log(filterBatterySize);
         }
     }
 
@@ -152,7 +152,7 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
             name: system
         }
     })
-    console.log(uniquesSpecs);
+    // console.log(uniquesSpecs);
 
 
     return (
@@ -265,7 +265,7 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
                 <div className="border-b border-gray-200 pb-4">
                     <div className="mx-auto flex flex-col lg:flex-row max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                         <div className='flex'>
-                            <Menu as="div" className="relative inline-block text-left">
+                            {/* <Menu as="div" className="relative inline-block text-left">
                                 <div>
                                     <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-gray-400">
                                         Sort
@@ -306,7 +306,7 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
                                         </div>
                                     </Menu.Items>
                                 </Transition>
-                            </Menu>
+                            </Menu> */}
 
                             <button
                                 type="button"
@@ -450,23 +450,13 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
                         className='h-16 active:scale-95 hover:bg-blue-800 hover:text-white font-semibold text-3xl px-10 lg:px-20 bg-white my-5 rounded-lg w-max'>
                         Search Now
                     </button>
-                    {/* <button
-                        onClick={() => {
-                            setCurrentPhones([]);
-                            setShowResults(false)
-                            dispatch(clearBatterySizeFilter())
-                            dispatch(clearBrandFilter())
-                            dispatch(clearDisplaySizeFilter())
-                            dispatch(clearRamFilter())
-                            dispatch(clearOSFilter())
-                            dispatch(clearActiveFilters())
-                            console.log(currentPhones)
-                        }}
-                        className='h-16 font-semibold text-xl px-10 bg-white my-5 rounded-lg'>
-                        Clear search fields
-                    </button> */}
+
                 </div>
-                <PhoneResultList currentPhones={currentPhones} />
+                {activeFilters.length > 0 ?
+                    <PhoneResultList currentPhones={currentPhones} />
+                    :
+                    <p className='text-white text-center m-5'>Please select one or more search attribute and click on "Search Now" button</p>
+                }
             </div>
         </div>
     )

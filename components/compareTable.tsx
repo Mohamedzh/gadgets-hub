@@ -1,6 +1,4 @@
-import { GetStaticProps } from 'next'
 import React, { Fragment, useEffect, useState } from 'react'
-import { prisma } from '../lib/db'
 import { AddButton, classNames } from '../lib/functions'
 import { useAppSelector } from '../redux/hooks'
 import { DetailedCategory, DetailedPhone } from '../types'
@@ -34,8 +32,6 @@ function CompareTable({ categories, phones, allPhones, quickSpecs }: Props) {
         (length === 0 ? renderNumber = 3 : length === 1 ? renderNumber = 2 : length === 2 ? renderNumber = 1 : renderNumber = 0)
         return renderNumber
     }
-    // console.log(phones);
-    // console.log((phones[0].PhoneSpecs.filter(spec => spec.spec.categoryName === 'Network'))[1].value);
 
     return (
         <div className="px-4 sm:px-6 lg:px-8">

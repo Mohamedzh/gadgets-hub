@@ -34,6 +34,7 @@ model Phone {
   EURPrice        EURPrice?
   IndianPrice     IndianPrice?
   EGPPrice        EGPPrice?
+  UserPhones      UserPhones[]
 }
 
 model Spec {
@@ -129,8 +130,19 @@ model Review {
 }
 
 model User {
-  id       String  @id
-  name     String
-  nickName String  @unique
-  email    String  @unique
+  id         String       @id
+  name       String
+  nickName   String       @unique
+  email      String       @unique
+  UserPhones UserPhones[]
+}
+
+model UserPhones {
+  id        Int    @id @default(autoincrement())
+  phoneName String
+  userId    String
+  phone     Phone  @relation(fields: [phoneName], references: [name])
+  user      User   @relation(fields: [userId], references: [id])
+
+  @@unique([phoneName, userId])
 }

@@ -8,7 +8,6 @@ import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useState } from 'react'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  // const supabaseClient = useSupabaseClient();
   const [supabaseClient] = useState(() => createBrowserSupabaseClient())
 
   return (

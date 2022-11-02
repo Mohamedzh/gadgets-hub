@@ -7,7 +7,6 @@ import batterySizeFilterReducer from './slices/batterySizeFilterSlice'
 import displaySizeFilterReducer from './slices/displaySizeFilterSlice'
 import ramFilterReducer from './slices/ramFilterSlice'
 
-
 export const store = configureStore({
   reducer: {
     compare: compareReducer,
