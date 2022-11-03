@@ -266,7 +266,8 @@ export const getAllPhonesDetails = async (min: number, max: number, allPhones: P
         j++
         setTimeout(async () => {
 
-            const res = await axios.get(`https://www.gsmarena.com/${allPhones[i].url}.php`)
+
+            const res = await axios.get(`https://www.gsmarena.com/${allPhones[i].url}.php`, { headers: { "User-Agent": "request" } })
             let html = res.data
             const $ = cheerio.load(html)
 
@@ -303,6 +304,7 @@ export const getAllPhonesDetails = async (min: number, max: number, allPhones: P
             let price: string = '0'
 
             const specNode = $('table')
+
             const spec_detail: SpecDetail[] = []
             specNode.each((i, el) => {
                 const specList: Spec[] = []
@@ -314,6 +316,8 @@ export const getAllPhonesDetails = async (min: number, max: number, allPhones: P
                         value: $('td.nfo', ele).text(),
                         alias: `${category}${index}`,
                     }
+                    console.log(a, 'each spec');
+
                     specList.push(a)
                     if (a.value.length > 0) {
                         allSpecs.push(a)
@@ -335,12 +339,16 @@ export const getAllPhonesDetails = async (min: number, max: number, allPhones: P
                     value: spec.value, specAlias: spec.alias, phoneId: allPhones[i].id
                 }
             })
+            console.log(allSpecs);
+            console.log(html);
 
 
             let qSpecs = quick_spec.map(spec => { return { value: spec.value, phoneId: allPhones[i].id, quickspecName: spec.name } })
             await prisma.phoneQuickSpecs.createMany({ data: qSpecs, skipDuplicates: true })
 
             updateSpecs(spec_detail)
+
+
 
             let usdPrice = Math.round(Number(price.slice(price.indexOf('$') + 2, price.indexOf('/') - 2).replace(',', '')))
             let euroPrice = Math.round(Number(price.slice(price.indexOf('€') + 2, price.indexOf('/', price.indexOf('€') + 2) - 2).replace(',', '')))

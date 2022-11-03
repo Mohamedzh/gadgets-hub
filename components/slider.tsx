@@ -32,7 +32,7 @@ export default function Slider({
             >
                 {lastReviews.map((slide, i) =>
                     <SwiperSlide key={i}>
-                        <Link href={slide.link}>
+                        <Link href={`https://www.gsmarena.com/${slide.link}`}>
                             <a className="relative text-center text-white">
                                 <img
                                     className="object-fill w-full lg:h-96"

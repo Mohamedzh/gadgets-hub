@@ -62,7 +62,7 @@ function PhoneDetails({ currentPhone, categories, otherPhones }: Props) {
         <div className='bg-gray-900'>
             <div className='text-center'>
                 <p className='text-5xl font-bold m-10 font-sans text-blue-300'>
-                    {currentPhone?.description.slice(0, currentPhone?.description.indexOf('.'))}
+                    {currentPhone?.description.indexOf('.') === -1 ? currentPhone.description : currentPhone?.description.slice(0, currentPhone?.description.indexOf('.'))}
                 </p>
 
                 <div className='grid grid-cols-2 lg:grid-cols-4 m-5 place-items-center'>

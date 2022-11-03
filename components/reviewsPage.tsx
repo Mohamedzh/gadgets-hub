@@ -11,7 +11,7 @@ function ReviewsPage({ reviews }: Props) {
         <div className='max-w-max m-5 text-white grid grid-cols-2 lg:grid-cols-3 mx-auto'>
             {reviews.map((review, i) =>
                 <div key={i} className='flex flex-col m-5 '>
-                    <Link href={review.link}>
+                    <Link href={`https://www.gsmarena.com/${review.link}`}>
                         <a>
                             <img className='rounded-lg mx-auto' src={review.imgUrl} />
                         </a>

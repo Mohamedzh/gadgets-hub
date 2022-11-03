@@ -31,7 +31,7 @@ const Home: NextPage = ({
 export default Home
 
 export const getStaticProps: GetStaticProps = async () => {
-  const latestPhones = await prisma.phone.findMany({ take: 5, orderBy: { year: 'desc' } })
+  const latestPhones = await prisma.phone.findMany({ take: 5, orderBy:{id:'desc'} })
   const news = await getLatestNews()
   const reviews = await getLatestReviews()
   return { props: { news, reviews, latestPhones }, revalidate: 86400 }

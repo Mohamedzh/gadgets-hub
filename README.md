@@ -1,34 +1,45 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Gadgets Hub website
 
-## Getting Started
+![Homepage](/public/phone1.png)
+## Table of contents
+* [General info](#general-info)
+* [Technologies](#technologies)
+* [Setup](#setup)
 
-First, run the development server:
+## General info
+A website for mobile phones specifications, reviews and news
+## Technologies
+* React version: 18.2.0
+* Next version: 12.3.1
+* Typescript version:4.8.4
+* Redux toolkit version: 1.8.5
+* Formik version: 2.2.9
+* Axios version: 0.27.2
+* Lodash version: 4.17
+* Cheerio version: 1.0.0
 
-```bash
-npm run dev
-# or
-yarn dev
+## Functionalities
+* Get the latest news daily by scrapping [gsmarena website](https://www.gsmarena.com) and displaying them on the website.
+* Display all mobile phone models from year 2019 to 2022, along with their detailed specifications, and updates them every week with the latest phones.
+* Display reviews for mobile phones and update them with the latest reviews on daily basis from [gsmarena website](https://www.gsmarena.com).
+* Phone finder tool to help the users search for phones using specific criteria like brand, battery size, display size and others.
+* Phone comparison tool that compares between up to 3 phones along with all their specifications.
+* User system with the ability to add favorite phones to the user profile to check them faster in the future.
+* Mobile-friendly design compatible with all screen sizes.
+
+## Setup
+To run this project, install it locally using npm:
 ```
+npm install
+npm run dev
+```
+Or you can view a live example on vercel [Here](https://gadgets-hub.vercel.app)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+![Reviews](/public/phone3.png.png)
+![Filter](/public/phone4.png)
+![Comparison](/public/phone6.png)
+![Responsive design](//public/phone7.png)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### Disclaimer
+The data in this website is obtained from [gsmarena website](https://www.gsmarena.com)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

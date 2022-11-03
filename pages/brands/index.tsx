@@ -128,7 +128,7 @@ export const getStaticProps: GetStaticProps = async () => {
         return { ...recordedPhone, id: targetPhone!.id }
     })
 
-    getAllPhonesDetails(0, newToBeRecordedPhones.length, newToBeRecordedPhones)
+    getAllPhonesDetails(0, 1, newToBeRecordedPhones)
 
 
 

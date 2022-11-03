@@ -155,7 +155,7 @@ export default function Footer() {
                 {/* </div> */}
                 <div className="pt-4 md:flex md:items-center md:justify-between flex flex-col">
                     <p className="mt-4 text-base text-gray-400 text-center md:mt-0">
-                        &copy; 2022 Gadgets Hub by Mohamed Samir Abbas | All rights reserved.
+                        &copy; 2022 Gadgets Hub by Mohamed Samir Zahran | All rights reserved.
                     </p>
                     <div className="flex space-x-6 my-3 place-self-center">
                         {navigation.social.map((item) => (
