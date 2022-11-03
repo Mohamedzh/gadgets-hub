@@ -32,11 +32,15 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
     let paths: { params: { phone: string } }[] = []
     for (let i = 0; i < brands.length; i++) {
-        paths = brands[i].phones.map(phone => ({
-            params: { phone: phone.name }
-        }))
+        paths = brands[i].phones.map(phone => {
+            return {
+                params: { phone: phone.name }
+            }
+        })
     }
-    return { paths, fallback: false }
+    console.log(paths);
+
+    return { paths, fallback: true }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }: { params?: ParsedUrlQuery }) => {
@@ -46,7 +50,7 @@ export const getStaticProps: GetStaticProps = async ({ params }: { params?: Pars
     try {
         let newPhone = params?.phone as string
         // newPhone = newPhone.slice(0, 1).toUpperCase() + params?.phone?.slice(1)
-        // console.log(newPhone, params?.phone);
+        console.log(newPhone, params?.phone);
 
         currentPhone = await prisma.phone.findFirst({ where: { name: newPhone }, include: { PhoneSpecs: { include: { spec: { include: { category: true } } } }, PhoneQuickSpecs: true } })
 
