@@ -11,7 +11,6 @@ export default async function handler(
 ) {
     try {
         const { id, phone } = req.body
-        console.log(id, phone);
         
         const newFav = await prisma.userPhones.create({ data: { userId: id, phoneName: phone } })
         res.status(200).send(newFav)

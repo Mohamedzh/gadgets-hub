@@ -71,7 +71,6 @@ export const getPages = async (url: string) => {
         data.pages = pagesData
     }
 
-    // console.log(data.pages)
     return data
 }
 
@@ -227,7 +226,6 @@ export const getBrandsDetails = async () => {
                             let brandString = brandArray.join()
                             let detailedPhone = json.map(phone => { return { ...phone, brandName: brandString } })
 
-                            console.log(json.length);
                             await prisma.phone.createMany({ data: detailedPhone, skipDuplicates: true })
                         }
                     }, 1000 * (t + 2))
@@ -253,7 +251,6 @@ export const getBrandsDetails = async () => {
                 brandArray.splice(-2)
                 let brandString = brandArray.join()
                 let detailedPhone = json.map(phone => { return { ...phone, brandName: brandString } })
-                console.log(json.length);
 
                 await prisma.phone.createMany({ data: detailedPhone, skipDuplicates: true })
             }

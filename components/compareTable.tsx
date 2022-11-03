@@ -22,9 +22,6 @@ function CompareTable({ categories, phones, allPhones, quickSpecs }: Props) {
     const comparePhones = useAppSelector(state => state.compare)
     const [currentPhones, setCurrentPhones] = useState(comparePhones)
 
-    console.log(quickSpecs);
-
-
     useEffect(() => { setCurrentPhones(comparePhones) }, [comparePhones])
 
     const setTableColumns = (length: number) => {

@@ -94,7 +94,6 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
             if (filterBatterySize.includes(option)) { dispatch(removeFromBatterySize(option)) } else {
                 dispatch(addToBatterySize(option))
             }
-            // console.log(filterBatterySize);
         }
     }
 
@@ -152,7 +151,6 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
             name: system
         }
     })
-    // console.log(uniquesSpecs);
 
 
     return (
@@ -432,7 +430,6 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
                                 dispatch(clearRamFilter())
                                 dispatch(clearOSFilter())
                                 dispatch(clearActiveFilters())
-                                console.log(currentPhones)
                             }}
                             className='font-semibold hover:bg-red-600 hover:text-white active:scale-95 duration-50 transition text-lg mx-10 p-3 text-red-600 bg-white rounded-lg self-end'>
                             Clear search fields

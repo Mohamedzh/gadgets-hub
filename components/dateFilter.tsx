@@ -32,7 +32,6 @@ export default function RangeSlider({ phones, setSortedPhones, sortedPhones }: P
 
     const setYearFilter = (newValue: number[]) => {
         setSortedPhones(phones.filter(phone => phone.year >= newValue[0] && phone.year <= newValue[1]))
-        console.log(phones.filter(phone => phone.year >= newValue[0] && phone.year <= newValue[1]));
     }
 
     return (

@@ -61,23 +61,22 @@ export default Phones
 export const getStaticProps: GetStaticProps = async () => {
 
     ////
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    page.setDefaultNavigationTimeout(0)
+    // const browser = await puppeteer.launch();
+    // const page = await browser.newPage();
+    // page.setDefaultNavigationTimeout(0)
 
-    await page.goto(`https://www.gsmarena.com`);
+    const res = await axios.get(`https://www.gsmarena.com`);
 
-    const bodyHandle = await page.$('body');
-    const html = await page.evaluate(body => body!.innerHTML, bodyHandle);
+    // const bodyHandle = await page.$('body');
+    // const html = await page.evaluate(body => body!.innerHTML, bodyHandle);
     let json: { url: string }[] = []
-    const $ = cheerio.load(html)
+    const $ = cheerio.load(res.data)
 
     const newPhones = $('.module-phones')
     newPhones.each((l, el) => {
         if (l === 1) {
             const phoneBlock = $(el).find('a')
             phoneBlock.each((j, ele) => {
-                console.log($(ele).attr('href'));
 
                 const phone = {
                     url: $(ele).attr('href')!.replace('.php', ''),
@@ -89,21 +88,21 @@ export const getStaticProps: GetStaticProps = async () => {
     })
     const allPhones = await prisma.phone.findMany({ select: { url: true } })
     let unrecordedPhones: { url: string }[] = []
-    console.log(json);
+    // console.log(json);
 
     for (let i = 0; i < json.length; i++) {
         if (!allPhones.find(phone => phone.url === json[i].url)) {
             unrecordedPhones.push(json[i])
         }
     }
-    console.log(unrecordedPhones);
+    // console.log(unrecordedPhones);
 
     let toBeRecordedPhones = []
     for (let i = 0; i < unrecordedPhones.length; i++) {
-        await page.goto(`https://www.gsmarena.com/${unrecordedPhones[i].url}.php`);
-        const bodyHandle2 = await page.$('body');
-        const html2 = await page.evaluate(body => body!.innerHTML, bodyHandle2);
-        const $ = cheerio.load(html2)
+        let response = await axios.get(`https://www.gsmarena.com/${unrecordedPhones[i].url}.php`);
+        // const bodyHandle2 = await page.$('body');
+        // const html2 = await page.evaluate(body => body!.innerHTML, bodyHandle2);
+        const $ = cheerio.load(response.data)
 
         const imgBlock = $('.specs-photo-main').find('img')
         const phone = {
@@ -116,9 +115,9 @@ export const getStaticProps: GetStaticProps = async () => {
         }
         toBeRecordedPhones.push(phone)
     }
-    await browser.close();
+    // await browser.close();
 
-    console.log(toBeRecordedPhones);
+    // console.log(toBeRecordedPhones);
 
     await prisma.phone.createMany({ data: toBeRecordedPhones, skipDuplicates: true })
 
