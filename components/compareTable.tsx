@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { AddButton, classNames } from '../lib/functions'
 import { useAppSelector } from '../redux/hooks'
-import { DetailedCategory, DetailedPhone } from '../types'
+import { DetailedCategory } from '../types'
 import { IoMdCloseCircle } from 'react-icons/io'
 import { useDispatch } from 'react-redux'
 import { removeFromComparison } from '../redux/slices/compareSlice'
@@ -12,12 +12,11 @@ import { QuickSpec } from '@prisma/client'
 
 type Props = {
     categories: DetailedCategory[]
-    phones: DetailedPhone[]
-    allPhones: DetailedPhone[]
+    allPhones: {name:string, imgUrl:string}[]
     quickSpecs: QuickSpec[]
 }
 
-function CompareTable({ categories, phones, allPhones, quickSpecs }: Props) {
+function CompareTable({ categories, allPhones, quickSpecs }: Props) {
     const dispatch = useDispatch()
     const comparePhones = useAppSelector(state => state.compare)
     const [currentPhones, setCurrentPhones] = useState(comparePhones)

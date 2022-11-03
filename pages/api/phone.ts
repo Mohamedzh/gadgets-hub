@@ -9,9 +9,9 @@ type Data = {
     msg?: string
 }
 
-interface ExtendedRequest extends IncomingHttpHeaders {
-    phoneName: string
-}
+// interface ExtendedRequest extends IncomingHttpHeaders {
+//     phoneName: string
+// }
 
 export default async function handler(
     req: NextApiRequest,
@@ -20,7 +20,8 @@ export default async function handler(
     try {
         const { phoneName } = req.body
         // const { phoneName } = req.headers as ExtendedRequest
-        const phone = await prisma.phone.findFirstOrThrow({ where: { name: phoneName }, include: { PhoneQuickSpecs: true, PhoneSpecs: { include: { spec: { include: { category: true } } } } } })
+
+        const phone = await prisma.phone.findFirst({ where: { name: phoneName }, include: { PhoneQuickSpecs: true, PhoneSpecs: { include: { spec: { include: { category: true } } } } } })
         if (phone) {
             res.status(200).json({ phone })
         } else {
