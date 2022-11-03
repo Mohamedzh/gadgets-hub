@@ -116,6 +116,7 @@ export const getStaticProps: GetStaticProps = async () => {
         }
         toBeRecordedPhones.push(phone)
     }
+    await browser.close();
 
     console.log(toBeRecordedPhones);
 
@@ -131,7 +132,6 @@ export const getStaticProps: GetStaticProps = async () => {
     getAllPhonesDetails(0, newToBeRecordedPhones.length, newToBeRecordedPhones)
 
 
-    await browser.close();
 
     /////
 
