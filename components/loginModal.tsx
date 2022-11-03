@@ -139,7 +139,7 @@ export default function Login({ openLogin, setOpenLogin, setOpenSignUp, setCurre
                                                             Login
                                                         </button>
                                                         <p>
-                                                            Don't have an account?<button
+                                                            Don&apos;t have an account?<button
                                                                 onClick={() => { setOpenSignUp(true); setOpenLogin(false) }}
                                                                 className='underline'> Sign up</button>
                                                         </p>

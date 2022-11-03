@@ -455,7 +455,7 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
                 {activeFilters.length > 0 ?
                     <PhoneResultList currentPhones={currentPhones} />
                     :
-                    <p className='text-white text-center m-5'>Please select one or more search attribute and click on "Search Now" button</p>
+                    <p className='text-white text-center m-5'>Please select one or more search attribute and click on &quot;Search Now&quot; button</p>
                 }
             </div>
         </div>

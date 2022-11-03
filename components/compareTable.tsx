@@ -142,8 +142,8 @@ function CompareTable({ categories, phones, allPhones, quickSpecs }: Props) {
                                                     <td className=" py-4 pl-4 pr-3 text-sm font-medium text-yellow-400 sm:pl-6">
                                                         {spec.name}
                                                     </td>
-                                                    {currentPhones.map(phone =>
-                                                        <td className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-100 sm:pl-6 text-center">
+                                                    {currentPhones.map((phone, index) =>
+                                                        <td key={index} className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-100 sm:pl-6 text-center">
                                                             {(phone.PhoneSpecs.find(x => x.spec.alias === spec.alias))?.value || 'NA'}
                                                         </td>
                                                     )}
