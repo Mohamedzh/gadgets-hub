@@ -28,10 +28,6 @@ export default News
 export const getStaticProps: GetStaticProps = async () => {
 
     const news = await getLatestNews()
-    try {
-    } catch (error) {
-        console.log(error)
-    }
-
-    return { props: { news } }
+   
+    return { props: { news },  revalidate: 43200 }
 }

@@ -28,14 +28,21 @@ A website for mobile phones specifications, reviews and news
 * Mobile-friendly design compatible with all screen sizes.
 
 ## Setup
-To run this project, install it locally using npm:
+To run this project:
+* Create a .env file with the following variables:
+DATABASE_URL: the database connection string
+(a supabase database is needed as the user authentication system is based on supabase auth)
+NEXT_PUBLIC_SUPABASE_URL: from supabase API settings
+NEXT_PUBLIC_SUPABASE_ANON_KEY: from supabase API settings
+
+* Install it locally using npm:
 ```
 npm install
 npm run dev
 ```
 Or you can view a live example on vercel [Here](https://gadgets-hub.vercel.app)
 
-![Reviews](/public/phone3.png.png)
+![Reviews](/public/phone3.png)
 ![Filter](/public/phone4.png)
 ![Comparison](/public/phone6.png)
 ![Responsive design](//public/phone7.png)

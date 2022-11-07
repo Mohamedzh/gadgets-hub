@@ -7,7 +7,6 @@ import Page404 from '../../components/page404'
 import PhoneDetails from '../../components/phoneDetails'
 import { prisma } from '../../lib/db'
 import { DetailedCategory } from '../../types'
-import { PhoneSummary } from '../brands/[brand]'
 
 type Props = {
     currentPhone?: any
@@ -54,8 +53,6 @@ export const getStaticProps: GetStaticProps = async ({ params }: { params?: Pars
     try {
         let newPhone = params?.phone as string
         // newPhone = newPhone.slice(0, 1).toUpperCase() + params?.phone?.slice(1)
-        console.log(newPhone, params?.phone);
-
         currentPhone = await prisma.phone.findFirst({ where: { name: newPhone }, include: { PhoneSpecs: { include: { spec: { include: { category: true } } } }, PhoneQuickSpecs: true } })
 
         otherPhones = await prisma.phone.findMany({ where: { brandName: currentPhone?.brandName }, take: 4, skip: 1, cursor: { id: currentPhone?.id }, orderBy:{id:'desc'} })

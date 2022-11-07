@@ -14,6 +14,26 @@ type Props = {
     brands: { name: string }[]
 }
 
+const getReviewDate = (date: string) => {
+    if (date.indexOf('updated') !== -1) {
+        let newDate = date.slice(date.indexOf('updated') + 9)
+        let day = newDate.slice(0, newDate.indexOf(' '))
+        if (day.length === 1) {
+            day = '0' + day
+        }
+        let month = monthNumberFromString(newDate.slice(newDate.indexOf(' ') + 1, newDate.lastIndexOf(' '))).toString()
+        let year = newDate.slice(newDate.lastIndexOf(' '))
+        return Number(year + month + day)
+    }
+    let day = date.slice(0, date.indexOf(' '))
+    if (day.length === 1) {
+        day = '0' + day
+    }
+    let month = monthNumberFromString(date.slice(date.indexOf(' ') + 1, date.lastIndexOf(' '))).toString()
+    let year = date.slice(date.lastIndexOf(' '))
+    return Number(year + month + day)
+}
+
 function Reviews({ reviews, brands }: Props) {
     const [page, setPage] = useState(1)
     const [pageNo, setPageNo] = useState(1)
@@ -45,19 +65,21 @@ export default Reviews
 export const getStaticProps: GetStaticProps = async () => {
     let reviews
     let brands
-    try {
 
-        brands = await prisma.brand.findMany({ select: { name: true } })
+    brands = await prisma.brand.findMany({ select: { name: true } })
 
-        let latestReviews = await getLatestReviews()
-        await prisma.review.createMany({ data: latestReviews, skipDuplicates: true })
+    let latestReviews = await getLatestReviews()
+    await prisma.review.createMany({ data: latestReviews, skipDuplicates: true })
 
-        reviews = await prisma.review.findMany({ select: { title: true, link: true, imgUrl: true, reviewDate: true } })
-        
+    reviews = await prisma.review.findMany({ select: { title: true, link: true, imgUrl: true, reviewDate: true } })
 
-    } catch (error) {
-        console.log(error)
-    }
+    reviews = reviews.map(review => {
+        return {
+            ...review, newReviewDate: getReviewDate(review.reviewDate)
+        }
+    })
+    console.log(reviews);
+    reviews = _.orderBy(reviews, 'newReviewDate', 'desc')
 
     return { props: { reviews, brands }, revalidate: 86400 }
 }
