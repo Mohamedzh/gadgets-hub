@@ -37,5 +37,5 @@ export const getStaticProps: GetStaticProps = async ({ params }: { params?: Pars
     let newBrand = params?.brand as string
     let phones = await prisma.phone.findMany({ where: { brandName: newBrand }, include: { GBPPrice: true, USDPrice: true, EURPrice: true } })
 
-    return { props: { phones, brand: params?.brand }, revalidate: 604800 }
+    return { props: { phones, brand: params?.brand }, revalidate: 172800 }
 }

@@ -62,5 +62,5 @@ export const getStaticProps: GetStaticProps = async ({ params }: { params?: Pars
         console.log(error)
     }
 
-    return { props: { phone: params?.phone, currentPhone, categories, otherPhones } }
+    return { props: { phone: params?.phone, currentPhone, categories, otherPhones }, revalidate:604800 }
 }
