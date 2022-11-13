@@ -13,7 +13,7 @@ type Props = {
 }
 
 export default function Login({ openLogin, setOpenLogin, setOpenSignUp, setCurrentUser }: Props) {
-
+    const [error, setError] = useState<string>()
     const [supabaseClient] = useState(() => createBrowserSupabaseClient())
 
     const formData = [
@@ -34,9 +34,10 @@ export default function Login({ openLogin, setOpenLogin, setOpenSignUp, setCurre
             if (data?.user) {
                 setCurrentUser(data.user);
                 setOpenLogin(false)
+                setError(undefined)
             }
             if (error) {
-                console.log(error);
+                setError(error.message);
             }
 
         },
@@ -74,7 +75,7 @@ export default function Login({ openLogin, setOpenLogin, setOpenSignUp, setCurre
                                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                             >
                                 <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8  sm:p-6">
-                                    <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+                                    <div className="flex flex-col justify-center py-6 lg:py-12 sm:px-6 lg:px-8">
                                         <div className="sm:mx-auto sm:w-full sm:max-w-md">
                                             <img
                                                 className="mx-auto h-12 w-auto"
@@ -138,8 +139,12 @@ export default function Login({ openLogin, setOpenLogin, setOpenSignUp, setCurre
                                                         >
                                                             Login
                                                         </button>
+                                                        {error &&
+                                                            <p className='text-red-500 mt-1 text-sm'>{error}, please check your email/password!</p>
+                                                        }
                                                         <p>
                                                             Don&apos;t have an account?<button
+                                                                type='button'
                                                                 onClick={() => { setOpenSignUp(true); setOpenLogin(false) }}
                                                                 className='underline'> Sign up</button>
                                                         </p>

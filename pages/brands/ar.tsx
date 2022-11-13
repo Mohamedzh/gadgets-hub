@@ -21,7 +21,7 @@ export type Brand = {
 function Phones({ dbBrands }: { dbBrands: Brand[] }) {
 
     return (
-        <div className='mx-10 my-5'>
+        <div className='mx-10 my-5 ar'>
             <p className='m-2 text-white text-base'>Brand search by name</p>
             <SearchBar dbBrands={dbBrands} />
             <div className='lg:mx-10 grid grid-cols-3'>

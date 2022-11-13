@@ -7,6 +7,7 @@ import { Autoplay, Pagination, Navigation } from "swiper";
 import { NewsType, ReviewType } from "../types";
 import Link from "next/link";
 import { Phone } from "@prisma/client";
+import TranslateTrial from "./translateTrial";
 
 export default function Slider({
     news, reviews, latestPhones }: {

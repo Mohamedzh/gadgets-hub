@@ -52,7 +52,7 @@ export default function ProfileSection({ user }: Props) {
     return (
         <>
             <div>
-                <h3 className="text-lg font-medium leading-6 text-gray-100">User Information</h3>
+                <h3 className="text-lg font-medium leading-6 text-gray-100 mt-3">User Information</h3>
                 {/* <p className="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p> */}
             </div>
             <div className="mt-5 border-t border-gray-200">

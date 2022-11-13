@@ -10,7 +10,6 @@ type Props = {
 function Profile({ user }: Props) {
     return (
         <div className='lg:mx-10 mx-5'>
-            <p>{user.email}</p>
             <ProfileSection user={user} />
         </div>
     )

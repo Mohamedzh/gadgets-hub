@@ -43,11 +43,11 @@ function Reviews({ reviews, brands }: Props) {
 
 
     return (
-        <div className='flex flex-col'>
+        <div className='flex flex-col ar'>
             <div
                 style={{ backgroundImage: `url('https://fdn.gsmarena.com/imgroot/static/headers/reviews-hlr.jpg')` }}
-                className='text-black flex bg-cover mx-5 lg:mx-10 h-48 lg:h-72 rounded-xl mt-10 p-5 lg:p-10 text-5xl lg:text-7xl font-bold font-serif'>
-                <p className='mt-auto'>Reviews</p>
+                className='text-gray-100 flex bg-cover mx-5 lg:mx-10 h-48 lg:h-72 rounded-xl mt-10 p-5 lg:p-10 text-5xl lg:text-7xl font-bold font-serif'>
+                <p className='mt-auto'>المراجعات والتقييمات</p>
             </div>
             {reviews.length > 0 &&
                 <div>

@@ -67,7 +67,7 @@ export default function SignUp({ setOpenSignUp, openSignUp, setOpenLogin, setCur
                         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
                     </Transition.Child>
 
-                    <div className="fixed inset-0 z-10 overflow-y-auto">
+                    <div className="fixed inset-0 top-10 z-10 overflow-y-auto">
                         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
                             <Transition.Child
                                 as={Fragment}
@@ -79,7 +79,7 @@ export default function SignUp({ setOpenSignUp, openSignUp, setOpenLogin, setCur
                                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                             >
                                 <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8  sm:p-6">
-                                    <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+                                    <div className="flex flex-col justify-center py-4 lg:py-12 sm:px-6 lg:px-8">
                                         <div className="sm:mx-auto sm:w-full sm:max-w-md">
                                             <img
                                                 className="mx-auto h-12 w-auto"
@@ -148,6 +148,7 @@ export default function SignUp({ setOpenSignUp, openSignUp, setOpenLogin, setCur
                                                         </button>
                                                         <p>
                                                             Already have an account?<button
+                                                                type='button'
                                                                 onClick={() => { setOpenSignUp(false); setOpenLogin(true) }}
                                                                 className='underline'> Login</button>
                                                         </p>

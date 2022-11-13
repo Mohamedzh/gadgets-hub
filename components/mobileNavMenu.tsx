@@ -1,7 +1,7 @@
 import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
-import React from 'react'
+import React, { MutableRefObject } from 'react'
 
 const brandsMenu = [
     { name: 'Apple', url: '/brands/apple' },
@@ -11,10 +11,11 @@ const brandsMenu = [
 ]
 
 type Props = {
-    item: { name: string; current: boolean; href: string; }
+    item: { name: string; current: boolean; href: string; },
+    close: (focusableElement?: HTMLElement | MutableRefObject<HTMLElement | null> | undefined) => void
 }
 
-function MobileNavMenu({ item }: Props) {
+function MobileNavMenu({ item, close }: Props) {
     return (
         <Disclosure>
             {({ open }) => (
@@ -35,6 +36,7 @@ function MobileNavMenu({ item }: Props) {
                             {brandsMenu.map((brand, i) =>
                                 <Link key={i} href={brand.url}>
                                     <Disclosure.Button
+                                        onClick={() => close()}
                                         as="a"
                                         className="block rounded-md text-center bg-gray-900 px-3 py-2 text-base font-medium text-white hover:bg-gray-400 hover:text-black cursor-pointer"
                                     >

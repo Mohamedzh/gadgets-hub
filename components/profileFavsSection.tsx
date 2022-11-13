@@ -24,7 +24,7 @@ function ProfileFavsSection({ user }: Props) {
         <div>
             <p className='text-gray-100 text-2xl font-semibold mb-5'>Favourite Phones</p>
             {user &&
-                <div className='grid grid-cols-8'>
+                <div className='grid grid-cols-2 lg:grid-cols-8'>
                     {favPhones?.map((item, i) =>
                         <Link href={`/${item.phone.name}`} key={i}>
                             <a
