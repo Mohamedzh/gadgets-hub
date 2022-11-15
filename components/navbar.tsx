@@ -11,6 +11,7 @@ import { useUser } from '@supabase/auth-helpers-react'
 import Login from './loginModal'
 import MobileNavMenu from './mobileNavMenu'
 import { useRouter } from 'next/router'
+import LanguageMenu from './languageMenu'
 
 const navMenu = [
     { name: 'News', current: false, href: '/news' },
@@ -85,10 +86,10 @@ export default function Navbar() {
                                                 </Link>
                                             )}
                                         </div>
-
                                     </div>
                                 </div>
                                 <div className="flex flex-1 justify-center px-2 lg:ml-6 lg:justify-end">
+                                    {/* <LanguageMenu /> */}
                                     {/* <div className="w-full max-w-lg lg:max-w-xs">
                                         <label htmlFor="search" className="sr-only">
                                             Search

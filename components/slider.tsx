@@ -7,13 +7,12 @@ import { Autoplay, Pagination, Navigation } from "swiper";
 import { NewsType, ReviewType } from "../types";
 import Link from "next/link";
 import { Phone } from "@prisma/client";
-import TranslateTrial from "./translateTrial";
 
 export default function Slider({
     news, reviews, latestPhones }: {
         news: NewsType[], reviews: ReviewType[], latestPhones: Phone[]
     }) {
-    const lastReviews = reviews.filter((subject, i) => i < 4)
+    // const lastReviews = reviews.filter((subject, i) => i < 4)
 
     return (
         <div className="my-10 grid grid-cols-4 lg:gap-x-8 gap-y-8 mx-5">
@@ -31,7 +30,7 @@ export default function Slider({
                 modules={[Autoplay, Pagination, Navigation]}
                 className="mySwiper col-span-4 lg:col-span-3 max-w-full rounded-lg"
             >
-                {lastReviews.map((slide, i) =>
+                {reviews.map((slide, i) =>
                     <SwiperSlide key={i}>
                         <Link href={`https://www.gsmarena.com/${slide.link}`}>
                             <a className="relative text-center text-white">

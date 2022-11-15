@@ -3,6 +3,7 @@ import { Dispatch } from "@reduxjs/toolkit";
 import axios from "axios";
 import { addToComparison } from "../redux/slices/compareSlice";
 import { DetailedCategory, DetailedPhone, DetailedPhoneSpecs } from "../types";
+// import { v2 } from "@google-cloud/translate";
 
 export function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(' ')
@@ -98,3 +99,17 @@ export const capitalize = (s: string) => s && s[0].toUpperCase() + s.slice(1)
 export const monthNumberFromString = (str: string) => {
     return new Date(`${str} 01 2000`).toLocaleDateString(`en`, { month: `2-digit` })
 }
+
+// export async function quickStart(text: string, target: string) {
+//     const { Translate } = v2
+//     const projectId = 'gadgets-hub-368213';
+//     const credentials = JSON.parse(
+//         Buffer.from(process.env.TRANSLATE_KEY!, 'base64').toString()
+//     )
+//     // Instantiates a client
+//     const translate = new Translate({ projectId, credentials });
+//     const [translation] = await translate.translate(text, target);
+//     // console.log(`Text: ${text}`);
+//     // console.log(`Translation: ${translation}`);
+//     return translation
+// }

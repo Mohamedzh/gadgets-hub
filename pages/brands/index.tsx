@@ -238,7 +238,7 @@ export const getStaticProps: GetStaticProps = async () => {
         }
     }
 
-    getPhonesDetails()
+    await getPhonesDetails()
     ////
     return { props: { dbBrands }, revalidate: 172800 }
 }

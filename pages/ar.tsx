@@ -12,7 +12,7 @@ const Home: NextPage = ({
     news?: NewsType[], reviews?: ReviewType[], latestPhones?: Phone[]
   }) => {
   return (
-    <div className='bg-gray-900 container lg:mx-10'>
+    <div className='bg-gray-900 container lg:mx-10 ar'>
       <Head>
         <title>Gadgets Hub</title>
         <meta name="description" content="Mobile phone database" />
@@ -35,7 +35,6 @@ export const getStaticProps: GetStaticProps = async () => {
   const news = await getLatestNews()
   const reviews = await getLatestReviews()
   const latest = reviews.filter((subject, i) => i < 4)
-
   const modified = await getLatestReviewsPics(latest)
 
   return { props: { news, reviews: modified, latestPhones }, revalidate: 28800 }

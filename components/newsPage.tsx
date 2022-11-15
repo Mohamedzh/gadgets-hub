@@ -21,7 +21,7 @@ function NewsPage({ news }: Props) {
                         <button
                             onClick={() => router.push(`https://www.gsmarena.com/${subject.link}`)}
                             className='bg-white my-5 text-gray-800 w-40 h-10 font-semibold rounded-lg self-center'>
-                            Read more..
+                            {router.asPath === '/news' ? 'Read more..' : 'اقرأ التفاصيل'}
                         </button>
                     </div>
                 </div>

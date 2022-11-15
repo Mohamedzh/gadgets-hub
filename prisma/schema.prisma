@@ -10,6 +10,7 @@ datasource db {
 model Brand {
   id          String   @id @default(uuid())
   name        String   @unique
+  arabicName  String   @default("")
   phonesNum   Int
   gsmArenaUrl String
   createdAt   DateTime @default(now())

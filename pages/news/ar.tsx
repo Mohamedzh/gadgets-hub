@@ -2,6 +2,8 @@ import { GetStaticProps } from 'next'
 import React from 'react'
 import NewsPage from '../../components/newsPage'
 import { getLatestNews } from '../../lib/cheerio'
+const { Translate } = require('@google-cloud/translate').v2;
+
 
 type Props = {
     news: any[]
@@ -24,7 +26,33 @@ export default News
 
 export const getStaticProps: GetStaticProps = async () => {
 
-    const news = await getLatestNews()
+    async function transArabic(text: string, target: string) {
+        const projectId = 'gadgets-hub-368213';
+        const credentials = JSON.parse(
+            Buffer.from(process.env.TRANSLATE_KEY!, 'base64').toString()
+        )
+        // Instantiates a client
+        const translate = new Translate({ projectId, credentials });
+        const [translation] = await translate.translate(text, target);
+        // console.log(`Text: ${text}`);
+        // console.log(`Translation: ${translation}`);
+        return translation
+    }
 
-    return { props: { news }, revalidate: 43200 }
+
+    let news = await getLatestNews()
+
+    let arNews = []
+
+    for (let i = 0; i < news.length; i++) {
+        let item = {
+            ...news[i],
+            title: await transArabic(news[i].title, 'ar'),
+            body: await transArabic(news[i].body, 'ar'),
+            newsDate: await transArabic(news[i].newsDate, 'ar')
+        }
+        arNews.push(item)
+    }
+
+    return { props: { news: arNews }, revalidate: 28800 }
 }

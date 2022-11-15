@@ -394,3 +394,10 @@ export const getAllPhonesDetails = async (min: number, max: number, allPhones: P
 
 
 }
+
+export const getLatestReviewsPics = async (reviews: ReviewType[]) => {
+    for (let i = 0; i < reviews.length; i++) {
+        reviews[i].imgUrl= reviews[i].imgUrl.replace('-347x151', '-1220x526')
+    }
+    return reviews
+}

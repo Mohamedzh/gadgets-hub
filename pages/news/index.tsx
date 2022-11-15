@@ -29,5 +29,5 @@ export const getStaticProps: GetStaticProps = async () => {
 
     const news = await getLatestNews()
 
-    return { props: { news }, revalidate: 43200 }
+    return { props: { news }, revalidate: 28800 }
 }

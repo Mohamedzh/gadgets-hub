@@ -1,10 +1,10 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
 import React, { useEffect } from 'react'
-import { prisma } from '../../lib/db'
+import { prisma } from '../../../lib/db'
 import { ParsedUrlQuery } from 'querystring'
-import PhoneFilter from '../../components/phoneFilter'
+import PhoneFilter from '../../../components/phoneFilter'
 import _ from 'lodash'
-import { PhoneWithPrice } from '../../types'
+import { PhoneWithPrice } from '../../../types'
 
 
 export type PhoneSummary = {
@@ -35,7 +35,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }: { params?: ParsedUrlQuery }) => {
     let newBrand = params?.brand as string
-    let phones = await prisma.phone.findMany({ where: { brandName: newBrand }, include: { GBPPrice: true, USDPrice: true, EURPrice: true } })
+    let phones = await prisma.phone.findMany({ where: { brandName: newBrand } })
 
     return { props: { phones, brand: params?.brand }, revalidate: 172800 }
 }
