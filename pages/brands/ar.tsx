@@ -29,7 +29,7 @@ function Phones({ dbBrands }: { dbBrands: Brand[] }) {
                     >
                         <Link href={`/brands/${brand.name.toLowerCase()}`}>
                             <a
-                                className={`${brand.arabicName.length > 8 ? 'text-base' : "text-lg"} lg:text-3xl font-semibold text-slate-400 font-mono`}
+                                className={`text-lg lg:text-3xl font-semibold text-slate-400 font-mono`}
                             >
                                 {brand.arabicName}
                             </a>

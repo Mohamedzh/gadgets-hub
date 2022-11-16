@@ -2,13 +2,17 @@ import { useRouter } from 'next/router'
 import React, { ReactNode } from 'react'
 import Footer from './footer'
 import Navbar from './navbar'
+import ArabicNavbar from './arabicNavbar'
+import ArabicFooter from './arabicFooter'
 
 function Layout({ children }: { children: ReactNode }) {
+    const router = useRouter()
     return (
         <div className='min-h-full'>
-            <Navbar />
+            {router.asPath.includes('/ar') ? <ArabicNavbar /> : <Navbar />}
             <main >{children}</main>
-            <Footer />
+            {router.asPath.includes('/ar') ? <ArabicFooter /> : <Footer />}
+
         </div>
     )
 }

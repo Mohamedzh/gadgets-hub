@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 
@@ -18,11 +19,13 @@ function NewsPage({ news }: Props) {
                         <p className='my-3 text-2xl'>{subject.title}</p>
                         <div>{subject.body}</div>
                         <p className='self-end'>{subject.newsDate}</p>
-                        <button
-                            onClick={() => router.push(`https://www.gsmarena.com/${subject.link}`)}
-                            className='bg-white my-5 text-gray-800 w-40 h-10 font-semibold rounded-lg self-center'>
-                            {router.asPath === '/news' ? 'Read more..' : 'اقرأ التفاصيل'}
-                        </button>
+                        <Link href={`https://www.gsmarena.com/${subject.link}`}>
+                            <a target='_blank'
+                                // onClick={() => router.push(`https://www.gsmarena.com/${subject.link}`)}
+                                className='bg-white my-5 text-gray-800 w-40 h-10 font-semibold rounded-lg self-center'>
+                                {router.asPath === '/news' ? 'Read more..' : 'اقرأ التفاصيل'}
+                            </a>
+                        </Link>
                     </div>
                 </div>
             )}

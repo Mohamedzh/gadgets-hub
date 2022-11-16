@@ -33,10 +33,12 @@ export default Home
 export const getStaticProps: GetStaticProps = async () => {
   const latestPhones = await prisma.phone.findMany({ take: 5, orderBy: { id: 'desc' } })
   const news = await getLatestNews()
+  const latestNews = news.filter((item, i) => i < 6)
+
   const reviews = await getLatestReviews()
   const latest = reviews.filter((subject, i) => i < 4)
 
   const modified = await getLatestReviewsPics(latest)
 
-  return { props: { news, reviews: modified, latestPhones }, revalidate: 28800 }
+  return { props: { news: latestNews, reviews: modified, latestPhones }, revalidate: 28800 }
 }

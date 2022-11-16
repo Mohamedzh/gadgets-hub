@@ -12,7 +12,7 @@ function ReviewsPage({ reviews }: Props) {
             {reviews.map((review, i) =>
                 <div key={i} className='flex flex-col m-5 '>
                     <Link href={`https://www.gsmarena.com/${review.link}`}>
-                        <a>
+                        <a target='_blank'>
                             <img className='rounded-lg mx-auto' src={review.imgUrl} />
                         </a>
                     </Link>

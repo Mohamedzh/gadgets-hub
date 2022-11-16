@@ -14,16 +14,16 @@ import { useRouter } from 'next/router'
 import LanguageMenu from './languageMenu'
 
 const navMenu = [
-    { name: 'News', current: false, href: '/news' },
-    { name: 'Reviews', current: false, href: '/reviews' },
-    { name: 'Phone Finder', current: false, href: '/phonefinder' },
-    { name: 'Brands', current: false, href: '#' },
-    { name: 'Comparison', current: false, href: '/compare' }
+    { name: 'الأخبار', current: false, href: '/news/ar' },
+    { name: 'التقييمات', current: false, href: '/reviews/ar' },
+    { name: 'ابحث عن تليفون', current: false, href: '/phonefinder/ar' },
+    { name: 'الماركات', current: false, href: '#' },
+    { name: 'مقارنة', current: false, href: '/compare/ar' }
 ]
 
 export const profileMenu = [
-    { name: 'Your profile' },
-    { name: 'Sign out' },
+    { name: 'حسابي' },
+    { name: 'تسجيل خروج' },
 ]
 
 export default function Navbar() {
@@ -43,7 +43,7 @@ export default function Navbar() {
 
     return (
         <div
-            className='sticky top-0 z-50'
+            className='sticky top-0 z-50 ar'
         >
             <Disclosure as="nav" className="bg-gray-800">
                 {({ open }) => (
@@ -52,7 +52,7 @@ export default function Navbar() {
                             <div className="relative flex h-16 items-center justify-between">
                                 <div className="flex items-center px-2 lg:px-0">
                                     <div className="flex-shrink-0">
-                                        <Link href='/'>
+                                        <Link href='/ar'>
                                             <a>
                                                 <img
                                                     className="block h-8 w-auto lg:hidden"
@@ -62,7 +62,7 @@ export default function Navbar() {
                                                 <p className='lg:hidden text-sm text-gray-200 font-mono font-semibold'>Gadgets Hub</p>
                                             </a>
                                         </Link>
-                                        <Link href='/'>
+                                        <Link href='/ar'>
                                             <a>
                                                 <img
                                                     className="hidden h-8 w-auto lg:block"
@@ -79,8 +79,8 @@ export default function Navbar() {
                                             {navMenu.map((nav, i) =>
                                                 <Link key={i} href={nav.href}>
                                                     <a className={`${nav.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md ${nav.name !== 'Brands' ? 'px-3 py-2' : ''} text-sm font-medium text-white place-self-center`}>
-                                                        {nav.name !== 'Brands' && nav.name}
-                                                        {nav.name === 'Brands' && <NewMenu nav={nav} />}
+                                                        {nav.name !== 'الماركات' && nav.name}
+                                                        {nav.name === 'الماركات' && <NewMenu nav={nav} />}
                                                         {/* <PopMenu /> */}
                                                     </a>
                                                 </Link>
@@ -156,7 +156,7 @@ export default function Navbar() {
                                                     <button
                                                         onClick={() => setOpenLogin(true)}
                                                         className=' p-2 font-semibold text-white hover:text-blue-600'>
-                                                        Login/Signup
+                                                        تسجيل دخول / مستخدم جديد
                                                     </button>
                                                 }
                                             </div>
