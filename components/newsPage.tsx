@@ -22,7 +22,7 @@ function NewsPage({ news }: Props) {
                         <Link href={`https://www.gsmarena.com/${subject.link}`}>
                             <a target='_blank'
                                 // onClick={() => router.push(`https://www.gsmarena.com/${subject.link}`)}
-                                className='bg-white my-5 text-gray-800 w-40 h-10 font-semibold rounded-lg self-center'>
+                                className={`bg-white my-5 text-xl text-center pt-1 hover:bg-gray-700 hover:text-gray-50 text-gray-800 w-40 h-10 font-semibold rounded-lg self-center`}>
                                 {router.asPath === '/news' ? 'Read more..' : 'اقرأ التفاصيل'}
                             </a>
                         </Link>

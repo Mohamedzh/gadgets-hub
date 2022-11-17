@@ -12,10 +12,10 @@ const brandsMenu = [
 ]
 
 const arabicBrandsMenu = [
-    { name: 'ابل', url: '/brands/apple', img: '/appleLogo.png' },
-    { name: 'سامسونج', url: '/brands/samsung', img: '/samsungLogo.png' },
-    { name: 'شاومي', url: '/brands/xiaomi', img: '/xiaomiLogo.png' },
-    { name: 'ون بلص', url: '/brands/oneplus', img: '/oneplusLogo.png' },
+    { name: 'ابل', url: '/brands/apple/ar', img: '/appleLogo.png' },
+    { name: 'سامسونج', url: '/brands/samsung/ar', img: '/samsungLogo.png' },
+    { name: 'شاومي', url: '/brands/xiaomi/ar', img: '/xiaomiLogo.png' },
+    { name: 'ون بلص', url: '/brands/oneplus/ar', img: '/oneplusLogo.png' },
 ]
 
 export default function NavMenu({ nav }: { nav: { name: string, current: boolean } }) {

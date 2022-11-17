@@ -6,6 +6,7 @@ import { theme } from '../lib/functions';
 import { Dispatch, SetStateAction } from 'react';
 import { EURPrice, Phone } from '@prisma/client';
 import { PhoneWithPrice } from '../types';
+import { useRouter } from 'next/router';
 
 
 function valuetext(value: number) {
@@ -19,6 +20,7 @@ type Props = {
 }
 
 export default function RangeSlider({ phones, setSortedPhones, sortedPhones }: Props) {
+    const router = useRouter()
     const years = phones.map(phone => { return phone.year })
 
     let min = Math.min(...years)
@@ -37,7 +39,7 @@ export default function RangeSlider({ phones, setSortedPhones, sortedPhones }: P
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ width: { xs: 100, sm: 150, md: 200, lg: 275 } }}>
-                <p className='lg:mb-4 lg:mt-10 text-sm lg:text-xl font-semibold text-gray-200'>Filter by Year</p>
+                <p className='lg:mb-4 lg:mt-10 text-sm lg:text-xl font-semibold text-gray-200'>{router.asPath.includes('/ar') ? 'تصنيف بواسطة سنة الاصدار' : 'Filter by Year'}</p>
                 <Slider
                     sx={{ color: 'blue' }}
                     getAriaLabel={() => 'Year range'}

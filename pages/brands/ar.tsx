@@ -36,14 +36,14 @@ function Phones({ dbBrands }: { dbBrands: Brand[] }) {
                         </Link>
                         <br></br>
                         {brand.phones.length > 0 &&
-                            <Link href={`/brands/${brand.name.toLowerCase()}`}>
+                            <Link href={`/brands/${brand.name.toLowerCase()}/ar`}>
                                 <a className='text-white text-sm lg:text-base hover:underline cursor-pointer hover:text-blue-600'>
                                     {brand.phones.length} جهاز
                                 </a>
                             </Link>}
                         <br></br>
                         {brand.Reviews.length > 0 &&
-                            <Link href={`/reviews/${brand.name.toLowerCase()}`}>
+                            <Link href={`/reviews/${brand.name.toLowerCase()}/ar`}>
                                 <a className='text-white text-sm lg:text-base hover:underline cursor-pointer hover:text-blue-600'>
                                     {brand.Reviews.length} تقييم
                                 </a>
@@ -63,32 +63,6 @@ export const getStaticProps: GetStaticProps = async () => {
     dbBrands = dbBrands.map(brand => {
         return { ...brand, createdAt: JSON.parse(JSON.stringify(brand.createdAt)), updatedAt: JSON.parse(JSON.stringify(brand.updatedAt)) }
     })
-
-
-    // async function transArabic(text: string, target: string) {
-    //     const { Translate } = v2
-    //     const projectId = 'gadgets-hub-368213';
-    //     const credentials = JSON.parse(
-    //         Buffer.from(process.env.TRANSLATE_KEY!, 'base64').toString()
-    //     )
-    //     // Instantiates a client
-    //     const translate = new Translate({ projectId, credentials });
-    //     const [translation] = await translate.translate(text, target);
-    //     // console.log(`Text: ${text}`);
-    //     // console.log(`Translation: ${translation}`);
-    //     return translation
-    // }
-
-    // let arBrands = []
-
-    // for (let i = 0; i < dbBrands.length; i++) {
-    //     let item = {
-    //         ...dbBrands[i],
-    //         name: await transArabic(dbBrands[i].name, 'ar'),
-    //     }
-    //     arBrands.push(item)
-    // }
-
 
     return { props: { dbBrands }, revalidate: 172800 }
 }

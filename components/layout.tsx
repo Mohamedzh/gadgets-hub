@@ -12,7 +12,6 @@ function Layout({ children }: { children: ReactNode }) {
             {router.asPath.includes('/ar') ? <ArabicNavbar /> : <Navbar />}
             <main >{children}</main>
             {router.asPath.includes('/ar') ? <ArabicFooter /> : <Footer />}
-
         </div>
     )
 }

@@ -9,6 +9,7 @@ import Pagination from './brandPhonesPagination'
 import _ from 'lodash'
 import { EURPrice, Phone } from '@prisma/client'
 import { PhoneWithPrice } from '../types'
+import { useRouter } from 'next/router'
 
 let sortOptions = [
     { name: 'A-Z', current: false },
@@ -20,8 +21,14 @@ let sortOptions = [
     // { name: 'Price: High to Low', function: '#', current: false },
 ]
 
+let arabicSortOptions = [
+    { name: 'الاسم (ا - ي)', current: false },
+    { name: 'الاسم (ي - ا)', current: false },
+    { name: 'الأكثر مشاهدة', current: true },
+]
 
-export default function PhoneFilter({ phones, brand }: { phones: PhoneWithPrice[], brand: string }) {
+export default function PhoneFilter({ phones, brand, arabicBrandName }: { phones: PhoneWithPrice[], brand: string, arabicBrandName: string }) {
+    const router = useRouter()
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
     const [page, setPage] = useState(1)
     const [pageNo, setPageNo] = useState(1)
@@ -55,7 +62,7 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneWithPrice[
         <div className="bg-gray-900">
             <div>
                 {/* Mobile filter dialog */}
-                <Transition.Root show={mobileFiltersOpen} as={Fragment}>
+                {/* <Transition.Root show={mobileFiltersOpen} as={Fragment}>
                     <Dialog as="div" className="relative z-40 lg:hidden" onClose={setMobileFiltersOpen}>
                         <Transition.Child
                             as={Fragment}
@@ -95,22 +102,34 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneWithPrice[
                             </Transition.Child>
                         </div>
                     </Dialog>
-                </Transition.Root>
+                </Transition.Root> */}
 
                 <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex items-baseline justify-between border-b border-gray-200 pt-24 pb-6">
-                        <h1 className="text-4xl font-bold text-blue-300">{brand.toUpperCase()}</h1>
+                        <h1 className="text-4xl font-bold text-blue-300">
+                            {router.asPath.includes('/ar') ? arabicBrandName : brand.toUpperCase()}
+                        </h1>
 
                         <div className="flex items-center">
                             <Menu as="div" className="relative inline-block text-left">
                                 <div>
-                                    <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-100 hover:text-gray-400">
-                                        Sort
-                                        <ChevronDownIcon
-                                            className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                                            aria-hidden="true"
-                                        />
-                                    </Menu.Button>
+                                    {router.asPath.includes('/ar') ?
+                                        <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-100 hover:text-gray-400">
+                                            <ChevronDownIcon
+                                                className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                                                aria-hidden="true"
+                                            />
+                                            الترتيب بحسب
+                                        </Menu.Button>
+                                        :
+                                        <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-100 hover:text-gray-400">
+                                            Sort
+                                            <ChevronDownIcon
+                                                className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                                                aria-hidden="true"
+                                            />
+                                        </Menu.Button>
+                                    }
                                 </div>
                                 <Transition
                                     as={Fragment}
@@ -123,7 +142,7 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneWithPrice[
                                 >
                                     <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         <div className="py-1">
-                                            {sortOptions.map((option) => (
+                                            {(router.asPath.includes('/ar') ? arabicSortOptions : sortOptions).map((option) => (
                                                 <Menu.Item key={option.name}>
                                                     {({ active }) => (
                                                         <button
@@ -152,14 +171,14 @@ export default function PhoneFilter({ phones, brand }: { phones: PhoneWithPrice[
                                 <span className="sr-only">View grid</span>
                                 <Squares2X2Icon className="h-5 w-5" aria-hidden="true" />
                             </button> */}
-                            <button
+                            {/* <button
                                 type="button"
                                 className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
                                 onClick={() => setMobileFiltersOpen(true)}
                             >
                                 <span className="sr-only">Filters</span>
                                 <FunnelIcon className="h-5 w-5" aria-hidden="true" />
-                            </button>
+                            </button> */}
                         </div>
                     </div>
 

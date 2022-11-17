@@ -57,7 +57,7 @@ export default function Navbar() {
                                                 <img
                                                     className="block h-8 w-auto lg:hidden"
                                                     src="/mobileLogo.png"
-                                                    alt="Your Company"
+                                                    alt="Gadgets Hub"
                                                 />
                                                 <p className='lg:hidden text-sm text-gray-200 font-mono font-semibold'>Gadgets Hub</p>
                                             </a>
@@ -67,7 +67,7 @@ export default function Navbar() {
                                                 <img
                                                     className="hidden h-8 w-auto lg:block"
                                                     src="/mobileLogo.png"
-                                                    alt="Your Company"
+                                                    alt="Gadgets Hub"
                                                 />
                                                 <p className='hidden lg:block text-gray-200 font-mono font-semibold'>Gadgets Hub</p>
                                             </a>
@@ -78,10 +78,9 @@ export default function Navbar() {
                                             {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
                                             {navMenu.map((nav, i) =>
                                                 <Link key={i} href={nav.href}>
-                                                    <a className={`${nav.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md ${nav.name !== 'Brands' ? 'px-3 py-2' : ''} text-sm font-medium text-white place-self-center`}>
+                                                    <a className={`${nav.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md ${nav.name !== 'الماركات' ? 'px-3 py-2' : ''} text-sm font-medium text-white place-self-center`}>
                                                         {nav.name !== 'الماركات' && nav.name}
                                                         {nav.name === 'الماركات' && <NewMenu nav={nav} />}
-                                                        {/* <PopMenu /> */}
                                                     </a>
                                                 </Link>
                                             )}
@@ -210,16 +209,16 @@ export default function Navbar() {
                                     <div className="space-y-1 px-2 pt-2 pb-3 flex flex-col">
                                         {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
                                         {navMenu.map((item, i) =>
-                                            item.name === 'Brands' ?
+                                            item.name === 'الماركات' ?
                                                 <MobileNavMenu close={close} key={item.name} item={item} />
                                                 :
                                                 <Link key={item.name} href={item.href}>
                                                     <Disclosure.Button
                                                         as="a"
                                                         onClick={() => close()}
-                                                        className={`block rounded-md bg-gray-900 px-3 ${item.name !== 'Brands' ? 'py-2' : 'flex place-items-start place-content-start '} text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer`}
+                                                        className={`block rounded-md bg-gray-900 px-3 ${item.name !== 'الماركات' ? 'py-2' : 'flex place-items-start place-content-start '} text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer`}
                                                     >
-                                                        {item.name !== 'Brands' && item.name}
+                                                        {item.name !== 'الماركات' && item.name}
                                                     </Disclosure.Button>
                                                 </Link>
                                         )}
@@ -240,7 +239,7 @@ export default function Navbar() {
                                                     <div className="text-sm font-medium text-gray-400">{currentUser?.email}</div>
                                                 </div> :
                                                 <div className="ml-3">
-                                                    <div className="text-base font-medium text-white">Login/Signup</div>
+                                                    <div className="text-base font-medium text-white">تسجيل دخول / مستخدم جديد</div>
                                                     {/* <div className="text-sm font-medium text-gray-400">{user?.email}</div> */}
                                                 </div>}
                                             {/* <button
@@ -279,7 +278,7 @@ export default function Navbar() {
                                                 onClick={() => { setOpenLogin(true); close() }}
                                                 className=' p-2 font-semibold text-white hover:text-blue-600 ml-3'
                                             >
-                                                Login/Signup
+                                                تسجيل دخول / مستخدم جديد
                                             </button>
                                         }
                                     </div>

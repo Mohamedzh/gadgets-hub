@@ -13,12 +13,11 @@ export type PhoneSummary = {
     brandName: string
 }
 
-function PhoneDetails({ phones, brand }: { phones: PhoneWithPrice[], brand: string }) {
+function PhoneDetails({ phones, brand, arabicBrandName }: { phones: PhoneWithPrice[], brand: string, arabicBrandName: string }) {
 
     return (
-        <div>
-            <PhoneFilter phones={phones} brand={brand} />
-
+        <div className='ar'>
+            <PhoneFilter phones={phones} brand={brand} arabicBrandName={arabicBrandName} />
         </div>
     )
 }
@@ -35,7 +34,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }: { params?: ParsedUrlQuery }) => {
     let newBrand = params?.brand as string
-    let phones = await prisma.phone.findMany({ where: { brandName: newBrand }})
+    let phones = await prisma.phone.findMany({ where: { brandName: newBrand } })
+    let arabicBrandName = await prisma.brand.findFirst({ where: { name: newBrand }, select: { arabicName: true } })
 
-    return { props: { phones, brand: params?.brand }, revalidate: 172800 }
+    return { props: { phones, brand: params?.brand, arabicBrandName: arabicBrandName?.arabicName }, revalidate: 172800 }
 }
