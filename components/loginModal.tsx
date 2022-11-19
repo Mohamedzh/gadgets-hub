@@ -10,15 +10,16 @@ type Props = {
     setOpenLogin: Dispatch<SetStateAction<boolean>>
     setOpenSignUp: Dispatch<SetStateAction<boolean>>
     setCurrentUser: Dispatch<SetStateAction<User | undefined>>
+    arLang: boolean
 }
 
-export default function Login({ openLogin, setOpenLogin, setOpenSignUp, setCurrentUser }: Props) {
+export default function Login({ openLogin, setOpenLogin, setOpenSignUp, setCurrentUser, arLang }: Props) {
     const [error, setError] = useState<string>()
     const [supabaseClient] = useState(() => createBrowserSupabaseClient())
 
     const formData = [
-        { name: 'email', type: 'email', label: 'Email Address' },
-        { name: 'password', type: 'password', label: 'Password' }
+        { name: 'email', type: 'email', label: 'Email Address', arabicLabel: 'البريد الالكتروني' },
+        { name: 'password', type: 'password', label: 'Password', arabicLabel: 'كلمة السر' }
     ]
 
     const formik = useFormik({
@@ -42,8 +43,8 @@ export default function Login({ openLogin, setOpenLogin, setOpenSignUp, setCurre
 
         },
         validationSchema: Yup.object({
-            email: Yup.string().required("Please enter your email address"),
-            password: Yup.string().required("Please enter your password"),
+            email: Yup.string().required(arLang ? 'رجاء ادخال بريدك الالكتروني' : "Please enter your email address"),
+            password: Yup.string().required(arLang ? 'رجاء ادخال كلمة السر الخاصة بك' : "Please enter your password"),
         })
     })
     return (
@@ -82,7 +83,9 @@ export default function Login({ openLogin, setOpenLogin, setOpenSignUp, setCurre
                                                 src="/mobileLogo.png"
                                                 alt="Gadgets Hub"
                                             />
-                                            <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Sign in to your account</h2>
+                                            <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+                                                {arLang ? 'تسجيل دخول الى حسابك' : 'Sign in to your account'}
+                                            </h2>
                                         </div>
 
                                         <div className="mt-8 sm:mx-auto sm:w-full">
@@ -90,11 +93,11 @@ export default function Login({ openLogin, setOpenLogin, setOpenSignUp, setCurre
                                                 <form className="space-y-6" onSubmit={formik.handleSubmit}>
                                                     <div className='grid grid-cols-2'>
                                                         {formData.map((data, i) =>
-                                                            <div key={i} className={`${i === 0 ? 'mr-2' : 'ml-2'}`}>
-                                                                <label htmlFor={data.name} className="block text-sm font-medium text-gray-700">
-                                                                    {data.label}
+                                                            <div key={i} className={`${i === 0 ? 'mr-2' : 'ml-2'} flex flex-col`}>
+                                                                <label htmlFor={data.name} className={`block text-sm font-medium text-gray-700 ${arLang ? 'self-end' : ''}`}>
+                                                                    {arLang ? data.arabicLabel : data.label}
                                                                 </label>
-                                                                <div className="mt-1">
+                                                                <div className="mt-1 flex flex-col">
                                                                     <input
                                                                         id={data.name}
                                                                         name={data.name}
@@ -105,8 +108,8 @@ export default function Login({ openLogin, setOpenLogin, setOpenSignUp, setCurre
                                                                         required
                                                                         className="block appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                                                     />
-                                                                    {data.name === "email" ? (formik.touched.email && formik.errors.email ? <p className="text-red-500 text-sm">{formik.errors.email}</p> : null) :
-                                                                        (formik.touched.password && formik.errors.password ? <p className="text-red-500 text-sm">{formik.errors.password}</p> : null)}
+                                                                    {data.name === "email" ? (formik.touched.email && formik.errors.email ? <p className={`text-red-500 text-xs ${arLang ? 'self-end' : ''}`}>{formik.errors.email}</p> : null) :
+                                                                        (formik.touched.password && formik.errors.password ? <p className={`text-red-500 text-xs ${arLang ? 'self-end' : ''}`}>{formik.errors.password}</p> : null)}
                                                                 </div>
                                                             </div>
                                                         )}
@@ -137,17 +140,29 @@ export default function Login({ openLogin, setOpenLogin, setOpenSignUp, setCurre
                                                             type="submit"
                                                             className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                         >
-                                                            Login
+                                                            {arLang ? 'تسجيل دخول' : 'Login'}
                                                         </button>
                                                         {error &&
                                                             <p className='text-red-500 mt-1 text-sm'>{error}, please check your email/password!</p>
                                                         }
-                                                        <p>
-                                                            Don&apos;t have an account?<button
-                                                                type='button'
-                                                                onClick={() => { setOpenSignUp(true); setOpenLogin(false) }}
-                                                                className='underline'> Sign up</button>
-                                                        </p>
+                                                        {arLang
+                                                            ?
+                                                            <p>
+                                                                <button
+                                                                    type='button'
+                                                                    onClick={() => { setOpenSignUp(true); setOpenLogin(false) }}
+                                                                    className='underline'> سجل حساب جديد
+                                                                </button>
+                                                                ليس لديك حساب؟
+                                                            </p>
+                                                            :
+                                                            <p>
+                                                                Don&apos;t have an account?<button
+                                                                    type='button'
+                                                                    onClick={() => { setOpenSignUp(true); setOpenLogin(false) }}
+                                                                    className='underline'>Sign up</button>
+                                                            </p>
+                                                        }
                                                     </div>
                                                 </form>
                                             </div>

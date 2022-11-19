@@ -1,10 +1,11 @@
 import { Brand, Phone, PhoneQuickSpecs, QuickSpec } from '@prisma/client'
 import { GetStaticProps } from 'next'
-import React from 'react'
-import Filters from '../components/phoneFinderFilters'
-import { prisma } from '../lib/db'
-import PhoneResultList from '../components/phoneFinderResultsList'
-import { PhoneFilter } from '../types'
+import React, { useEffect, useState } from 'react'
+import Filters from '../../components/phoneFinderFilters'
+import { prisma } from '../../lib/db'
+import PhoneResultList from '../../components/phoneFinderResultsList'
+import { PhoneFilter } from '../../types'
+import { useRouter } from 'next/router'
 
 type Props = {
     quickSpecs: PhoneQuickSpecs[]
@@ -13,6 +14,10 @@ type Props = {
 }
 
 function PhoneFinder({ quickSpecs, brands, phones }: Props) {
+    const router = useRouter()
+    const [arLang, setArLang] = useState<boolean>(false)
+    useEffect(() => { if (router.asPath.includes('/ar')) { setArLang(true) } }, [router.asPath])
+
     return (
         <div className='mx-10'>
             <div
@@ -20,7 +25,7 @@ function PhoneFinder({ quickSpecs, brands, phones }: Props) {
                 className='text-gray-200 lg:text-black flex bg-[bottom] bg-[length:1269px_450px] lg:h-72 rounded-xl mt-10 pt-20 pb-3 lg:py-10 px-3 lg:px-10 text-2xl lg:text-5xl font-bold font-serif'>
                 <p className='mt-auto'>Phone Finder</p>
             </div>
-            <Filters quickSpecs={quickSpecs} brands={brands} phones={phones} />
+            <Filters quickSpecs={quickSpecs} brands={brands} phones={phones} arLang={arLang} />
         </div>
     )
 }

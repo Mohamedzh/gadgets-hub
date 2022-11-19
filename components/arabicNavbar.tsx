@@ -27,11 +27,13 @@ export const profileMenu = [
 ]
 
 export default function Navbar() {
+    const router = useRouter()
+    const [arLang, setArLang] = useState<boolean>(false)
+    useEffect(() => { if (router.asPath.includes('/ar')) { setArLang(true) } }, [router.asPath])
     const [supabaseClient] = useState(() => createBrowserSupabaseClient())
     const [openSignUp, setOpenSignUp] = useState(false)
     const [openLogin, setOpenLogin] = useState(false)
 
-    const router = useRouter()
     const user = useUser()
 
     const [currentUser, setCurrentUser] = useState<User>()
@@ -59,26 +61,26 @@ export default function Navbar() {
                                                     src="/mobileLogo.png"
                                                     alt="Gadgets Hub"
                                                 />
-                                                <p className='lg:hidden text-sm text-gray-200 font-mono font-semibold'>Gadgets Hub</p>
+                                                <p className='lg:hidden text-sm text-gray-200 font-mono font-semibold'>{arLang ? 'مركز الهواتف' : 'Gadgets Hub'}</p>
                                             </a>
                                         </Link>
                                         <Link href='/ar'>
-                                            <a>
+                                            <a className='flex flex-col'>
                                                 <img
-                                                    className="hidden h-8 w-auto lg:block"
+                                                    className={`hidden h-8 w-auto lg:block place-items-center`}
                                                     src="/mobileLogo.png"
                                                     alt="Gadgets Hub"
                                                 />
-                                                <p className='hidden lg:block text-gray-200 font-mono font-semibold'>Gadgets Hub</p>
+                                                <p className='hidden lg:block text-gray-200 font-mono font-semibold'>{arLang ? 'مركز الهواتف' : 'Gadgets Hub'}</p>
                                             </a>
                                         </Link>
                                     </div>
                                     <div className="hidden lg:ml-6 lg:block">
-                                        <div className="flex space-x-4">
+                                        <div className="mr-5 flex ">
                                             {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
                                             {navMenu.map((nav, i) =>
                                                 <Link key={i} href={nav.href}>
-                                                    <a className={`${nav.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md ${nav.name !== 'الماركات' ? 'px-3 py-2' : ''} text-sm font-medium text-white place-self-center`}>
+                                                    <a className={`${nav.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'} rounded-md ${nav.name !== 'الماركات' ? 'px-3 py-2' : ''} text-sm font-medium text-white place-self-center mx-1`}>
                                                         {nav.name !== 'الماركات' && nav.name}
                                                         {nav.name === 'الماركات' && <NewMenu nav={nav} />}
                                                     </a>
@@ -132,8 +134,8 @@ export default function Navbar() {
                                         <Menu as="div" className="relative ml-4 flex-shrink-0">
                                             <div>
 
-                                                <Login openLogin={openLogin} setOpenLogin={setOpenLogin} setOpenSignUp={setOpenSignUp} setCurrentUser={setCurrentUser} />
-                                                <SignUp openSignUp={openSignUp} setOpenSignUp={setOpenSignUp} setOpenLogin={setOpenLogin} setCurrentUser={setCurrentUser} />
+                                                <Login openLogin={openLogin} setOpenLogin={setOpenLogin} setOpenSignUp={setOpenSignUp} setCurrentUser={setCurrentUser} arLang={arLang} />
+                                                <SignUp openSignUp={openSignUp} setOpenSignUp={setOpenSignUp} setOpenLogin={setOpenLogin} setCurrentUser={setCurrentUser} arLang={arLang} />
 
                                                 {currentUser ?
                                                     <Menu.Button className="flex rounded-full bg-gray-800 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
@@ -174,7 +176,7 @@ export default function Navbar() {
                                                             {({ active }) => (
                                                                 i === 0 ?
                                                                     <button
-                                                                        onClick={() => router.push('/profile')}
+                                                                        onClick={() => router.push('/profile/ar')}
                                                                         className={classNames(
                                                                             active ? 'bg-gray-100' : '',
                                                                             'block px-4 py-2 text-sm text-gray-700 w-full font-semibold'
@@ -255,7 +257,7 @@ export default function Navbar() {
                                                 {profileMenu.map((item, i) =>
                                                     i === 0 ?
                                                         <Disclosure.Button
-                                                            onClick={() => { close(); router.push('/profile') }}
+                                                            onClick={() => { close(); router.push('/profile/ar') }}
                                                             key={i}
                                                             as="button"
 

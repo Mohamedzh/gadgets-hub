@@ -4,12 +4,13 @@ import React from 'react'
 
 type Props = {
     otherPhones: Phone[]
+    arLang: boolean
 }
 
-function SeeAlsoSection({ otherPhones }: Props) {
+function SeeAlsoSection({ otherPhones, arLang }: Props) {
     return (
         <div>
-            <p className='font-semibold text-xl text-gray-100'>See also</p>
+            <p className='font-semibold text-xl text-gray-100'>{arLang ? 'مقترحات' : 'See also'}</p>
             <div className='grid grid-cols-4 lg:grid-cols-2'>
                 {otherPhones.map((phone, i) =>
                     <Link href={`/${phone.name}`} key={i}>

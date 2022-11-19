@@ -4,7 +4,7 @@ import { classNames, createPhoneData } from '../lib/functions'
 import { DetailedCategory, DetailedPhone } from '../types'
 
 export default function SpecsTable(
-    { currentPhone, categories }: { currentPhone: DetailedPhone, categories: DetailedCategory[] }
+    { currentPhone, categories, arLang }: { currentPhone: DetailedPhone, categories: DetailedCategory[], arLang: boolean }
 ) {
     let specs = currentPhone.PhoneSpecs
 
@@ -13,7 +13,7 @@ export default function SpecsTable(
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
                     <p className='text-3xl font-bold m-5 font-serif text-amber-400'>
-                        Detailed Specifications
+                        {arLang ? 'التفاصيل' : 'Detailed Specifications'}
                     </p>
                 </div>
                 {/* <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -53,7 +53,7 @@ export default function SpecsTable(
                                                 <th
                                                     colSpan={4}
                                                     scope="colgroup"
-                                                    className="bg-gray-200 px-4 py-2 text-left text-lg font-semibold text-gray-900 sm:px-6"
+                                                    className={`bg-gray-200 px-4 py-2 ${arLang ? 'text-right' : 'text-left'} text-lg font-semibold text-gray-900 sm:px-6`}
                                                 >
                                                     {category.name}
                                                 </th>
@@ -63,10 +63,10 @@ export default function SpecsTable(
                                                     key={i}
                                                     className={classNames(i === 0 ? 'border-gray-300' : 'border-gray-200', 'border-t')}
                                                 >
-                                                    <td className=" py-4 pl-4 pr-3 text-sm text-left font-medium text-yellow-400 sm:pl-6">
+                                                    <td className={`py-4 pl-4 pr-3 text-sm ${arLang ? 'text-right' : 'text-left'} font-medium text-yellow-400 sm:pl-6`}>
                                                         {spec.spec}
                                                     </td>
-                                                    <td className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-100 sm:pl-6">
+                                                    <td className="py-4 pl-4 pr-3 text-sm font-medium text-gray-100 sm:pl-6">
                                                         {spec.value}
                                                     </td>
                                                 </tr>

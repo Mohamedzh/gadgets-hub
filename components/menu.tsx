@@ -105,7 +105,7 @@ export default function NavMenu({ nav }: { nav: { name: string, current: boolean
                             }
                         </div>
                         <div className="px-1 py-1">
-                            <Link href={'/brands'}>
+                            <Link href={`${router.asPath.includes('/ar') ? '/brands/ar' : '/brands'}`}>
                                 <a>
                                     <Menu.Item>
                                         {({ active }) => (

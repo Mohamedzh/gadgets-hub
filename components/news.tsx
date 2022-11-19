@@ -1,19 +1,17 @@
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import React from 'react'
 import { NewsType } from '../types'
 
 type Props = {
     news: NewsType[]
+    arLang: boolean
 }
 
-function News({ news }: Props) {
-    const router = useRouter()
-    // const latestNews = news.filter((item, i) => i < 6)
+function News({ news, arLang }: Props) {
     return (
         <div className='mb-10'>
             <p className='text-4xl font-semibold m-3 text-white'>
-                {router.asPath.includes('/ar') ? 'آخر الأخبار' : 'Latest News'}
+                {arLang ? 'آخر الأخبار' : 'Latest News'}
             </p>
             <div className='grid grid-cols-2 lg:grid-cols-3'>
                 {news.map((item, i) =>

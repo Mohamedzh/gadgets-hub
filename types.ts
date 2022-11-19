@@ -1,4 +1,4 @@
-import { Category, EURPrice, Phone, PhoneQuickSpecs } from "@prisma/client"
+import { Category, EURPrice, Phone, PhoneQuickSpecs, QuickSpec } from "@prisma/client"
 
 export type Page = {
     url?: string
@@ -86,4 +86,13 @@ export interface PhoneFilter extends Phone {
 
 export interface PhoneWithPrice extends Phone {
     EURPrice: EURPrice
+}
+
+export interface ArQuickSpec extends QuickSpec {
+    arabicName: string
+}
+
+export interface ArCategory extends Category {
+    arabicName?: string
+    specs: { name: string, categoryName: string, alias: string, arabicName?: string }[]
 }

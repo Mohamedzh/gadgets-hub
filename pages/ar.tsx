@@ -7,11 +7,17 @@ import { getLatestNews, getLatestReviews, getLatestReviewsPics } from '../lib/ch
 import { NewsType, ReviewType } from '../types'
 import { Phone } from '@prisma/client'
 import { v2 } from '@google-cloud/translate'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 
 const Home: NextPage = ({
   news, reviews, latestPhones }: {
     news?: NewsType[], reviews?: ReviewType[], latestPhones?: Phone[]
   }) => {
+  const router = useRouter()
+  const [arLang, setArLang] = useState<boolean>(false)
+  useEffect(() => { if (router.asPath.includes('/ar')) { setArLang(true) } }, [router.asPath])
+
   return (
     <div className='bg-gray-900 container lg:mx-10 ar'>
       <Head>
@@ -21,8 +27,8 @@ const Home: NextPage = ({
       </Head>
       {reviews && news && latestPhones &&
         <div>
-          <Slider reviews={reviews} news={news} latestPhones={latestPhones} />
-          <News news={news} />
+          <Slider reviews={reviews} news={news} latestPhones={latestPhones} arLang={arLang} />
+          <News news={news} arLang={arLang} />
         </div>
       }
     </div>

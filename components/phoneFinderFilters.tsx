@@ -62,9 +62,10 @@ type Props = {
     quickSpecs: PhoneQuickSpecs[]
     brands: { name: string }[]
     phones: PhoneFilter[]
+    arLang: boolean
 }
 
-export default function Filters({ quickSpecs, brands, phones }: Props) {
+export default function Filters({ quickSpecs, brands, phones, arLang }: Props) {
     const [open, setOpen] = useState(false)
 
     const [showResults, setShowResults] = useState<boolean>(false)
@@ -250,7 +251,7 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
 
             <div className="mx-auto max-w-7xl pb-8 sm:px-2">
                 <p className="mt-4 text-center lg:text-left max-w-xl text-gray-300">
-                    Find your phone using a combination of brand and specifications filters.
+                    {arLang ? 'ابحث عن هاتفك باستخدام مجموعة من فلاتر الخصئص والماركات' : ' Find your phone using a combination of brand and specifications filters.'}
                 </p>
             </div>
 
@@ -315,11 +316,11 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
                             </button>
                         </div>
                         <div className='flex flex-col lg:flex-row mt-10 lg:mt-0'>
-                            <p className='mx-2 place-self-center font-semibold text-blue-300'>Brands</p>
+                            <p className='mx-2 place-self-center font-semibold text-blue-300'>{arLang ? 'الماركات' :'Brands'}</p>
                             <BrandSearchBar dbBrands={brands} />
                         </div>
                         <div className='flex flex-col lg:flex-row mt-5 lg:mt-0'>
-                            <p className='mx-2 place-self-center font-semibold text-blue-300'>OS</p>
+                            <p className='mx-2 place-self-center font-semibold text-blue-300'>{arLang ? 'نظام التشغيل' :'OS'}</p>
                             {os &&
                                 <OsSearchBar os={os} />
                             }
@@ -392,7 +393,7 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
                 <div className="border-b-gray-300 border-b">
                     <div className="mx-auto max-w-7xl py-3 px-4 sm:flex sm:items-center sm:px-6 lg:px-8">
                         <h3 className="text-sm font-medium text-gray-400">
-                            Filters
+                            {arLang ? 'الفلاتر' : 'Filters'}
                             <span className="sr-only">, active</span>
                         </h3>
 
@@ -432,7 +433,7 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
                                 dispatch(clearActiveFilters())
                             }}
                             className='font-semibold hover:bg-red-600 hover:text-white active:scale-95 duration-50 transition text-lg mx-10 p-3 text-red-600 bg-white rounded-lg self-end'>
-                            Clear search fields
+                            {arLang ? 'مسح حقول البحث' : 'Clear search fields'}
                         </button>
                     </div>
                 </div>
@@ -445,14 +446,14 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
                             setShowResults(true)
                         }}
                         className='h-16 active:scale-95 hover:bg-blue-800 hover:text-white font-semibold text-3xl px-10 lg:px-20 bg-white my-5 rounded-lg w-max'>
-                        Search Now
+                        {arLang ? 'ابحث الان' : 'Search Now'}
                     </button>
 
                 </div>
                 {activeFilters.length > 0 ?
-                    <PhoneResultList currentPhones={currentPhones} />
+                    <PhoneResultList currentPhones={currentPhones} arLang={arLang} />
                     :
-                    <p className='text-white text-center m-5'>Please select one or more search attribute and click on &quot;Search Now&quot; button</p>
+                    <p className='text-white text-center m-5'>{arLang ? 'قم باختيار احد خيارات البحث واضغط على زر ابحث الان' : `Please select one or more search attribute and click on "Search Now" button`}</p>
                 }
             </div>
         </div>

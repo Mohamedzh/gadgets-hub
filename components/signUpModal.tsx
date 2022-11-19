@@ -12,19 +12,18 @@ type Props = {
     setOpenSignUp: Dispatch<SetStateAction<boolean>>
     setOpenLogin: Dispatch<SetStateAction<boolean>>
     setCurrentUser: Dispatch<SetStateAction<User | undefined>>
+    arLang: boolean
 
 }
 
-export default function SignUp({ setOpenSignUp, openSignUp, setOpenLogin, setCurrentUser }: Props) {
+export default function SignUp({ setOpenSignUp, openSignUp, setOpenLogin, setCurrentUser, arLang }: Props) {
 
     const [supabaseClient] = useState(() => createBrowserSupabaseClient())
 
-    const router = useRouter()
-
-    const formData = [{ name: 'name', type: 'text', label: 'Name' },
-    { name: 'nickName', type: 'text', label: 'Nickname' },
-    { name: 'email', type: 'email', label: 'Email Address' },
-    { name: 'password', type: 'password', label: 'Password' }]
+    const formData = [{ name: 'name', type: 'text', label: 'Name', arabicLabel: 'الاسم' },
+    { name: 'nickName', type: 'text', label: 'Nickname', arabicLabel: ' الاسم على الموقع' },
+    { name: 'email', type: 'email', label: 'Email Address', arabicLabel: 'البريد الالكتروني' },
+    { name: 'password', type: 'password', label: 'Password', arabicLabel: 'كلمة السر' }]
 
     const formik = useFormik({
         initialValues: {
@@ -45,10 +44,10 @@ export default function SignUp({ setOpenSignUp, openSignUp, setOpenLogin, setCur
             }
         },
         validationSchema: Yup.object({
-            name: Yup.string().required("Please enter your name"),
-            nickName: Yup.string().required("Please enter your display nickname"),
-            email: Yup.string().email("Please enter a valid email format").required("Please enter your email address"),
-            password: Yup.string().required("Please enter your password").min(6),
+            name: Yup.string().required(arLang ? 'رجاء ادخال اسمك' : "Please enter your name"),
+            nickName: Yup.string().required(arLang ? 'رجاء ادخال اسمك على الموقع' : "Please enter your display nickname"),
+            email: Yup.string().email(arLang ? 'رجاء ادخال صيغة بريد الكتروني صحيحة' : "Please enter a valid email format").required(arLang ? 'رجاء ادخال البريد الالكتروني الخاص بك' : "Please enter your email address"),
+            password: Yup.string().required(arLang ? 'رجاء ادخال كلمة المرور الخاصة بك' : "Please enter your password").min(6, arLang ? 'كلمة المرور يجب الا تقل عن 6 أحرف' : 'Password should be at least 6 characters'),
         })
     })
     return (
@@ -86,7 +85,9 @@ export default function SignUp({ setOpenSignUp, openSignUp, setOpenLogin, setCur
                                                 src="/mobileLogo.png"
                                                 alt="Gadgets Hub"
                                             />
-                                            <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Sign up to your account</h2>
+                                            <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+                                                {arLang ? 'تسجيل حساب جديد' : 'Sign up a new account'}
+                                            </h2>
                                         </div>
 
                                         <div className="mt-8 sm:mx-auto sm:w-full">
@@ -94,11 +95,11 @@ export default function SignUp({ setOpenSignUp, openSignUp, setOpenLogin, setCur
                                                 <form className="space-y-6" onSubmit={formik.handleSubmit}>
                                                     <div className='grid grid-cols-2'>
                                                         {formData.map((data, i) =>
-                                                            <div key={i} className={`${i === 0 || i === 2 ? 'mr-2' : 'ml-2'}`}>
-                                                                <label htmlFor={data.name} className="block text-sm font-medium text-gray-700">
-                                                                    {data.label}
+                                                            <div key={i} className={`${i === 0 || i === 2 ? 'mr-2' : 'ml-2'} flex flex-col`}>
+                                                                <label htmlFor={data.name} className={`block text-sm font-medium text-gray-700 ${arLang ? 'self-end' : ''}`}>
+                                                                    {arLang ? data.arabicLabel : data.label}
                                                                 </label>
-                                                                <div className="mt-1">
+                                                                <div className="mt-1 flex flex-col">
                                                                     <input
                                                                         id={data.name}
                                                                         name={data.name}
@@ -109,10 +110,10 @@ export default function SignUp({ setOpenSignUp, openSignUp, setOpenLogin, setCur
                                                                         required
                                                                         className="block appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                                                     />
-                                                                    {data.name === 'password' ? (formik.touched.password && formik.errors.password ? <p className="text-red-500 text-sm">{formik.errors.password}</p> : null) :
-                                                                        data.name === 'name' ? (formik.touched.name && formik.errors.name ? <p className="text-red-500 text-sm">{formik.errors.name}</p> : null) :
-                                                                            data.name === 'nickName' ? (formik.touched.nickName && formik.errors.nickName ? <p className="text-red-500 text-sm">{formik.errors.nickName}</p> : null) :
-                                                                                (formik.touched.email && formik.errors.email ? <p className="text-red-500 text-sm">{formik.errors.email}</p> : null)
+                                                                    {data.name === 'password' ? (formik.touched.password && formik.errors.password ? <p className={`text-red-500 text-xs ${arLang ? 'self-end' : ''}`}>{formik.errors.password}</p> : null) :
+                                                                        data.name === 'name' ? (formik.touched.name && formik.errors.name ? <p className={`text-red-500 text-xs ${arLang ? 'self-end' : ''}`}>{formik.errors.name}</p> : null) :
+                                                                            data.name === 'nickName' ? (formik.touched.nickName && formik.errors.nickName ? <p className={`text-red-500 text-xs ${arLang ? 'self-end' : ''}`}>{formik.errors.nickName}</p> : null) :
+                                                                                (formik.touched.email && formik.errors.email ? <p className={`text-red-500 text-xs ${arLang ? 'self-end' : ''}`}>{formik.errors.email}</p> : null)
                                                                     }
                                                                 </div>
                                                             </div>
@@ -144,14 +145,26 @@ export default function SignUp({ setOpenSignUp, openSignUp, setOpenLogin, setCur
                                                             type="submit"
                                                             className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                         >
-                                                            Sign up
+                                                            {arLang ? 'سجل حسابك' : 'Sign up'}
                                                         </button>
-                                                        <p>
-                                                            Already have an account?<button
-                                                                type='button'
-                                                                onClick={() => { setOpenSignUp(false); setOpenLogin(true) }}
-                                                                className='underline'> Login</button>
-                                                        </p>
+                                                        {arLang ?
+                                                            <p>
+                                                                <button
+                                                                    type='button'
+                                                                    onClick={() => { setOpenSignUp(false); setOpenLogin(true) }}
+                                                                    className='underline'> تسجيل دخول الى حسابك
+                                                                </button>
+                                                                لديك حساب بالفعل؟
+                                                            </p>
+                                                            :
+                                                            <p>
+                                                                Already have an account?
+                                                                <button
+                                                                    type='button'
+                                                                    onClick={() => { setOpenSignUp(false); setOpenLogin(true) }}
+                                                                    className='underline'> Login
+                                                                </button>
+                                                            </p>}
                                                     </div>
                                                 </form>
                                             </div>

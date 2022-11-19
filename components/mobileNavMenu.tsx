@@ -79,7 +79,7 @@ function MobileNavMenu({ item, close }: Props) {
                                     </Link>
                                 )
                             }
-                            <Link href="/brands">
+                            <Link href={`${router.asPath.includes('/ar') ? '/brands/ar' : '/brands'}`}>
                                 <Disclosure.Button
                                     as="a"
                                     className="block rounded-md px-3 py-2 text-center bg-gray-900 text-base font-medium text-gray-300 hover:bg-gray-400 hover:text-black cursor-pointer"

@@ -1,22 +1,22 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { AddButton, classNames } from '../lib/functions'
 import { useAppSelector } from '../redux/hooks'
-import { DetailedCategory } from '../types'
+import { ArCategory, ArQuickSpec, DetailedCategory } from '../types'
 import { IoMdCloseCircle } from 'react-icons/io'
 import { useDispatch } from 'react-redux'
 import { removeFromComparison } from '../redux/slices/compareSlice'
 import { AiOutlineMinusCircle } from 'react-icons/ai'
 import Link from 'next/link'
 import CompareSearchBar from './comparePhonesSearchBar'
-import { QuickSpec } from '@prisma/client'
 
 type Props = {
-    categories: DetailedCategory[]
-    allPhones: {name:string, imgUrl:string}[]
-    quickSpecs: QuickSpec[]
+    categories: ArCategory[]
+    allPhones: { name: string, imgUrl: string }[]
+    quickSpecs: ArQuickSpec[]
+    arLang: boolean
 }
 
-function CompareTable({ categories, allPhones, quickSpecs }: Props) {
+function CompareTable({ categories, allPhones, quickSpecs, arLang }: Props) {
     const dispatch = useDispatch()
     const comparePhones = useAppSelector(state => state.compare)
     const [currentPhones, setCurrentPhones] = useState(comparePhones)
@@ -50,8 +50,7 @@ function CompareTable({ categories, allPhones, quickSpecs }: Props) {
                                 <thead className="bg-gray-300 sticky top-0 z-40">
                                     <tr>
                                         <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-lg font-semibold text-gray-900 sm:pl-6 ">
-                                            Phones
-
+                                            {arLang ? 'الهواتف' : 'Phones'}
                                         </th>
                                         {currentPhones.map((phone, i) =>
                                             <th key={i} scope="col" className="px-3 py-3.5 text-left font-semibold text-gray-900">
@@ -61,7 +60,7 @@ function CompareTable({ categories, allPhones, quickSpecs }: Props) {
                                                         onClick={() => dispatch(removeFromComparison(phone))}
                                                         className='w-8 h-8 self-end cursor-pointer hover:scale-125 ring-red-500 text-bold text-red-500 rounded-full'
                                                     />
-                                                    <Link href={`/${phone.name}`}>
+                                                    <Link href={`/${arLang ? phone.name + '/ar' : phone.name}`}>
                                                         <a>
                                                             <img className='mb-3 h-32 mx-auto' src={phone.imgUrl} />
                                                             <p>{phone.description.slice(0, phone.description.indexOf('.'))}</p>
@@ -72,7 +71,7 @@ function CompareTable({ categories, allPhones, quickSpecs }: Props) {
                                         )}
                                         {Array.from(Array(setTableColumns(currentPhones.length)).keys()).map((item, i) =>
                                             <th key={i}>
-                                                <CompareSearchBar allPhones={allPhones} i={i} />
+                                                <CompareSearchBar allPhones={allPhones} i={i} arLang={arLang} />
                                             </th>
                                         )}
                                     </tr>
@@ -82,9 +81,9 @@ function CompareTable({ categories, allPhones, quickSpecs }: Props) {
                                         <th
                                             colSpan={4}
                                             scope="colgroup"
-                                            className="bg-gray-100 px-4 py-2 text-left text-lg font-semibold text-gray-900 sm:px-6"
+                                            className={`bg-gray-100 px-4 py-2 ${arLang ? 'text-right' : 'text-left'}  text-lg font-semibold text-gray-900 sm:px-6`}
                                         >
-                                            Quick Specs
+                                            {arLang ? 'نظرة سريعة' : 'Quick Specs'}
                                         </th>
                                     </tr>
                                     {quickSpecs.map((quickSpec, i) =>
@@ -93,7 +92,7 @@ function CompareTable({ categories, allPhones, quickSpecs }: Props) {
                                                 className={classNames(i === 0 ? 'border-gray-300' : 'border-gray-200', 'border-t divide-x-2')}
                                             >
                                                 <td className=" py-4 pl-4 pr-3 text-sm font-medium text-yellow-400 text-center sm:pl-6">
-                                                    {quickSpec.name}
+                                                    {arLang ? quickSpec.arabicName : quickSpec.name}
                                                 </td>
                                                 {currentPhones.map((phone, i) =>
                                                     <td key={i} className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-300 sm:pl-6 text-center">
@@ -114,7 +113,7 @@ function CompareTable({ categories, allPhones, quickSpecs }: Props) {
                                             scope="colgroup"
                                             className="bg-gray-900 px-4 py-2 text-center text-4xl font-semibold text-white sm:px-6"
                                         >
-                                            Detailed Comparison
+                                            {arLang ? 'مقارنة تفصيلية' : 'Detailed Comparison'}
                                         </th>
                                     </tr>
                                     {categories.map((category, idx) => (
@@ -125,9 +124,9 @@ function CompareTable({ categories, allPhones, quickSpecs }: Props) {
                                                 <th
                                                     colSpan={4}
                                                     scope="colgroup"
-                                                    className="bg-gray-100 px-4 py-2 text-left text-lg font-semibold text-gray-900 sm:px-6"
+                                                    className={`bg-gray-100 px-4 py-2 ${arLang ? 'text-right' : 'text-left'} text-lg font-semibold text-gray-900 sm:px-6`}
                                                 >
-                                                    {category.name}
+                                                    {arLang ? category.arabicName : category.name}
                                                 </th>
                                             </tr>
                                             {category.specs.map((spec, i) => (
@@ -136,7 +135,7 @@ function CompareTable({ categories, allPhones, quickSpecs }: Props) {
                                                     className={classNames(i === 0 ? 'border-gray-300' : 'border-gray-200', 'border-t')}
                                                 >
                                                     <td className=" py-4 pl-4 pr-3 text-sm font-medium text-yellow-400 sm:pl-6">
-                                                        {spec.name}
+                                                        {arLang ? spec.arabicName : spec.name}
                                                     </td>
                                                     {currentPhones.map((phone, index) =>
                                                         <td key={index} className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-100 sm:pl-6 text-center">

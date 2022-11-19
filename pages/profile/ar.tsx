@@ -1,5 +1,5 @@
 import React from 'react'
-import ProfileSection from '../components/profileSection'
+import ProfileSection from '../../components/profileSection'
 import { withPageAuth, User } from '@supabase/auth-helpers-nextjs'
 
 
@@ -9,7 +9,7 @@ type Props = {
 
 function Profile({ user }: Props) {
     return (
-        <div className='lg:mx-10 mx-5'>
+        <div className='lg:mx-10 mx-5 ar'>
             <ProfileSection user={user} />
         </div>
     )

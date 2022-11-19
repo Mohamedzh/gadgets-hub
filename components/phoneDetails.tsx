@@ -1,7 +1,7 @@
 import { Category, Phone } from '@prisma/client'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import {  AddToComparison } from '../lib/functions'
+import { AddToComparison } from '../lib/functions'
 import { useAppSelector } from '../redux/hooks'
 import { DetailedCategory, DetailedPhone } from '../types'
 import Alert from './addPhoneAlert'
@@ -19,9 +19,10 @@ type Props = {
     currentPhone?: DetailedPhone
     categories: DetailedCategory[]
     otherPhones: Phone[]
+    arLang: boolean
 }
 
-function PhoneDetails({ currentPhone, categories, otherPhones }: Props) {
+function PhoneDetails({ currentPhone, categories, otherPhones, arLang }: Props) {
     const [supabaseClient] = useState(() => createBrowserSupabaseClient())
     const user = useUser()
 
@@ -83,7 +84,7 @@ function PhoneDetails({ currentPhone, categories, otherPhones }: Props) {
                                 </button>
                                 {/* <StarIcon className='w-10 h-10 mx-3 bg-white flex' /> */}
                                 {currentPhone && !comparedPhones.includes(currentPhone) && comparedPhones.length < 4 &&
-                                    <AddToComparison dispatch={dispatch} phone={currentPhone} setShow={setShow} />
+                                    <AddToComparison dispatch={dispatch} phone={currentPhone} setShow={setShow} arLang={arLang} />
                                 }
                                 {show && <Alert setShow={setShow} />}
                             </div>
@@ -95,7 +96,7 @@ function PhoneDetails({ currentPhone, categories, otherPhones }: Props) {
                     </div>
                     <div className='col-span-2'>
                         <p className='text-3xl font-bold m-5 font-serif text-amber-400'>
-                            Phone Summary
+                            {arLang ? "ملخص المواصفات" : 'Phone Summary'}
                         </p>
                         <div className=''>
                             {currentPhone?.PhoneQuickSpecs.map((spec, idx) =>
@@ -109,13 +110,13 @@ function PhoneDetails({ currentPhone, categories, otherPhones }: Props) {
                     </div>
                     <div className='lg:col-span-1 col-span-2'>
 
-                        {otherPhones && <SeeAlsoSection otherPhones={otherPhones} />}
+                        {otherPhones && <SeeAlsoSection otherPhones={otherPhones} arLang={arLang}/>}
 
 
                     </div>
                 </div>
                 {currentPhone &&
-                    <SpecsTable currentPhone={currentPhone} categories={categories} />
+                    <SpecsTable currentPhone={currentPhone} categories={categories} arLang={arLang} />
                 }
 
             </div>
