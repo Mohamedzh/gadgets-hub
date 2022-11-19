@@ -32,6 +32,10 @@ export default function Navbar() {
     const [openLogin, setOpenLogin] = useState(false)
 
     const router = useRouter()
+
+    const [arLang, setArLang] = useState<boolean>(false)
+    useEffect(() => { if (router.asPath.includes('/ar')) { setArLang(true) } }, [router.asPath])
+
     const user = useUser()
 
     const [currentUser, setCurrentUser] = useState<User>()
@@ -133,8 +137,8 @@ export default function Navbar() {
                                         <Menu as="div" className="relative ml-4 flex-shrink-0">
                                             <div>
 
-                                                <Login openLogin={openLogin} setOpenLogin={setOpenLogin} setOpenSignUp={setOpenSignUp} setCurrentUser={setCurrentUser} />
-                                                <SignUp openSignUp={openSignUp} setOpenSignUp={setOpenSignUp} setOpenLogin={setOpenLogin} setCurrentUser={setCurrentUser} />
+                                                <Login openLogin={openLogin} setOpenLogin={setOpenLogin} setOpenSignUp={setOpenSignUp} setCurrentUser={setCurrentUser} arLang={arLang} />
+                                                <SignUp openSignUp={openSignUp} setOpenSignUp={setOpenSignUp} setOpenLogin={setOpenLogin} setCurrentUser={setCurrentUser} arLang={arLang} />
 
                                                 {currentUser ?
                                                     <Menu.Button className="flex rounded-full bg-gray-800 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
