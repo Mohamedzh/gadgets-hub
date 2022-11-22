@@ -262,17 +262,10 @@ export const getBrandsDetails = async () => {
 export const getAllPhonesDetails = async (min: number, max: number, allPhones: Phone[]) => {
 
     let j = 0
-    // const browser = await puppeteer.launch();
-    // const page = await browser.newPage();
-    // page.setDefaultNavigationTimeout(0)
-
-
+  
     for (let i = min; i < max; i++) {
         j++
         setTimeout(async () => {
-
-            // await page.goto(`https://www.gsmarena.com/${allPhones[i].url}.php`, { waitUntil: 'networkidle0' });
-            // const html = await page.content(); // serialized HTML of page DOM.
 
             const res = await axios.get(`https://www.gsmarena.com/${allPhones[i].url}.php`, { headers: { "User-Agent": "request" } })
             let html = res.data
@@ -323,7 +316,7 @@ export const getAllPhonesDetails = async (min: number, max: number, allPhones: P
                         value: $('td.nfo', ele).text(),
                         alias: `${category}${index}`,
                     }
-                    console.log(a, 'each spec');
+                    // console.log(a, 'each spec');
 
                     specList.push(a)
                     if (a.value.length > 0) {
@@ -346,8 +339,6 @@ export const getAllPhonesDetails = async (min: number, max: number, allPhones: P
                     value: spec.value, specAlias: spec.alias, phoneId: allPhones[i].id
                 }
             })
-            console.log(allSpecs);
-            // console.log(html);
 
 
             let qSpecs = quick_spec.map(spec => { return { value: spec.value, phoneId: allPhones[i].id, quickspecName: spec.name } })
@@ -385,10 +376,6 @@ export const getAllPhonesDetails = async (min: number, max: number, allPhones: P
             await prisma.phoneSpecs.createMany({ data: phoneSpecs, skipDuplicates: true })
 
             console.log(i);
-            // if (i === max - 1) {
-
-            //     await browser.close();
-            // }
         }, 1000 * (j * 15))
     }
 
