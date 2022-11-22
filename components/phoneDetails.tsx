@@ -48,12 +48,12 @@ function PhoneDetails({ currentPhone, categories, otherPhones, arLang }: Props) 
                     setFavColor('yellow')
                 }
             } else {
-                setFavErrorMsg(`Please sign in first`)
+                setFavErrorMsg(`${arLang ? 'رجاء تسجيل الدخول اولا' : 'Please sign in first'}`)
             }
         } catch (error: any) {
             console.log(error);
             if (error.response.data.code === "P2002") {
-                setFavMsg('Phone already exists in your favorites')
+                setFavMsg(`${arLang ? 'الهاتف موجود بالفعل في قائمتك المفضلة' : 'Phone already exists in your favorites'}`)
             }
         }
 
@@ -110,12 +110,12 @@ function PhoneDetails({ currentPhone, categories, otherPhones, arLang }: Props) 
                     </div>
                     <div className='lg:col-span-1 col-span-2'>
 
-                        {otherPhones && <SeeAlsoSection otherPhones={otherPhones} arLang={arLang}/>}
+                        {otherPhones && <SeeAlsoSection otherPhones={otherPhones} arLang={arLang} />}
 
 
                     </div>
                 </div>
-                {currentPhone &&
+                {currentPhone && !arLang &&
                     <SpecsTable currentPhone={currentPhone} categories={categories} arLang={arLang} />
                 }
 

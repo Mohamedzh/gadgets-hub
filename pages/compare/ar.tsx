@@ -1,4 +1,4 @@
-import { QuickSpec } from '@prisma/client'
+import { PhoneQuickSpecs, QuickSpec } from '@prisma/client'
 import { GetStaticProps } from 'next'
 import React, { Fragment, useEffect, useState } from 'react'
 import CompareTable from '../../components/compareTable'
@@ -19,8 +19,6 @@ function Compare({ categories, allPhones, quickSpecs }: Props) {
     const router = useRouter()
     const [arLang, setArLang] = useState<boolean>(false)
     useEffect(() => { if (router.asPath.includes('/ar')) { setArLang(true) } }, [router.asPath])
-
-    const comparePhones = useAppSelector(state => state.compare)
 
     return (
         <div className='ar'>

@@ -25,7 +25,7 @@ function Index({ currentPhone, categories, otherPhones }: Props) {
             {currentPhone ?
                 <PhoneDetails currentPhone={currentPhone} categories={categories} otherPhones={otherPhones} arLang={arLang} />
                 :
-                <Page404 arLang={arLang}/>
+                <Page404 arLang={arLang} />
             }
         </div>
     )
@@ -39,14 +39,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
     let paths: { params: { phone: string } }[] = []
     for (let i = 0; i < brands.length; i++) {
-        paths = brands[i].phones.map(phone => {
-            return {
-                params: { phone: phone.name }
-            }
-        })
+        for (let j = 0; j < brands[i].phones.length; j++) {
+            paths.push({ params: { phone: brands[i].phones[j].name } })
+        }
+        // paths = brands[i].phones.map(phone => {
+        //     return {
+        //         params: { phone: phone.name }
+        //     }
+        // })
     }
+    console.log(paths.length);
 
-    return { paths, fallback: true }
+    return { paths, fallback: false }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }: { params?: ParsedUrlQuery }) => {

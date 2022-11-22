@@ -8,6 +8,7 @@ import { removeFromComparison } from '../redux/slices/compareSlice'
 import { AiOutlineMinusCircle } from 'react-icons/ai'
 import Link from 'next/link'
 import CompareSearchBar from './comparePhonesSearchBar'
+import { PhoneQuickSpecs } from '@prisma/client'
 
 type Props = {
     categories: ArCategory[]
@@ -107,16 +108,18 @@ function CompareTable({ categories, allPhones, quickSpecs, arLang }: Props) {
                                             </tr>
                                         </Fragment>
                                     )}
-                                    <tr className="border-t border-gray-200">
-                                        <th
-                                            colSpan={4}
-                                            scope="colgroup"
-                                            className="bg-gray-900 px-4 py-2 text-center text-4xl font-semibold text-white sm:px-6"
-                                        >
-                                            {arLang ? 'مقارنة تفصيلية' : 'Detailed Comparison'}
-                                        </th>
-                                    </tr>
+                                    {!arLang &&
+                                        <tr className="border-t border-gray-200">
+                                            <th
+                                                colSpan={4}
+                                                scope="colgroup"
+                                                className="bg-gray-900 px-4 py-2 text-center text-4xl font-semibold text-white sm:px-6"
+                                            >
+                                                {arLang ? 'مقارنة تفصيلية' : 'Detailed Comparison'}
+                                            </th>
+                                        </tr>}
                                     {categories.map((category, idx) => (
+                                        !arLang &&
                                         <Fragment
                                             key={idx}
                                         >
