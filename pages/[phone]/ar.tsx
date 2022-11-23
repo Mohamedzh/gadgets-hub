@@ -40,8 +40,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
             OR: [
                 { name: 'apple' },
                 { name: 'samsung' },
-                { name: 'oneplus' },
-                { name: 'xiaomi' }
             ]
         }, include: { phones: { select: { name: true } } }
     })
