@@ -3,11 +3,11 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 import React, { useEffect, useState } from 'react'
-import Page404 from '../../components/page404'
 import PhoneDetails from '../../components/phoneDetails'
 import { prisma } from '../../lib/db'
 import { DetailedCategory } from '../../types'
 import { v2 } from '@google-cloud/translate'
+import Loading from '../../components/loading'
 
 type Props = {
     currentPhone?: any
@@ -22,19 +22,29 @@ function Index({ currentPhone, categories, otherPhones }: Props) {
 
     return (
         <div className='ar'>
-            {currentPhone ?
-                <PhoneDetails currentPhone={currentPhone} categories={categories} otherPhones={otherPhones} arLang={arLang} />
-                :
-                <Page404 arLang={arLang} />
+            {
+                currentPhone ?
+                    <PhoneDetails currentPhone={currentPhone} categories={categories} otherPhones={otherPhones} arLang={arLang} />
+                    :
+                    <Loading />
             }
-        </div>
+        </div >
     )
 }
 
 export default Index
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const brands = await prisma.brand.findMany({ include: { phones: { select: { name: true } } } })
+    const brands = await prisma.brand.findMany({
+        where: {
+            OR: [
+                { name: 'apple' },
+                { name: 'samsung' },
+                { name: 'oneplus' },
+                { name: 'xiaomi' }
+            ]
+        }, include: { phones: { select: { name: true } } }
+    })
 
 
     let paths: { params: { phone: string } }[] = []
@@ -48,9 +58,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
         //     }
         // })
     }
-    console.log(paths.length);
+    // console.log(paths.length);
 
-    return { paths, fallback: false }
+    return { paths, fallback: true }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }: { params?: ParsedUrlQuery }) => {

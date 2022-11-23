@@ -3,7 +3,7 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 import React, { useEffect, useState } from 'react'
-import Page404 from '../../components/page404'
+import Loading from '../../components/loading'
 import PhoneDetails from '../../components/phoneDetails'
 import { prisma } from '../../lib/db'
 import { DetailedCategory } from '../../types'
@@ -21,10 +21,10 @@ function Index({ currentPhone, categories, otherPhones }: Props) {
 
     return (
         <div>
-            {currentPhone &&
+            {currentPhone ?
                 <PhoneDetails currentPhone={currentPhone} categories={categories} otherPhones={otherPhones} arLang={arLang} />
-                // :
-                // <Page404 arLang={arLang} />
+                :
+                <Loading />
             }
         </div>
     )
@@ -33,8 +33,16 @@ function Index({ currentPhone, categories, otherPhones }: Props) {
 export default Index
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const brands = await prisma.brand.findMany({ include: { phones: { select: { name: true } } } })
-
+    const brands = await prisma.brand.findMany({
+        where: {
+            OR: [
+                { name: 'apple' },
+                { name: 'samsung' },
+                { name: 'oneplus' },
+                { name: 'xiaomi' }
+            ]
+        }, include: { phones: { select: { name: true } } }
+    })
 
     let paths: { params: { phone: string } }[] = []
     for (let i = 0; i < brands.length; i++) {
@@ -48,7 +56,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
         // })
     }
 
-    return { paths, fallback: false }
+    return { paths, fallback: true }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }: { params?: ParsedUrlQuery }) => {
