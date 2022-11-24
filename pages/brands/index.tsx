@@ -105,7 +105,7 @@ export const getStaticProps: GetStaticProps = async () => {
             imgUrl: imgBlock.attr('src')!,
             url: unrecordedPhones[i].url,
             description: $('.specs-phone-name-title').text(),
-            year: Number($('span[data-spec=released-hl]').text().slice(9, 13)),
+            year: (Number($('span[data-spec=released-hl]').text().slice(9, 13)) % 1 === 0 ? Number($('span[data-spec=released-hl]').text().slice(9, 13)) : Number($('span[data-spec=released-hl]').text().slice(13, 17))),
             brandName: $('.specs-phone-name-title').text().slice(0, $('.specs-phone-name-title').text().indexOf(' ')).toLowerCase()
         }
         toBeRecordedPhones.push(phone)
