@@ -63,7 +63,7 @@ export default function LanguageMenu() {
                                         </button>
                                         :
                                         <button
-                                            onClick={() => router.push(`${router.asPath}/ar`)}
+                                            onClick={() => router.push(`${router.asPath}ar`)}
                                             className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
                                                 } group flex w-full items-center rounded-md px-4 py-2 text-sm`}
                                         >

@@ -1,5 +1,5 @@
 import { Category, Phone, PhoneQuickSpecs, PhoneSpecs, Spec } from '@prisma/client'
-import { GetStaticPaths, GetStaticProps } from 'next'
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 import React, { useEffect, useState } from 'react'
@@ -34,34 +34,35 @@ function Index({ currentPhone, categories, otherPhones }: Props) {
 
 export default Index
 
-export const getStaticPaths: GetStaticPaths = async () => {
-    const brands = await prisma.brand.findMany({
-        where: {
-            OR: [
-                { name: 'apple' },
-                { name: 'samsung' },
-            ]
-        }, include: { phones: { select: { name: true } } }
-    })
+// export const getStaticPaths: GetStaticPaths = async () => {
+//     const brands = await prisma.brand.findMany({
+//         where: {
+//             OR: [
+//                 { name: 'apple' },
+//                 { name: 'samsung' },
+//             ]
+//         }, include: { phones: { select: { name: true } } }
+//     })
 
 
-    let paths: { params: { phone: string } }[] = []
-    for (let i = 0; i < brands.length; i++) {
-        for (let j = 0; j < brands[i].phones.length; j++) {
-            paths.push({ params: { phone: brands[i].phones[j].name } })
-        }
-        // paths = brands[i].phones.map(phone => {
-        //     return {
-        //         params: { phone: phone.name }
-        //     }
-        // })
-    }
-    // console.log(paths.length);
+//     let paths: { params: { phone: string } }[] = []
+//     for (let i = 0; i < brands.length; i++) {
+//         for (let j = 0; j < brands[i].phones.length; j++) {
+//             paths.push({ params: { phone: brands[i].phones[j].name } })
+//         }
+// paths = brands[i].phones.map(phone => {
+//     return {
+//         params: { phone: phone.name }
+//     }
+// })
+// }
+// console.log(paths.length);
 
-    return { paths, fallback: true }
-}
+//     return { paths, fallback: true }
+// }
 
-export const getStaticProps: GetStaticProps = async ({ params }: { params?: ParsedUrlQuery }) => {
+// export const getStaticProps: GetStaticProps = async ({ params }: { params?: ParsedUrlQuery }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }: { params?: ParsedUrlQuery }) => {
     let currentPhone: Phone & { PhoneSpecs: (PhoneSpecs & { spec: Spec & { category: Category; }; })[]; PhoneQuickSpecs: PhoneQuickSpecs[]; } | null = null;
     let categories: (Category & { specs: Spec[] })[] = [];
     let otherPhones: Phone[] = []
@@ -85,7 +86,11 @@ export const getStaticProps: GetStaticProps = async ({ params }: { params?: Pars
         if (currentPhone) {
             for (let i = 0; i < currentPhone.PhoneQuickSpecs.length; i++) {
                 currentPhone.PhoneQuickSpecs[i].value = await transArabic(currentPhone.PhoneQuickSpecs[i].value, 'ar')
-                currentPhone.PhoneQuickSpecs[i].quickspecName = await transArabic(currentPhone.PhoneQuickSpecs[i].quickspecName, 'ar')
+                if (currentPhone.PhoneQuickSpecs[i].quickspecName === 'OS') {
+                    currentPhone.PhoneQuickSpecs[i].quickspecName = 'نظام التشغيل'
+                } else {
+                    currentPhone.PhoneQuickSpecs[i].quickspecName = await transArabic(currentPhone.PhoneQuickSpecs[i].quickspecName, 'ar')
+                }
             }
             for (let j = 0; j < currentPhone.PhoneSpecs.length; j++) {
                 currentPhone.PhoneSpecs[j].spec.categoryName = await transArabic(currentPhone.PhoneSpecs[j].spec.categoryName, 'ar')
@@ -104,5 +109,8 @@ export const getStaticProps: GetStaticProps = async ({ params }: { params?: Pars
         console.log(error)
     }
 
-    return { props: { phone: params?.phone, currentPhone, categories, otherPhones }, revalidate: 604800 }
+    return {
+        props: { phone: params?.phone, currentPhone, categories, otherPhones }
+        // , revalidate: 604800 
+    }
 }
