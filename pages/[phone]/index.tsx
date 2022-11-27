@@ -19,13 +19,12 @@ function Index({ currentPhone, categories, otherPhones }: Props) {
     const [arLang, setArLang] = useState<boolean>(false)
     useEffect(() => { if (router.asPath.includes('/ar')) { setArLang(true) } }, [router.asPath])
 
+    if (router.isFallback) {
+        return <Loading />
+    }
     return (
         <div>
-            {currentPhone ?
-                <PhoneDetails currentPhone={currentPhone} categories={categories} otherPhones={otherPhones} arLang={arLang} />
-                :
-                <Loading />
-            }
+            <PhoneDetails currentPhone={currentPhone} categories={categories} otherPhones={otherPhones} arLang={arLang} />
         </div>
     )
 }
@@ -65,7 +64,9 @@ export const getStaticProps: GetStaticProps = async ({ params }: { params?: Pars
         let newPhone = params?.phone as string
         // newPhone = newPhone.slice(0, 1).toUpperCase() + params?.phone?.slice(1)
         currentPhone = await prisma.phone.findFirst({ where: { name: newPhone }, include: { PhoneSpecs: { include: { spec: { include: { category: true } } } }, PhoneQuickSpecs: true } })
-
+        if (!currentPhone) {
+            return { notFound: true }
+        }
         otherPhones = await prisma.phone.findMany({ where: { brandName: currentPhone?.brandName }, take: 4, skip: 1, cursor: { id: currentPhone?.id }, orderBy: { id: 'desc' } })
 
         categories = await prisma.category.findMany({ include: { specs: true } })

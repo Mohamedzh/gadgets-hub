@@ -20,49 +20,48 @@ function Index({ currentPhone, categories, otherPhones }: Props) {
     const [arLang, setArLang] = useState<boolean>(false)
     useEffect(() => { if (router.asPath.includes('/ar')) { setArLang(true) } }, [router.asPath])
 
+    if (router.isFallback) {
+        return <Loading />
+    }
+
     return (
         <div className='ar'>
-            {
-                currentPhone ?
-                    <PhoneDetails currentPhone={currentPhone} categories={categories} otherPhones={otherPhones} arLang={arLang} />
-                    :
-                    <Loading />
-            }
+            <PhoneDetails currentPhone={currentPhone} categories={categories} otherPhones={otherPhones} arLang={arLang} />
         </div >
     )
 }
 
 export default Index
 
-// export const getStaticPaths: GetStaticPaths = async () => {
-//     const brands = await prisma.brand.findMany({
-//         where: {
-//             OR: [
-//                 { name: 'apple' },
-//                 { name: 'samsung' },
-//             ]
-//         }, include: { phones: { select: { name: true } } }
-//     })
+export const getStaticPaths: GetStaticPaths = async () => {
+    const brands = await prisma.brand.findMany({
+        where: {
+            OR: [
+                { name: 'apple' },
+                { name: 'samsung' },
+            ]
+        }, include: { phones: { select: { name: true } } }
+    })
 
 
-//     let paths: { params: { phone: string } }[] = []
-//     for (let i = 0; i < brands.length; i++) {
-//         for (let j = 0; j < brands[i].phones.length; j++) {
-//             paths.push({ params: { phone: brands[i].phones[j].name } })
-//         }
-// paths = brands[i].phones.map(phone => {
-//     return {
-//         params: { phone: phone.name }
-//     }
-// })
-// }
-// console.log(paths.length);
+    let paths: { params: { phone: string } }[] = []
+    for (let i = 0; i < brands.length; i++) {
+        for (let j = 0; j < brands[i].phones.length; j++) {
+            paths.push({ params: { phone: brands[i].phones[j].name } })
+        }
+        paths = brands[i].phones.map(phone => {
+            return {
+                params: { phone: phone.name }
+            }
+        })
+    }
+    console.log(paths.length);
 
-//     return { paths, fallback: true }
-// }
+    return { paths, fallback: true }
+}
 
-// export const getStaticProps: GetStaticProps = async ({ params }: { params?: ParsedUrlQuery }) => {
-export const getServerSideProps: GetServerSideProps = async ({ params }: { params?: ParsedUrlQuery }) => {
+export const getStaticProps: GetStaticProps = async ({ params }: { params?: ParsedUrlQuery }) => {
+    // export const getServerSideProps: GetServerSideProps = async ({ params }: { params?: ParsedUrlQuery }) => {
     let currentPhone: Phone & { PhoneSpecs: (PhoneSpecs & { spec: Spec & { category: Category; }; })[]; PhoneQuickSpecs: PhoneQuickSpecs[]; } | null = null;
     let categories: (Category & { specs: Spec[] })[] = [];
     let otherPhones: Phone[] = []
@@ -98,19 +97,21 @@ export const getServerSideProps: GetServerSideProps = async ({ params }: { param
                 currentPhone.PhoneSpecs[j].value = await transArabic(currentPhone.PhoneSpecs[j].value, 'ar')
             }
 
+        } else {
+            return { notFound: true }
         }
         otherPhones = await prisma.phone.findMany({ where: { brandName: currentPhone?.brandName }, take: 4, skip: 1, cursor: { id: currentPhone?.id }, orderBy: { id: 'desc' } })
 
         categories = await prisma.category.findMany({ include: { specs: true } })
-        for (let k = 0; k < categories.length; k++) {
-            categories[k].name = await transArabic(categories[k].name, 'ar')
-        }
+        // for (let k = 0; k < categories.length; k++) {
+        //     categories[k].name = await transArabic(categories[k].name, 'ar')
+        // }
     } catch (error) {
         console.log(error)
     }
 
     return {
         props: { phone: params?.phone, currentPhone, categories, otherPhones }
-        // , revalidate: 604800 
+        , revalidate: 604800
     }
 }
