@@ -19,7 +19,7 @@ function NewsPage({ news }: Props) {
                         <p className='my-3 text-2xl'>{subject.title}</p>
                         <div>{subject.body}</div>
                         <p className='self-end'>{subject.newsDate}</p>
-                        <Link href={`https://www.gsmarena.com/${subject.link}`}>
+                        <Link href={`news/${subject.link.slice(0, subject.link.indexOf('.php'))}`}>
                             <a target='_blank'
                                 // onClick={() => router.push(`https://www.gsmarena.com/${subject.link}`)}
                                 className={`bg-white my-5 text-xl text-center pt-1 hover:bg-gray-700 hover:text-gray-50 text-gray-800 w-40 h-10 font-semibold rounded-lg self-center`}>

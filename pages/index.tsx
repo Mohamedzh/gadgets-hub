@@ -8,6 +8,9 @@ import { NewsType, ReviewType } from '../types'
 import { Phone } from '@prisma/client'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
 
 const Home: NextPage = ({
   news, reviews, latestPhones }: {
@@ -16,6 +19,8 @@ const Home: NextPage = ({
   const router = useRouter()
   const [arLang, setArLang] = useState<boolean>(false)
   useEffect(() => { if (router.asPath.includes('/ar')) { setArLang(true) } }, [router.asPath])
+
+  const { t } = useTranslation();
 
   return (
     <div className='bg-gray-900 container lg:mx-10'>
@@ -36,7 +41,7 @@ const Home: NextPage = ({
 
 export default Home
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async ({locale}) => {
   const latestPhones = await prisma.phone.findMany({ take: 5, orderBy: { id: 'desc' } })
   const news = await getLatestNews()
   const latestNews = news.filter((item, i) => i < 6)
@@ -46,5 +51,5 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const modified = await getLatestReviewsPics(latest)
 
-  return { props: { news: latestNews, reviews: modified, latestPhones }, revalidate: 28800 }
+  return { props: { ...(await serverSideTranslations(locale ? locale : "en")), news: latestNews, reviews: modified, latestPhones }, revalidate: 28800 }
 }
