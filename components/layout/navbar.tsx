@@ -5,27 +5,18 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { classNames } from "../../lib/functions";
 import Link from "next/link";
 import NewMenu from "./brandsMenu";
-import SignUp from "../signUpModal";
+import SignUp from "../user/signUpModal";
 import {
   createBrowserSupabaseClient,
   User,
 } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
-import Login from "../loginModal";
-import MobileNavMenu from "../mobileNavMenu";
+import Login from "../user/loginModal";
+import MobileNavMenu from "./mobileNavMenu";
 import { useRouter } from "next/router";
 import LanguageMenu from "./languageMenu";
 import { useTranslation } from "next-i18next";
-
-export const profileMenu = [{ name: "Your profile" }, { name: "Sign out" }];
-
-const navMenu = [
-  { name: "news", current: false, href: "/news" },
-  { name: "reviews", current: false, href: "/reviews" },
-  { name: "phoneFinder", current: false, href: "/phonefinder" },
-  { name: "brands", current: false, href: "#" },
-  { name: "comparison", current: false, href: "/compare" },
-];
+import { profileMenu } from "../../lib/data";
 
 export default function Navbar() {
   const [supabaseClient] = useState(() => createBrowserSupabaseClient());
@@ -33,7 +24,6 @@ export default function Navbar() {
   const [openLogin, setOpenLogin] = useState(false);
 
   const router = useRouter();
-  const { t } = useTranslation();
 
   const navMenu = [
     { name: "news", current: false, href: "/news" },
@@ -43,12 +33,7 @@ export default function Navbar() {
     { name: "comparison", current: false, href: "/compare" },
   ];
 
-  const [arLang, setArLang] = useState<boolean>(false);
-  useEffect(() => {
-    if (router.asPath.includes("/ar")) {
-      setArLang(true);
-    }
-  }, [router.asPath]);
+  const { t } = useTranslation();
 
   const user = useUser();
 
@@ -94,7 +79,7 @@ export default function Navbar() {
                       </a>
                     </Link>
                   </div>
-                  <div className="hidden lg:ml-6 lg:block">
+                  <div className="hidden lg:mx-6 lg:block">
                     <div className="flex space-x-4">
                       {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
                       {navMenu.map((nav, i) => (
@@ -110,7 +95,6 @@ export default function Navbar() {
                           >
                             {nav.name !== "brands" && t(nav.name)}
                             {nav.name === "brands" && <NewMenu nav={nav} />}
-                            {/* <PopMenu /> */}
                           </a>
                         </Link>
                       ))}
@@ -166,14 +150,12 @@ export default function Navbar() {
                           setOpenLogin={setOpenLogin}
                           setOpenSignUp={setOpenSignUp}
                           setCurrentUser={setCurrentUser}
-                          arLang={arLang}
                         />
                         <SignUp
                           openSignUp={openSignUp}
                           setOpenSignUp={setOpenSignUp}
                           setOpenLogin={setOpenLogin}
                           setCurrentUser={setCurrentUser}
-                          arLang={arLang}
                         />
 
                         {currentUser ? (
@@ -196,7 +178,7 @@ export default function Navbar() {
                             onClick={() => setOpenLogin(true)}
                             className=" p-2 font-semibold text-white hover:text-blue-600"
                           >
-                            Login/Signup
+                            {t("loginSignUp")}
                           </button>
                         )}
                       </div>
@@ -221,7 +203,7 @@ export default function Navbar() {
                                       "block px-4 py-2 text-sm text-gray-700 w-full font-semibold"
                                     )}
                                   >
-                                    {item.name}
+                                    {t(item.name)}
                                   </button>
                                 ) : (
                                   <button
@@ -237,7 +219,7 @@ export default function Navbar() {
                                       "block px-4 py-2 text-sm text-gray-700 cursor-pointer w-full font-semibold"
                                     )}
                                   >
-                                    {item.name}
+                                    {t(item.name)}
                                   </button>
                                 )
                               }
@@ -257,7 +239,7 @@ export default function Navbar() {
                   <div className="space-y-1 px-2 pt-2 pb-3 flex flex-col">
                     {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
                     {navMenu.map((item, i) =>
-                      item.name === "Brands" ? (
+                      item.name === "brands" ? (
                         <MobileNavMenu
                           close={close}
                           key={item.name}
@@ -274,7 +256,7 @@ export default function Navbar() {
                                 : "flex place-items-start place-content-start "
                             } text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer`}
                           >
-                            {item.name !== "Brands" && item.name}
+                            {item.name !== "Brands" && t(item.name)}
                           </Disclosure.Button>
                         </Link>
                       )
@@ -301,7 +283,7 @@ export default function Navbar() {
                       ) : (
                         <div className="ml-3">
                           <div className="text-base font-medium text-white">
-                            Login/Signup
+                            {t("loginSignUp")}
                           </div>
                           {/* <div className="text-sm font-medium text-gray-400">{user?.email}</div> */}
                         </div>
@@ -327,22 +309,20 @@ export default function Navbar() {
                               as="button"
                               className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                             >
-                              {item.name}
+                              {t(item.name)}
                             </Disclosure.Button>
                           ) : (
                             <Disclosure.Button
                               onClick={async () => {
                                 await supabaseClient.auth.signOut();
                                 setCurrentUser(undefined);
-                                if ((router.asPath = "/profile")) {
-                                  router.push("/");
-                                }
+                                router.reload();
                               }}
                               key={i}
                               as="button"
                               className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                             >
-                              {item.name}
+                              {t(item.name)}
                             </Disclosure.Button>
                           )
                         )}
@@ -355,7 +335,7 @@ export default function Navbar() {
                         }}
                         className=" p-2 font-semibold text-white hover:text-blue-600 ml-3"
                       >
-                        Login/Signup
+                        t({"loginSignUp"}){" "}
                       </button>
                     )}
                   </div>

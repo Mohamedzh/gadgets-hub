@@ -1,0 +1,15 @@
+{
+    "phoneSummary": "Phone Summary",
+    "details": "Detailed Specifications",
+    "seeAlso": "See Also",
+    "batterySize": "Battery size",
+    "batteryType": "Battery type",
+    "cameraPixels": "Camera pixels",
+    "chipset": "Chipset",
+    "displayResolution": "Display resolution",
+    "displaySize": "Display size",
+    "oS": "OS",
+    "ramSize": "RAM size",
+    "releaseDate": "Release date",
+    "videoPixels": "Video pixels"
+}

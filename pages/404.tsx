@@ -1,17 +1,22 @@
-import Component404 from '../components/page404'
-import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import Component404 from "../components/page404";
+import React from "react";
+import { GetStaticProps } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 function Page404() {
-    const router = useRouter()
-    const [arLang, setArLang] = useState<boolean>(false)
-    useEffect(() => { if (router.asPath.includes('/ar')) { setArLang(true) } }, [router.asPath])
-
-    return (
-        <div>
-            <Component404 arLang={arLang} />
-        </div>
-    )
+  return (
+    <div>
+      <Component404 />
+    </div>
+  );
 }
 
-export default Page404
+export default Page404;
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ? locale : "en")),
+    },
+  };
+};

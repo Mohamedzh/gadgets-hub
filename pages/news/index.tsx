@@ -1,6 +1,6 @@
 import { GetStaticProps } from "next";
 import React from "react";
-import NewsPage from "../../components/newsPage";
+import NewsPage from "../../components/news/newsPage";
 import { getLatestNews } from "../../lib/cheerio";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";

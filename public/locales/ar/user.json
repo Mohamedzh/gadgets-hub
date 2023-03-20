@@ -1,0 +1,20 @@
+{
+    "email": "البريد الالكتروني",
+    "password": "كلمة السر",
+    "loginMissingEmail": "رجاء ادخال بريدك الالكتروني",
+    "loginMissingPassword": "رجاء ادخال كلمة السر الخاصة بك",
+    "signInButton": "تسجيل دخول الى حسابك",
+    "login": "تسجيل دخول",
+    "loginError": "رجاء تأكد من صحة البيانات المدخلة",
+    "dontHaveAccountMessage": "ليس لديك حساب؟",
+    "signUp": "سجل حساب جديد",
+    "nickName": "الاسم على الموقع",
+    "name": "الاسم",
+    "invalidEmailMessage": "رجاء ادخال صيغة بريد الكتروني صحيحة",
+    "passwordLengthMessage": "كلمة المرور يجب الا تقل عن 6 أحرف",
+    "nameMissing": "رجاء ادخال اسمك",
+    "nickNameMissing": "رجاء ادخال اسمك على الموقع",
+    "signUpTitle": "تسجيل حساب جديد",
+    "signUpButton": "سجل حساب جديد",
+    "alreadyHaveAccountMessage":"لديك حساب بالفعل؟"
+}

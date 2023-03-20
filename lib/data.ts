@@ -1,35 +1,38 @@
-import { PhoneQuickSpecs } from '@prisma/client'
-import _ from 'lodash'
+import { PhoneQuickSpecs } from "@prisma/client";
+import _ from "lodash";
 
 export const getUniqueSpecNames = (quickSpecs: PhoneQuickSpecs[]) => {
-    const uniqueSpecNames = _.uniqBy(quickSpecs, 'quickspecName')
-    return uniqueSpecNames
-}
+  const uniqueSpecNames = _.uniqBy(quickSpecs, "quickspecName");
+  return uniqueSpecNames;
+};
 
 export const getUniqueSpecValues = (quickSpecs: PhoneQuickSpecs[]) => {
-    const uniqueValues = _.uniqBy(quickSpecs, 'value')
-}
+  const uniqueValues = _.uniqBy(quickSpecs, "value");
+};
 
 export const getUniqueSpecs = (quickSpecs: PhoneQuickSpecs[]) => {
-    let uniquesSpecs: { name: string, options: string[] }[] = getUniqueSpecNames(quickSpecs).map(item => {
-        return { id: item.quickspecName, name: item.quickspecName, options: [] }
-    })
-    return uniquesSpecs
-}
-
+  let uniquesSpecs: { name: string; options: string[] }[] = getUniqueSpecNames(
+    quickSpecs
+  ).map((item) => {
+    return { id: item.quickspecName, name: item.quickspecName, options: [] };
+  });
+  return uniquesSpecs;
+};
 
 export const getUniqueBatterySizes = (quickSpecs: PhoneQuickSpecs[]) => {
-    let batterySize = getUniqueSpecs(quickSpecs).find(spec => spec.name === 'Battery size')?.options.map(option => {
-        let system
-        system = option.slice(0, option.indexOf('m'))
-        if (system === '') {
-            system = null
-        }
-        return {
-            option: Number(system)
-        }
-    })
-}
+  let batterySize = getUniqueSpecs(quickSpecs)
+    .find((spec) => spec.name === "Battery size")
+    ?.options.map((option) => {
+      let system;
+      system = option.slice(0, option.indexOf("m"));
+      if (system === "") {
+        system = null;
+      }
+      return {
+        option: Number(system),
+      };
+    });
+};
 
 // let ramSize = uniquesSpecs.find(spec => spec.name === 'RAM size')?.options.map(option => {
 //     let system
@@ -64,7 +67,6 @@ export const getUniqueBatterySizes = (quickSpecs: PhoneQuickSpecs[]) => {
 //     }
 // })
 
-
 // let date = uniquesSpecs.find(spec => spec.name === 'Release date')?.options.map(option => {
 //     let year = option.slice(option.indexOf(' '), option.indexOf(' ') + 5)
 //     let month = option.slice(option.indexOf(',') + 2, option.lastIndexOf(" ")).slice(0, 3)
@@ -90,3 +92,8 @@ export const getUniqueBatterySizes = (quickSpecs: PhoneQuickSpecs[]) => {
 //         option: (dateNum)
 //     }
 // })
+
+export const profileMenu = [
+  { name: "layout:profileMenuProfile" },
+  { name: "layout:profileMenuSignOut" },
+];

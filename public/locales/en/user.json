@@ -1,0 +1,20 @@
+{
+    "email": "Email Address",
+    "password": "Password",
+    "loginMissingEmail": "Please enter your email address",
+    "loginMissingPassword": "Please enter your password",
+    "signInButton": "Sign in to your account",
+    "login": "Login",
+    "loginError": "please check your email/password!",
+    "dontHaveAccountMessage": "Don't have an account?",
+    "signUp": "Sign up",
+    "nickName": "Nickname",
+    "name": "Name",
+    "invalidEmailMessage": "Please enter a valid email format",
+    "passwordLengthMessage": "Password should be at least 6 characters",
+    "nameMissing": "Please enter your name",
+    "nickNameMissing": "Please enter your display nickname",
+    "signUpTitle": "Sign up a new account",
+    "signUpButton": "Sign up",
+    "alreadyHaveAccountMessage": "Already have an account?"
+}

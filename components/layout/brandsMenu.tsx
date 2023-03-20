@@ -4,6 +4,7 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
+import { englishLocale } from "../../lib/functions";
 
 const brandsMenu = [
   { name: "Apple", url: "/brands/apple", img: "/appleLogo.png" },
@@ -31,23 +32,15 @@ export default function NavMenu({
     <div className="text-right">
       <Menu as="div" className="relative inline-block text-left">
         <div>
-          {router.asPath.includes("/ar") ? (
-            <Menu.Button className="inline-flex w-full justify-center rounded-md bg-gray-800 bg-opacity-20 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 hover:bg-gray-700 hover:text-white">
-              <ChevronDownIcon
-                className="mr-2 h-5 w-5 text-violet-200 hover:text-violet-100"
-                aria-hidden="true"
-              />
-              {t(nav.name)}
-            </Menu.Button>
-          ) : (
-            <Menu.Button className="inline-flex w-full justify-center rounded-md bg-gray-800 bg-opacity-20 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 hover:bg-gray-700 hover:text-white">
-              {t(nav.name)}
-              <ChevronDownIcon
-                className="ml-2 -mr-1 h-5 w-5 text-violet-200 hover:text-violet-100"
-                aria-hidden="true"
-              />
-            </Menu.Button>
-          )}
+          <Menu.Button className="inline-flex w-full justify-center rounded-md bg-gray-800 bg-opacity-20 p-1 text-sm font-medium text-gray-300 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 hover:bg-gray-700 hover:text-white">
+            <ChevronDownIcon
+              className={`${
+                englishLocale(router) ? "ml-2 " : "mr-2 "
+              } h-5 w-5 text-violet-200 hover:text-violet-100`}
+              aria-hidden="true"
+            />
+            {t(nav.name)}
+          </Menu.Button>
         </div>
         <Transition
           as={Fragment}
@@ -60,20 +53,20 @@ export default function NavMenu({
         >
           <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="px-1 py-1 ">
-              {!router.asPath.includes("/ar")
-                ? brandsMenu.map((brand, i) => (
-                    <Link key={i} href={brand.url}>
-                      <a>
-                        <Menu.Item key={i}>
-                          {({ active }) => (
-                            <button
-                              className={`${
-                                active
-                                  ? "bg-violet-500 text-white"
-                                  : "text-gray-900"
-                              } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                            >
-                              {/* {active ? (
+              {(englishLocale(router) ? brandsMenu : arabicBrandsMenu).map(
+                (brand, i) => (
+                  <Link key={i} href={brand.url}>
+                    <a>
+                      <Menu.Item key={i}>
+                        {({ active }) => (
+                          <button
+                            className={`${
+                              active
+                                ? "bg-violet-500 text-white"
+                                : "text-gray-900"
+                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                          >
+                            {/* {active ? (
                                                         <EditActiveIcon
                                                             className="mr-2 h-5 w-5"
                                                             aria-hidden="true"
@@ -84,34 +77,15 @@ export default function NavMenu({
                                                             aria-hidden="true"
                                                         />
                                                     )} */}
-                              <img className="h-7 w-7 mr-2" src={brand.img} />
-                              {brand.name}
-                            </button>
-                          )}
-                        </Menu.Item>
-                      </a>
-                    </Link>
-                  ))
-                : arabicBrandsMenu.map((brand, i) => (
-                    <Link key={i} href={brand.url}>
-                      <a>
-                        <Menu.Item key={i}>
-                          {({ active }) => (
-                            <button
-                              className={`${
-                                active
-                                  ? "bg-violet-500 text-white"
-                                  : "text-gray-900"
-                              } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                            >
-                              <img className="h-7 w-7 mr-2" src={brand.img} />
-                              {brand.name}
-                            </button>
-                          )}
-                        </Menu.Item>
-                      </a>
-                    </Link>
-                  ))}
+                            <img className="h-7 w-7 mr-2" src={brand.img} />
+                            {brand.name}
+                          </button>
+                        )}
+                      </Menu.Item>
+                    </a>
+                  </Link>
+                )
+              )}
             </div>
             <div className="px-1 py-1">
               <Link
@@ -138,9 +112,7 @@ export default function NavMenu({
                                                         aria-hidden="true"
                                                     />
                                                 )} */}
-                        {router.asPath.includes("/ar")
-                          ? "عرض كل الماركات"
-                          : "Show All Brands"}
+                        {t("showAllBrands")}
                       </button>
                     )}
                   </Menu.Item>

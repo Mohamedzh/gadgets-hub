@@ -1,0 +1,15 @@
+{
+    "phoneSummary": "ملخص المواصفات",
+    "details": "التفاصيل",
+    "seeAlso": "مقترحات",
+    "batterySize": "حجم البطارية",
+    "batteryType": "نوع البطارية",
+    "cameraPixels": "الكاميرا",
+    "chipset": "Chipset",
+    "displayResolution": "الشاشة",
+    "displaySize": "حجم الشاشة",
+    "oS": "نظام التشغيل",
+    "ramSize": "حجم الذاكرة العشوائية (الرام)",
+    "releaseDate": "تاريخ الاصدار",
+    "videoPixels": "الفيديو"
+}
