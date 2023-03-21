@@ -315,7 +315,6 @@ export const getAllPhonesDetails = async (
       );
       let html = res.data;
       const $ = cheerio.load(html);
-
       const release_date = $("span[data-spec=released-hl]").text();
       const operating_system = $("span[data-spec=os-hl]").text();
       const display_size = $("span[data-spec=displaysize-hl]").text();
@@ -346,7 +345,6 @@ export const getAllPhonesDetails = async (
 
       let allSpecs: Spec[] = [];
       let price: string = "0";
-
       const specNode = $("table");
 
       const spec_detail: SpecDetail[] = [];
@@ -360,7 +358,6 @@ export const getAllPhonesDetails = async (
             value: $("td.nfo", ele).text(),
             alias: `${category}${index}`,
           };
-          // console.log(a, 'each spec');
 
           specList.push(a);
           if (a.value.length > 0) {

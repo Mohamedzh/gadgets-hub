@@ -116,3 +116,22 @@ export type Brand = {
   phones: { name: string }[];
   Reviews: { name: string }[];
 };
+
+export interface SpecDetailType {
+  category: string;
+  specs: SpecsType[];
+}
+
+export interface SpecsType {
+  name: string;
+  value: string;
+}
+
+export interface DetailedPhoneType {
+  title: string;
+  img: string;
+  urlImg: string;
+  url: String;
+  specDetails: SpecDetailType[];
+  quickSpecs: SpecsType[];
+}

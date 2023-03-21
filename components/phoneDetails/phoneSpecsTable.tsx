@@ -1,20 +1,21 @@
 import { Category } from "@prisma/client";
 import { Fragment } from "react";
 import { useTranslation } from "next-i18next";
-import { classNames, createPhoneData } from "../../lib/functions";
-import { DetailedCategory, DetailedPhone } from "../../types";
+import {
+  classNames,
+  createPhoneData,
+  englishLocale,
+} from "../../lib/functions";
+import { DetailedPhone, DetailedPhoneType } from "../../types";
+import { useRouter } from "next/router";
 
 export default function SpecsTable({
-  currentPhone,
-  categories,
-  arLang,
+  current,
 }: {
-  currentPhone: DetailedPhone;
-  categories: DetailedCategory[];
-  arLang: boolean;
+  current: DetailedPhoneType;
 }) {
   const { t } = useTranslation();
-  let specs = currentPhone.PhoneSpecs;
+  const router = useRouter();
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 mx-10">
@@ -55,17 +56,17 @@ export default function SpecsTable({
                                     </tr>
                                 </thead> */}
                 <tbody className="bg-gray-700">
-                  {createPhoneData(categories, specs).map((category, idx) => (
+                  {current.specDetails.map((category, idx) => (
                     <Fragment key={idx}>
                       <tr className="border-t border-gray-200">
                         <th
                           colSpan={4}
                           scope="colgroup"
                           className={`bg-gray-200 px-4 py-2 ${
-                            arLang ? "text-right" : "text-left"
+                            !englishLocale(router) ? "text-right" : "text-left"
                           } text-lg font-semibold text-gray-900 sm:px-6`}
                         >
-                          {category.name}
+                          {t("phone:" + category.category.split(" ").join(""))}
                         </th>
                       </tr>
                       {category.specs.map((spec, i) => (
@@ -78,13 +79,20 @@ export default function SpecsTable({
                         >
                           <td
                             className={`py-4 pl-4 pr-3 text-sm ${
-                              arLang ? "text-right" : "text-left"
+                              !englishLocale(router)
+                                ? "text-right"
+                                : "text-left"
                             } font-medium text-yellow-400 sm:pl-6`}
                           >
-                            {spec.spec}
+                            {t("phone:" + spec.name.split(" ").join(""))}
                           </td>
                           <td className="py-4 pl-4 pr-3 text-sm font-medium text-gray-100 sm:pl-6">
-                            {spec.value}
+                            {spec.value.split("\n").map((line) => (
+                              <span>
+                                {line}
+                                <br />
+                              </span>
+                            ))}
                           </td>
                         </tr>
                       ))}

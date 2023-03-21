@@ -45,7 +45,7 @@ export default function Page404() {
         </div>
         <div className="mx-auto max-w-xl py-16 sm:py-24">
           <div className="text-center">
-            <p className="text-base font-semibold text-indigo-400">404</p>
+            <p className="text-3xl font-semibold text-indigo-400">404</p>
             <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-100 sm:text-5xl">
               {t("page404:pageNotExistMsg")}
             </h1>

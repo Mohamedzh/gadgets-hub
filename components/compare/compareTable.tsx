@@ -128,9 +128,7 @@ function CompareTable({ categories, allPhones, quickSpecs }: Props) {
                         )}
                       >
                         <td className=" py-4 pl-4 pr-3 text-sm font-medium text-yellow-400 text-center sm:pl-6">
-                          {englishLocale(router)
-                            ? quickSpec.name
-                            : quickSpec.arabicName}
+                          {t("phone:" + quickSpec.name.split(" ").join(""))}
                         </td>
                         {currentPhones.map((phone, i) => (
                           <td
@@ -150,7 +148,7 @@ function CompareTable({ categories, allPhones, quickSpecs }: Props) {
                       </tr>
                     </Fragment>
                   ))}
-                  {englishLocale(router) && (
+                  {
                     <tr className="border-t border-gray-200">
                       <th
                         colSpan={4}
@@ -160,67 +158,56 @@ function CompareTable({ categories, allPhones, quickSpecs }: Props) {
                         {t("compare:detailedComparison")}
                       </th>
                     </tr>
-                  )}
-                  {categories.map(
-                    (category, idx) =>
-                      englishLocale(router) && (
-                        <Fragment key={idx}>
-                          <tr className="border-t border-gray-200">
-                            <th
-                              colSpan={4}
-                              scope="colgroup"
-                              className={`bg-gray-100 px-4 py-2 ${
-                                englishLocale(router)
-                                  ? "text-left"
-                                  : "text-right"
-                              } text-lg font-semibold text-gray-900 sm:px-6`}
+                  }
+                  {categories.map((category, idx) => (
+                    <Fragment key={idx}>
+                      <tr className="border-t border-gray-200">
+                        <th
+                          colSpan={4}
+                          scope="colgroup"
+                          className={`bg-gray-100 px-4 py-2 ${
+                            englishLocale(router) ? "text-left" : "text-right"
+                          } text-lg font-semibold text-gray-900 sm:px-6`}
+                        >
+                          {t("phone:" + category.name.split(" ").join(""))}
+                        </th>
+                      </tr>
+                      {category.specs.map((spec, i) => (
+                        <tr
+                          key={i}
+                          className={classNames(
+                            i === 0 ? "border-gray-300" : "border-gray-200",
+                            "border-t"
+                          )}
+                        >
+                          <td className=" py-4 pl-4 pr-3 text-sm font-medium text-yellow-400 sm:pl-6">
+                            {t("phone:" + spec.name.split(" ").join(""))}
+                          </td>
+                          {currentPhones.map((phone, index) => (
+                            <td
+                              key={index}
+                              className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-100 sm:pl-6 text-center"
                             >
-                              {englishLocale(router)
-                                ? category.name
-                                : category.arabicName}
-                            </th>
-                          </tr>
-                          {category.specs.map((spec, i) => (
-                            <tr
-                              key={i}
-                              className={classNames(
-                                i === 0 ? "border-gray-300" : "border-gray-200",
-                                "border-t"
-                              )}
-                            >
-                              <td className=" py-4 pl-4 pr-3 text-sm font-medium text-yellow-400 sm:pl-6">
-                                {englishLocale(router)
-                                  ? spec.name
-                                  : spec.arabicName}
-                              </td>
-                              {currentPhones.map((phone, index) => (
-                                <td
-                                  key={index}
-                                  className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-100 sm:pl-6 text-center"
-                                >
-                                  {phone.PhoneSpecs.find(
-                                    (x) => x.spec.alias === spec.alias
-                                  )?.value || "NA"}
-                                </td>
-                              ))}
-                              {Array.from(
-                                Array(
-                                  setTableColumns(currentPhones.length)
-                                ).keys()
-                              ).map((item, i) => (
-                                <th key={i}></th>
-                              ))}
-                              {/* <td className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 text-center">
+                              {phone.PhoneSpecs.find(
+                                (x) => x.spec.alias === spec.alias
+                              )?.value || "NA"}
+                            </td>
+                          ))}
+                          {Array.from(
+                            Array(setTableColumns(currentPhones.length)).keys()
+                          ).map((item, i) => (
+                            <th key={i}></th>
+                          ))}
+                          {/* <td className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 text-center">
                                                         {(phones[1].PhoneSpecs.find(x => x.spec.alias === spec.alias))?.value || 'NA'}
                                                     </td>
                                                     <td className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 text-center">
                                                         {(phones[2].PhoneSpecs.find(x => x.spec.alias === spec.alias))?.value || 'NA'}
                                                     </td> */}
-                            </tr>
-                          ))}
-                        </Fragment>
-                      )
-                  )}
+                        </tr>
+                      ))}
+                    </Fragment>
+                  ))}
                 </tbody>
               </table>
             </div>

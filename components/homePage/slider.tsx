@@ -58,7 +58,11 @@ export default function Slider({
                 >
                   {slide.title}
                   <br />
-                  <span className="text-sm">{slide.reviewDate}</span>
+                  <span className="text-sm">{slide.reviewDate.split(" ")
+                  .map((char) => {
+                    return t(char);
+                  })
+                  .join(" ")}</span>
                 </p>
                 {/* <p className={`${arLang ? 'lg:right-4 right-1' : 'lg:left-4 left-1'} absolute bottom-1 bg-opacity-50 bg-gray-600 lg:p-5 p-2 text-sm font-semibold lg:text-sm`}>
                                     {slide.reviewDate}

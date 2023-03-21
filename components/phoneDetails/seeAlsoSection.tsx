@@ -5,14 +5,15 @@ import { useTranslation } from "next-i18next";
 
 type Props = {
   otherPhones: Phone[];
-  arLang: boolean;
 };
 
-function SeeAlsoSection({ otherPhones, arLang }: Props) {
+function SeeAlsoSection({ otherPhones }: Props) {
   const { t } = useTranslation();
   return (
     <div>
-      <p className="font-semibold text-xl text-gray-100">{t("seeAlso")}</p>
+      <p className="font-semibold text-xl text-gray-100">
+        {t("phone:seeAlso")}
+      </p>
       <div className="grid grid-cols-4 lg:grid-cols-2">
         {otherPhones.map((phone, i) => (
           <Link href={`/${phone.name}`} key={i}>

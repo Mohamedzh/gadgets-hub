@@ -37,5 +37,18 @@
     "filtersA-Z": "الاسم (ا - ي)",
     "filtersZ-A": "الاسم (ي - ا)",
     "filtersMostPopular": "الأكثر مشاهدة",
-    "sortButton": "الترتيب بحسب"
+    "sortButton": "الترتيب بحسب",
+    "filters": "الفلاتر",
+    "January": "يناير",
+    "February": "فبراير",
+    "March": "مارس",
+    "April": "أبريل",
+    "May": "مايو",
+    "June": "يونيو",
+    "July": "يوليو",
+    "August": "أغسطس",
+    "September": "سبتمبر",
+    "October": "أكتوبر",
+    "November": "نوفمبر",
+    "December": "ديسمبر"
 }

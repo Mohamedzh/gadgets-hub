@@ -16,5 +16,6 @@
     "nickNameMissing": "Please enter your display nickname",
     "signUpTitle": "Sign up a new account",
     "signUpButton": "Sign up",
-    "alreadyHaveAccountMessage": "Already have an account?"
+    "alreadyHaveAccountMessage": "Already have an account?",
+    "userInformation": "User Information"
 }

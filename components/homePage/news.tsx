@@ -21,7 +21,12 @@ function News({ news }: Props) {
                 {item.title} <br></br> {item.title.length < 45 && <br></br>}
               </div>
               <p className="text-white place-self-end text-xs lg:text-base">
-                {item.newsDate}
+                {item.newsDate
+                  .split(" ")
+                  .map((char) => {
+                    return t(char);
+                  })
+                  .join(" ")}
               </p>
             </a>
           </Link>

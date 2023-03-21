@@ -1,9 +1,9 @@
-import { Category, Phone } from "@prisma/client";
-import React, { useEffect, useState } from "react";
+import { Phone } from "@prisma/client";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { AddToComparison } from "../../lib/functions";
+import AddToComparison from "./addToComparisonBtn";
 import { useAppSelector } from "../../redux/hooks";
-import { DetailedCategory, DetailedPhone } from "../../types";
+import { DetailedPhone, DetailedPhoneType } from "../../types";
 import Alert from "../alerts/addPhoneAlert";
 import SpecsTable from "./phoneSpecsTable";
 import SeeAlsoSection from "./seeAlsoSection";
@@ -21,17 +21,11 @@ import { useTranslation } from "next-i18next";
 
 type Props = {
   currentPhone?: DetailedPhone;
-  categories: DetailedCategory[];
   otherPhones: Phone[];
-  arLang: boolean;
+  current: DetailedPhoneType;
 };
 
-function PhoneDetails({
-  currentPhone,
-  categories,
-  otherPhones,
-  arLang,
-}: Props) {
+function PhoneDetails({ currentPhone, otherPhones, current }: Props) {
   const { t } = useTranslation();
   const [supabaseClient] = useState(() => createBrowserSupabaseClient());
   const user = useUser();
@@ -49,7 +43,7 @@ function PhoneDetails({
   const addToFavourites = async () => {
     try {
       if (user) {
-        let data = { id: user.id, phone: currentPhone?.name };
+        let data = { id: user.id, phone: current.title };
         const res = await axios.post("/api/addToFavs", data);
 
         if (res.status === 200) {
@@ -72,24 +66,19 @@ function PhoneDetails({
     <div className="bg-gray-900">
       <div className="text-center">
         <p className="text-5xl font-bold m-10 font-sans text-blue-300">
-          {currentPhone?.description.indexOf(".") === -1
-            ? currentPhone.description
-            : currentPhone?.description.slice(
-                0,
-                currentPhone?.description.indexOf(".")
-              )}
+          {current.title}
         </p>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 m-5 place-items-center">
           <div className="lg:col-span-1 col-span-2 flex flex-col">
             <div className="flex">
               <img
-                className="lg:w-60 lg:mt-5 mx-auto"
-                src={currentPhone?.imgUrl}
+                className="lg:w-80 lg:mt-10 mx-auto border-4 border-white"
+                src={current.img}
               />
             </div>
             <p className="my-2 text-xl font-semibold text-white">
-              {currentPhone?.name}
+              {current.title}
             </p>
             <div className="flex flex-col mt-3">
               <div className="flex">
@@ -112,13 +101,12 @@ function PhoneDetails({
                 </button>
                 {/* <StarIcon className='w-10 h-10 mx-3 bg-white flex' /> */}
                 {currentPhone &&
-                  !comparedPhones.includes(currentPhone) &&
+                  !comparedPhones.find((phone) => phone.url === current.url) &&
                   comparedPhones.length < 4 && (
                     <AddToComparison
                       dispatch={dispatch}
                       phone={currentPhone}
                       setShow={setShow}
-                      arLang={arLang}
                     />
                   )}
                 {show && <Alert setShow={setShow} />}
@@ -136,32 +124,29 @@ function PhoneDetails({
               {t("phone:phoneSummary")}
             </p>
             <div className="">
-              {currentPhone?.PhoneQuickSpecs.map((spec, idx) => (
+              {current.quickSpecs.map((spec, idx) => (
+                // {currentPhone?.PhoneQuickSpecs.map((spec, idx) => (
                 <div
                   className="grid grid-cols-2 m-3 border-2 rounded divide-x-2 divide-slate-400 border-slate-400 border-x-2 border-t-2 "
                   key={idx}
                 >
                   <p className="px-3 my-auto border-spacing-6 font-semibold text-blue-400">
-                    {spec.quickspecName}
+                    {t("phone:" + spec.name.split(" ").join(""))}
                   </p>
-                  <p className="px-3 text-gray-100">{spec.value}</p>
+                  <p className="px-3 text-gray-100">
+                    {spec.value.indexOf("Released") >= 0
+                      ? spec.value.slice(spec.value.indexOf("Released") + 9)
+                      : spec.value}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
           <div className="lg:col-span-1 col-span-2">
-            {otherPhones && (
-              <SeeAlsoSection otherPhones={otherPhones} arLang={arLang} />
-            )}
+            {otherPhones && <SeeAlsoSection otherPhones={otherPhones} />}
           </div>
         </div>
-        {currentPhone && !arLang && (
-          <SpecsTable
-            currentPhone={currentPhone}
-            categories={categories}
-            arLang={arLang}
-          />
-        )}
+        {<SpecsTable current={current} />}
       </div>
     </div>
   );

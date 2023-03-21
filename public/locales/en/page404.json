@@ -2,5 +2,8 @@
     "pageNotExistMsg": "This page does not exist",
     "pageNotFoundMsg": "The page you are looking for could not be found",
     "popularPages": "Popular pages",
-    "goHomeMsg":"Or go back home"
+    "goHomeMsg": "Or go back home",
+    "internalServerErrorMsg1": "Internal server error",
+    "internalServerErrorMsg2": "An error occurred while fetching data",
+    "internalServerErrorMsg3": "Go back home"
 }

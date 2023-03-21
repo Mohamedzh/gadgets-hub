@@ -16,5 +16,6 @@
     "nickNameMissing": "رجاء ادخال اسمك على الموقع",
     "signUpTitle": "تسجيل حساب جديد",
     "signUpButton": "سجل حساب جديد",
-    "alreadyHaveAccountMessage":"لديك حساب بالفعل؟"
+    "alreadyHaveAccountMessage": "لديك حساب بالفعل؟",
+    "userInformation": "معلومات الحساب"
 }

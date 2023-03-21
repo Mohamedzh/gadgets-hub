@@ -1,7 +1,9 @@
 {
     "pageNotExistMsg": "هذه الصفحة غير موجودة",
-    "pageNotFoundMsg":"الصفحة التي تبحث عنها غير موجودة",
-    "popularPages":"الصفحات الأكثر زيارة",
-    "goHomeMsg":"او عد الى الصفحة الرئيسية"
-
+    "pageNotFoundMsg": "الصفحة التي تبحث عنها غير موجودة",
+    "popularPages": "الصفحات الأكثر زيارة",
+    "goHomeMsg": "او عد الى الصفحة الرئيسية",
+    "internalServerErrorMsg1": "لقد حدث خطأ",
+    "internalServerErrorMsg2": "حدث خطأ أثناء تحميل البيانات المطلوبة",
+    "internalServerErrorMsg3": "عد الى الصفحة الرئيسية"
 }

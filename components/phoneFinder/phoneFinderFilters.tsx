@@ -8,7 +8,11 @@ import {
 } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import { classNames, monthNumberFromString } from "../../lib/functions";
+import {
+  classNames,
+  englishLocale,
+  monthNumberFromString,
+} from "../../lib/functions";
 import _ from "lodash";
 import { Brand, Phone, PhoneQuickSpecs } from "@prisma/client";
 import BrandSearchBar from "./phoneFinderBrandSearchBar";
@@ -48,6 +52,7 @@ import {
 import { clearBrandFilter } from "../../redux/slices/brandFilterSlice";
 import { clearOSFilter } from "../../redux/slices/osFilterSlice";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
@@ -57,7 +62,7 @@ const sortOptions = [
 const filters = [
   {
     id: "ramSize",
-    name: "RAM Size",
+    name: "phone:RAMsize",
     options: [
       { value: "<4", label: "Less than 4GB", checked: false },
       { value: "4-8", label: "4 - 8GB", checked: false },
@@ -67,7 +72,7 @@ const filters = [
   },
   {
     id: "batterySize",
-    name: "Battery Size",
+    name: "phone:Batterysize",
     options: [
       { value: "<3000", label: "Less than 3000maH", checked: false },
       { value: "3000-4500", label: "3000 - 4500mAH", checked: false },
@@ -77,7 +82,7 @@ const filters = [
   },
   {
     id: "displaySize",
-    name: "Display Size",
+    name: "phone:Displaysize",
     options: [
       { value: "<4", label: 'Less than 4"', checked: false },
       { value: "4-6", label: '4 - 6"', checked: false },
@@ -95,7 +100,7 @@ type Props = {
 
 export default function Filters({ quickSpecs, brands, phones }: Props) {
   const [open, setOpen] = useState(false);
-
+  const router = useRouter();
   const { t } = useTranslation();
   const [showResults, setShowResults] = useState<boolean>(false);
 
@@ -236,7 +241,7 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
             >
               <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
                 <div className="flex items-center justify-between px-4 mt-16">
-                  <h2 className="text-lg font-medium text-gray-900">Filters</h2>
+                  <h2 className="text-lg font-medium text-gray-900">{t("filters")}</h2>
                   <button
                     type="button"
                     className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
@@ -260,7 +265,7 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
                           <h3 className="-mx-2 -my-3 flow-root">
                             <Disclosure.Button className="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400">
                               <span className="font-medium text-gray-900">
-                                {section.name}
+                                {t(section.name.split(" ").join(""))}
                               </span>
                               <span className="ml-6 flex items-center">
                                 <ChevronDownIcon
@@ -385,7 +390,7 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
                 className="inline-block text-sm font-medium ml-40 text-gray-200 hover:text-gray-500 sm:hidden"
                 onClick={() => setOpen(true)}
               >
-                Filters
+                {t("filters")}
               </button>
             </div>
             <div className="flex flex-col lg:flex-row mt-10 lg:mt-0">
@@ -396,27 +401,31 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
             </div>
             <div className="flex flex-col lg:flex-row mt-5 lg:mt-0">
               <p className="mx-2 place-self-center font-semibold text-blue-300">
-                {t("phone:oS")}
+                {t("phone:OS")}
               </p>
               {os && <OsSearchBar os={os} />}
             </div>
             <div className="hidden sm:block">
               <div className="flow-root">
-                <Popover.Group className="-mx-4 flex items-center divide-x divide-gray-200">
+                <Popover.Group className={`${englishLocale(router)? "-mx-4" :"mx-4 divide-x-reverse"} flex items-center divide-x divide-gray-200`}>
                   {filters.map((section, sectionIdx) => (
                     <Popover
                       key={section.name}
                       className="relative inline-block px-4 text-left"
                     >
                       <Popover.Button className="group inline-flex justify-center text-sm font-medium text-white hover:text-gray-300">
-                        <span>{section.name}</span>
+                        <span>{t(section.name.split(" ").join(""))}</span>
                         {/* {sectionIdx === 0 ? ( */}
-                        <span className="ml-1.5 rounded bg-gray-200 py-0.5 px-1.5 text-xs font-semibold tabular-nums text-gray-700">
+                        <span
+                          className={`${
+                            englishLocale(router) ? "ml-1.5" : "mr-1.5"
+                          } rounded bg-gray-200 py-0.5 px-1.5 text-xs font-semibold tabular-nums text-gray-700`}
+                        >
                           {setFilterNumber(section.id)}
                         </span>
                         {/* ) : null} */}
                         <ChevronDownIcon
-                          className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                          className={`ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500`}
                           aria-hidden="true"
                         />
                       </Popover.Button>
@@ -484,7 +493,7 @@ export default function Filters({ quickSpecs, brands, phones }: Props) {
 
             <div
               aria-hidden="true"
-              className="hidden h-5 w-px bg-gray-300 sm:ml-4 sm:block"
+              className="hidden h-5 w-px bg-gray-300 sm:mx-4 sm:block"
             />
 
             <div className="mt-2 sm:mt-0 sm:ml-4 mb-3 lg:mb-0">

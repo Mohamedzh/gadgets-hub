@@ -6,7 +6,6 @@ import {
 import { BarsArrowUpIcon, UsersIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import ProfileFavsSection from "./profileFavsSection";
-import { useUser } from "@supabase/auth-helpers-react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { englishLocale } from "../../lib/functions";
@@ -53,8 +52,7 @@ export default function ProfileSection({ user }: Props) {
 
   const userData = [
     {
-      name: "Nickname",
-      arabicName: "الاسم",
+      name: "user:nickName",
       value: user.user_metadata.nickName,
       placeHolder: "profile:newNickName",
       disabled: false,
@@ -84,7 +82,7 @@ export default function ProfileSection({ user }: Props) {
     <>
       <div>
         <h3 className="text-lg font-medium leading-6 text-gray-100 mt-3">
-          User Information
+          {t("user:userInformation")}
         </h3>
         {/* <p className="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p> */}
       </div>
@@ -95,9 +93,7 @@ export default function ProfileSection({ user }: Props) {
               key={i}
               className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5"
             >
-              <dt className=" font-medium text-green-500">
-                {englishLocale(router) ? data.name : data.arabicName}
-              </dt>
+              <dt className=" font-medium text-green-500">{t(data.name)}</dt>
               <dd className="mt-1 flex  text-white sm:col-span-2 sm:mt-0">
                 {!show ? (
                   <span className="flex-grow">{data.value}</span>
