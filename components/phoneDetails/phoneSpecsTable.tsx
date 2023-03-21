@@ -87,8 +87,8 @@ export default function SpecsTable({
                             {t("phone:" + spec.name.split(" ").join(""))}
                           </td>
                           <td className="py-4 pl-4 pr-3 text-sm font-medium text-gray-100 sm:pl-6">
-                            {spec.value.split("\n").map((line) => (
-                              <span>
+                            {spec.value.split("\n").map((line, i) => (
+                              <span key={i}>
                                 {line}
                                 <br />
                               </span>
