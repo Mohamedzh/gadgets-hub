@@ -136,9 +136,34 @@ export const monthNumberFromString = (str: string) => {
 //     return translation;
 //   }
 
+export const getReviewDate = (date: string) => {
+  if (date.indexOf("updated") !== -1) {
+    let newDate = date.slice(date.indexOf("updated") + 9);
+    let day = newDate.slice(0, newDate.indexOf(" "));
+    if (day.length === 1) {
+      day = "0" + day;
+    }
+    let month = monthNumberFromString(
+      newDate.slice(newDate.indexOf(" ") + 1, newDate.lastIndexOf(" "))
+    ).toString();
+    let year = newDate.slice(newDate.lastIndexOf(" "));
+    return Number(year + month + day);
+  }
+  let day = date.slice(0, date.indexOf(" "));
+  if (day.length === 1) {
+    day = "0" + day;
+  }
+  let month = monthNumberFromString(
+    date.slice(date.indexOf(" ") + 1, date.lastIndexOf(" "))
+  ).toString();
+  let year = date.slice(date.lastIndexOf(" "));
+  return Number(year + month + day);
+};
+
 export const stringInsert = (s: string, index: number, newStr: string) => {
   return s.slice(0, index) + newStr + s.slice(index);
 };
+
 export const stringReplace = (
   s: string,
   startIndex: number,

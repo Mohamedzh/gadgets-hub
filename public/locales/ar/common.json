@@ -39,16 +39,22 @@
     "filtersMostPopular": "الأكثر مشاهدة",
     "sortButton": "الترتيب بحسب",
     "filters": "الفلاتر",
+    "search": "بحث",
     "January": "يناير",
+    "Jan": "يناير",
     "February": "فبراير",
+    "Feb": "فبراير",
     "March": "مارس",
     "April": "أبريل",
     "May": "مايو",
     "June": "يونيو",
     "July": "يوليو",
     "August": "أغسطس",
+    "Aug": "أغسطس",
     "September": "سبتمبر",
+    "Sept": "سبتمبر",
     "October": "أكتوبر",
     "November": "نوفمبر",
-    "December": "ديسمبر"
+    "December": "ديسمبر",
+    "Dec": "ديسمبر"
 }

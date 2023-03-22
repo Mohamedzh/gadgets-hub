@@ -4,7 +4,6 @@ import {
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
 } from "@heroicons/react/20/solid";
-import { Review } from "@prisma/client";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useTranslation } from "next-i18next";
@@ -14,18 +13,18 @@ export default function Pagination({
   setPage,
   pageNo,
   page,
-  reviews,
+  count,
 }: {
   setPage: Dispatch<SetStateAction<number>>;
   pageNo: number;
   page: number;
-  reviews: Review[];
+  count: number;
 }) {
   const { t } = useTranslation();
   const router = useRouter();
   let newArray = Array.from(Array(pageNo).keys());
   let pagesArray = newArray.map((item) => {
-    if (item === 0) {
+    if (item === page - 1) {
       return { item, current: true };
     } else return { item, current: false };
   });
@@ -55,9 +54,9 @@ export default function Pagination({
             <span className="font-medium">{page * 30 - 29} </span>
             {t("to")}{" "}
             <span className="font-medium">
-              {page * 30 > reviews.length ? reviews.length : page * 30}
+              {page * 30 > count ? count : page * 30}
             </span>{" "}
-            {t("of")} <span className="font-medium">{reviews.length}</span>{" "}
+            {t("of")} <span className="font-medium">{count}</span>{" "}
             {t("results")}
           </p>
         </div>

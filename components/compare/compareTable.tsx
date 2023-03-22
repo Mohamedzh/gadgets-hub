@@ -15,11 +15,10 @@ import { useRouter } from "next/router";
 
 type Props = {
   categories: ArCategory[];
-  allPhones: { name: string; imgUrl: string }[];
   quickSpecs: ArQuickSpec[];
 };
 
-function CompareTable({ categories, allPhones, quickSpecs }: Props) {
+function CompareTable({ categories, quickSpecs }: Props) {
   const router = useRouter();
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -102,7 +101,7 @@ function CompareTable({ categories, allPhones, quickSpecs }: Props) {
                       Array(setTableColumns(currentPhones.length)).keys()
                     ).map((item, i) => (
                       <th key={i}>
-                        <CompareSearchBar allPhones={allPhones} i={i} />
+                        <CompareSearchBar i={i} />
                       </th>
                     ))}
                   </tr>

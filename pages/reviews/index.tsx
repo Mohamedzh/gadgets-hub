@@ -4,51 +4,35 @@ import { prisma } from "../../lib/db";
 import ReviewsPage from "../../components/reviews/reviewsPage";
 import { Review } from "@prisma/client";
 import Pagination from "../../components/reviews/reviewsPagination";
-import { monthNumberFromString, paginate } from "../../lib/functions";
+import { getReviewDate } from "../../lib/functions";
 import { getLatestReviews } from "../../lib/cheerio";
 import SearchBar from "../../components/reviews/reviewSearchBar";
 import _ from "lodash";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import axios from "axios";
 
 type Props = {
   reviews: Review[];
   brands: { name: string }[];
+  count: number;
 };
 
-const getReviewDate = (date: string) => {
-  if (date.indexOf("updated") !== -1) {
-    let newDate = date.slice(date.indexOf("updated") + 9);
-    let day = newDate.slice(0, newDate.indexOf(" "));
-    if (day.length === 1) {
-      day = "0" + day;
-    }
-    let month = monthNumberFromString(
-      newDate.slice(newDate.indexOf(" ") + 1, newDate.lastIndexOf(" "))
-    ).toString();
-    let year = newDate.slice(newDate.lastIndexOf(" "));
-    return Number(year + month + day);
-  }
-  let day = date.slice(0, date.indexOf(" "));
-  if (day.length === 1) {
-    day = "0" + day;
-  }
-  let month = monthNumberFromString(
-    date.slice(date.indexOf(" ") + 1, date.lastIndexOf(" "))
-  ).toString();
-  let year = date.slice(date.lastIndexOf(" "));
-  return Number(year + month + day);
-};
-
-function Reviews({ reviews, brands }: Props) {
+function Reviews({ reviews, brands, count }: Props) {
   const { t } = useTranslation();
-  const [page, setPage] = useState(1);
-  const [pageNo, setPageNo] = useState(1);
-  const currentReviews = paginate(page, 30, reviews);
+  const [page, setPage] = useState<number>(1);
+  const [pageNo, setPageNo] = useState<number>(Math.ceil(count / 30));
+
+  const [currentReviews, setCurrentReviews] = useState<Review[]>(reviews);
+
+  const getCurrentRevs = async (page: number) => {
+    const res = await axios.get(`/api/reviewsPage?page=${page}`);
+    setCurrentReviews(res.data);
+  };
 
   useEffect(() => {
-    setPageNo(Math.ceil(reviews.length / 30));
-  }, []);
+    getCurrentRevs(page);
+  }, [page]);
 
   return (
     <div className="flex flex-col">
@@ -68,7 +52,7 @@ function Reviews({ reviews, brands }: Props) {
             setPage={setPage}
             pageNo={pageNo}
             page={page}
-            reviews={reviews}
+            count={count}
           />
         </div>
       )}
@@ -88,21 +72,28 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   await prisma.review.createMany({ data: latestReviews, skipDuplicates: true });
 
   reviews = await prisma.review.findMany({
+    orderBy: { id: "desc" },
+    take: 30,
     select: { title: true, link: true, imgUrl: true, reviewDate: true },
   });
 
-  reviews = reviews.map((review) => {
+  reviews = reviews.map((review, i) => {
     return {
       ...review,
       newReviewDate: getReviewDate(review.reviewDate),
     };
   });
-  reviews = _.orderBy(reviews, "newReviewDate", "desc");
+  // reviews = _.orderBy(reviews, "newReviewDate", "asc");
+
+  const count = await prisma.review.aggregate({
+    _count: { id: true },
+  });
 
   return {
     props: {
       ...(await serverSideTranslations(locale ? locale : "en")),
       reviews,
+      count: count._count.id,
       brands,
     },
     revalidate: 86400,

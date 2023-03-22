@@ -39,16 +39,22 @@
     "filtersMostPopular": "Most Popular",
     "sortButton": "Sort",
     "filters": "Filters",
+    "search": "Search",
     "January": "January",
+    "Jan": "January",
     "February": "February",
+    "Feb": "February",
     "March": "March",
     "April": "April",
     "May": "May",
     "June": "June",
     "July": "July",
     "August": "August",
+    "Aug": "August",
     "September": "September",
+    "Sept": "September",
     "October": "October",
     "November": "November",
-    "December": "December"
+    "December": "December",
+    "Dec": "December"
 }

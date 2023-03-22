@@ -1,24 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { Combobox } from "@headlessui/react";
 import { classNames } from "../../lib/functions";
-import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { addToComparison } from "../../redux/slices/compareSlice";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
+import { searchPhones } from "../../lib/api";
 
-export default function SearchBar({
-  allPhones,
-  i,
-}: {
-  allPhones: { name: string; imgUrl: string }[];
-  i: number;
-}) {
+export default function SearchBar({ i }: { i: number }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");
   const [selectedPhone, setSelectedPhone] = useState(null);
+  const [filteredPhones, setFilteredPhones] = useState<
+    { name: string; url: string; imgUrl: string }[]
+  >([]);
 
   const getComparePhone = async (phoneName: string) => {
     const res = await axios.post("/api/phone", { phoneName });
@@ -26,12 +23,16 @@ export default function SearchBar({
     dispatch(addToComparison(current));
   };
 
-  const filteredPhones =
-    query === ""
-      ? allPhones
-      : allPhones.filter((phone) => {
-          return phone.name.toLowerCase().includes(query.toLowerCase());
-        });
+  const getSearchPhones = async (query: string) => {
+    const phones = await searchPhones(query);
+    setFilteredPhones(phones);
+  };
+
+  useEffect(() => {
+    if (query.length > 0) {
+      getSearchPhones(query);
+    }
+  }, [query]);
 
   return (
     <Combobox as="div" value={selectedPhone} onChange={setSelectedPhone}>
