@@ -10,9 +10,9 @@ import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 
-type Props = { reviews: Review[]; brand: string };
+type Props = { reviews: Review[]; brand: string; count: number };
 
-function Reviews({ reviews, brand }: Props) {
+function Reviews({ reviews, brand, count }: Props) {
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const [pageNo, setPageNo] = useState(1);
@@ -39,7 +39,7 @@ function Reviews({ reviews, brand }: Props) {
             setPage={setPage}
             pageNo={pageNo}
             page={page}
-            reviews={reviews}
+            count={count}
           />
         </div>
       ) : (
@@ -91,16 +91,23 @@ export const getStaticProps: GetStaticProps = async ({
       where: { brandName: brand },
       select: { title: true, link: true, imgUrl: true, reviewDate: true },
     });
+
+    const count = await prisma.review.aggregate({
+      _count: { id: true },
+    });
+    return {
+      props: {
+        ...(await serverSideTranslations(locale ? locale : "en")),
+        reviews,
+        brand,
+        count,
+      },
+      revalidate: 86400,
+    };
   } catch (error) {
     console.log(error);
+    return {
+      redirect: { destination: "/500", permanent: false },
+    };
   }
-
-  return {
-    props: {
-      ...(await serverSideTranslations(locale ? locale : "en")),
-      reviews,
-      brand,
-    },
-    revalidate: 86400,
-  };
 };
