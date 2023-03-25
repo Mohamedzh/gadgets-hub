@@ -13,7 +13,6 @@ import {
 import { prisma } from "./db";
 import wretch from "wretch";
 import { Phone } from "@prisma/client";
-import puppeteer from "puppeteer";
 
 type newBrand = {
   name: string;

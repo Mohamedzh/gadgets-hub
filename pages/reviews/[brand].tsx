@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { prisma } from "../../lib/db";
-import ReviewsPage from "../../components/brandReviewsPage";
+import ReviewsPage from "../../components/reviews/brandReviewsPage";
 import { Review } from "@prisma/client";
 import Pagination from "../../components/reviews/reviewsPagination";
 import { paginate } from "../../lib/functions";
@@ -10,9 +10,9 @@ import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 
-type Props = { reviews: Review[]; brand: string; count: number };
+type Props = { reviews: Review[]; brand: string};
 
-function Reviews({ reviews, brand, count }: Props) {
+function Reviews({ reviews, brand }: Props) {
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const [pageNo, setPageNo] = useState(1);
@@ -39,7 +39,6 @@ function Reviews({ reviews, brand, count }: Props) {
             setPage={setPage}
             pageNo={pageNo}
             page={page}
-            count={count}
           />
         </div>
       ) : (
@@ -92,15 +91,14 @@ export const getStaticProps: GetStaticProps = async ({
       select: { title: true, link: true, imgUrl: true, reviewDate: true },
     });
 
-    const count = await prisma.review.aggregate({
-      _count: { id: true },
-    });
+    // const count = await prisma.review.aggregate({
+    //   _count: { id: true },
+    // });
     return {
       props: {
         ...(await serverSideTranslations(locale ? locale : "en")),
         reviews,
         brand,
-        count,
       },
       revalidate: 86400,
     };

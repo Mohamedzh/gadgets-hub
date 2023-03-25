@@ -18,7 +18,7 @@ export default function Pagination({
   setPage: Dispatch<SetStateAction<number>>;
   pageNo: number;
   page: number;
-  count: number;
+  count?: number;
 }) {
   const { t } = useTranslation();
   const router = useRouter();
@@ -54,7 +54,7 @@ export default function Pagination({
             <span className="font-medium">{page * 30 - 29} </span>
             {t("to")}{" "}
             <span className="font-medium">
-              {page * 30 > count ? count : page * 30}
+              {count && page * 30 > count ? count : page * 30}
             </span>{" "}
             {t("of")} <span className="font-medium">{count}</span>{" "}
             {t("results")}

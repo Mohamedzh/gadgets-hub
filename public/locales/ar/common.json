@@ -1,6 +1,7 @@
 {
     "news": "الأخبار",
     "reviews": "التقييمات",
+    "brandReviews": "تقييمات",
     "phoneFinder": "ابحث عن تليفون",
     "brands": "الماركات",
     "comparison": "مقارنة",
@@ -54,7 +55,9 @@
     "September": "سبتمبر",
     "Sept": "سبتمبر",
     "October": "أكتوبر",
+    "Oct": "أكتوبر",
     "November": "نوفمبر",
+    "Nov": "نوفمبر",
     "December": "ديسمبر",
     "Dec": "ديسمبر"
 }

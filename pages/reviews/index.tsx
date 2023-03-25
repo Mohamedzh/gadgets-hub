@@ -83,7 +83,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
       newReviewDate: getReviewDate(review.reviewDate),
     };
   });
-  // reviews = _.orderBy(reviews, "newReviewDate", "asc");
 
   const count = await prisma.review.aggregate({
     _count: { id: true },

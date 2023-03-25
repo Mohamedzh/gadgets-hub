@@ -1,6 +1,7 @@
 {
     "news": "News",
     "reviews": "Reviews",
+    "brandReviews": "Reviews",
     "phoneFinder": "Phone Finder",
     "brands": "Brands",
     "comparison": "Comparison",
@@ -54,7 +55,9 @@
     "September": "September",
     "Sept": "September",
     "October": "October",
+    "Oct": "October",
     "November": "November",
+    "Nov": "November",
     "December": "December",
     "Dec": "December"
 }

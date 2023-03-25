@@ -9,10 +9,7 @@ import SpecsTable from "./phoneSpecsTable";
 import SeeAlsoSection from "./seeAlsoSection";
 import { BookmarkIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/outline";
-import {
-  createBrowserSupabaseClient,
-  User,
-} from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import FavsAlert from "../alerts/addToFavsAlert";
 import FavSuccessMsg from "../alerts/addToFavsSuccess";

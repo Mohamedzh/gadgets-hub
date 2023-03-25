@@ -1,20 +1,12 @@
-import {
-  Category,
-  Phone,
-  PhoneQuickSpecs,
-  PhoneSpecs,
-  Spec,
-} from "@prisma/client";
+import { Phone } from "@prisma/client";
 import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import { ParsedUrlQuery } from "querystring";
 import React from "react";
 import Loading from "../../components/loading";
 import PhoneDetails from "../../components/phoneDetails/phoneDetails";
 import { prisma } from "../../lib/db";
-import { DetailedCategory, DetailedPhoneType } from "../../types";
+import { DetailedPhoneType } from "../../types";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import axios, { AxiosResponse } from "axios";
 import { getPhoneDetails } from "../../lib/phoneDetails";
 
 type Props = {
@@ -163,7 +155,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } catch (error) {
     console.log(error);
     return {
-      redirect: { destination: "/404", permanent: false },
+      redirect: { destination: "/500", permanent: false },
     };
   }
 };
