@@ -72,11 +72,10 @@ export type NewsType = {
 
 export type ReviewType = {
   title: string;
-  arTitle: string;
   link: string;
   imgUrl: string;
   reviewDate: string;
-  newReviewDate: number;
+  newReviewDate?: number;
   brandName?: string;
 };
 
