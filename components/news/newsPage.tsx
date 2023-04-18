@@ -48,6 +48,7 @@ function NewsPage({ news, arabicNews }: Props) {
             > */}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href={`https://www.gsmarena.com/${subject.link}`}
               className={`bg-white my-5 text-xl text-center pt-1 hover:bg-gray-700 hover:text-gray-50 text-gray-800 w-40 h-10 font-semibold rounded-lg self-center`}
             >
