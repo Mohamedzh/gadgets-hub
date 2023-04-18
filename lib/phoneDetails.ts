@@ -16,6 +16,8 @@ export const getPhoneDetails = async (phoneUrl: string) => {
   const chipset = $("div[data-spec=chipset-hl]").text();
   const battery_size = $(".accent-battery").text();
   const battery_type = $("div[data-spec=battype-hl]").text();
+  const releaseDate = $("span[data-spec=released-hl]").text().slice(9);
+  const os = $("span[data-spec=os-hl]").text();
 
   const quick_spec = [];
   quick_spec.push({ name: "Display size", value: display_size });
@@ -26,6 +28,8 @@ export const getPhoneDetails = async (phoneUrl: string) => {
   quick_spec.push({ name: "Chipset", value: chipset });
   quick_spec.push({ name: "Battery size", value: battery_size });
   quick_spec.push({ name: "Battery type", value: battery_type });
+  quick_spec.push({ name: "Release date", value: releaseDate });
+  quick_spec.push({ name: "OS", value: os });
 
   const title = $(".specs-phone-name-title").text();
 
@@ -45,7 +49,7 @@ export const getPhoneDetails = async (phoneUrl: string) => {
     );
   }
 
-  const urlImg = $(".specs-photo-main a").attr("href");
+  const urlImg = $(".specs-photo-main img").attr("src");
   const url = phoneUrl;
 
   const specNode = $("table");

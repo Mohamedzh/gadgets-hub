@@ -1,46 +1,59 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React from "react";
 import { useTranslation } from "next-i18next";
+import { NewsType } from "../../types";
+import { useRouter } from "next/router";
+import { englishLocale } from "../../lib/functions";
+import Image from "next/image";
 
 type Props = {
-  news: any[];
+  news: NewsType[];
+  arabicNews: NewsType[];
 };
 
-function NewsPage({ news }: Props) {
+function NewsPage({ news, arabicNews }: Props) {
   const { t } = useTranslation();
+  const router = useRouter();
   return (
     <div className="my-5 pt-5">
-      {news.map((subject, i) => (
+      {(englishLocale(router) ? news : arabicNews).map((subject, i) => (
         <div
           key={i}
-          className="grid grid-cols-3 my-5 pt-7 border-white rounded-lg border p-2"
+          className="grid grid-cols-3 my-5 py-7 border-white rounded-lg border p-2"
         >
-          <div className="col-span-3 lg:col-span-1 mx-3">
-            <img
-              className="lg:w-80 lg:h-80"
+          <div className="relative col-span-3 lg:col-span-1 mx-3">
+            <Image
+              layout="fill"
+              className="lg:w-80 lg:h-80 rounded-lg"
               src={subject.imgUrl}
-              alt={subject.alt}
+              alt={subject.imgAlt}
             />
           </div>
-          <div className="col-span-3 lg:col-span-1 flex-col flex text-white">
-            <p className="my-3 text-2xl">{subject.title}</p>
+          <div className="col-span-3 lg:col-span-2 flex-col flex justify-items-center text-white">
+            <p className="my-3 text-2xl text-center">{subject.title}</p>
             <div>{subject.body}</div>
-            <p className="self-end">{subject.newsDate}</p>
-            <Link
+            <p className="self-end">
+              {subject.newsDate
+                .split(" ")
+                .map((char) => {
+                  return t(char);
+                })
+                .join(" ")}
+            </p>
+            {/* <Link
               href={`news/${subject.link.slice(
                 0,
                 subject.link.indexOf(".php")
               )}`}
+            > */}
+            <a
+              target="_blank"
+              href={`https://www.gsmarena.com/${subject.link}`}
+              className={`bg-white my-5 text-xl text-center pt-1 hover:bg-gray-700 hover:text-gray-50 text-gray-800 w-40 h-10 font-semibold rounded-lg self-center`}
             >
-              <a
-                target="_blank"
-                // onClick={() => router.push(`https://www.gsmarena.com/${subject.link}`)}
-                className={`bg-white my-5 text-xl text-center pt-1 hover:bg-gray-700 hover:text-gray-50 text-gray-800 w-40 h-10 font-semibold rounded-lg self-center`}
-              >
-                {t("readMore")}
-              </a>
-            </Link>
+              {t("readMore")}
+            </a>
+            {/* </Link> */}
           </div>
         </div>
       ))}

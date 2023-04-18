@@ -1,34 +1,16 @@
-import { IncomingHttpHeaders } from 'http'
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { prisma } from '../../lib/db'
-import { DetailedPhone } from '../../types'
-
-type Data = {
-    phone?: DetailedPhone
-    error?: unknown
-    msg?: string
-}
-
-// interface ExtendedRequest extends IncomingHttpHeaders {
-//     phoneName: string
-// }
+import type { NextApiRequest, NextApiResponse } from "next";
+import { getPhoneDetails } from "../../lib/phoneDetails";
 
 export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse<Data>
+  req: NextApiRequest,
+  res: NextApiResponse
 ) {
-    try {
-        const { phoneName } = req.body
-        // const { phoneName } = req.headers as ExtendedRequest
+  try {
+    const { name } = req.query;
+    const current = await getPhoneDetails(name as string);
 
-        const phone = await prisma.phone.findFirst({ where: { name: phoneName }, include: { PhoneQuickSpecs: true, PhoneSpecs: { include: { spec: { include: { category: true } } } } } })
-        if (phone) {
-            res.status(200).json({ phone })
-        } else {
-            res.status(404).json({ msg: 'Phone not found' })
-        }
-    } catch (error) {
-        res.status(500).json({ error })
-    }
-
+    res.status(200).json({ phone: current });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
 }

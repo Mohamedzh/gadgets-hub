@@ -4,12 +4,15 @@ import NewsPage from "../../components/news/newsPage";
 import { getLatestNews } from "../../lib/cheerio";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { googleTranslator } from "../../lib/rapidAPITranslation";
+import { NewsType } from "../../types";
 
 type Props = {
-  news: any[];
+  news: NewsType[];
+  arabicNews: NewsType[];
 };
 
-function News({ news }: Props) {
+function News({ news, arabicNews }: Props) {
   const { t } = useTranslation();
 
   return (
@@ -22,7 +25,7 @@ function News({ news }: Props) {
       >
         <p className="mt-auto">{t("news")}</p>
       </div>
-      <NewsPage news={news} />
+      <NewsPage news={news} arabicNews={arabicNews} />
     </div>
   );
 }
@@ -31,9 +34,25 @@ export default News;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const news = await getLatestNews();
+  const arabicNews: NewsType[] = [];
+  const newsBody = news.map((item) => item.body);
+  const newsTitle = news.map((item) => item.title);
+  const translatedBody = await googleTranslator(newsBody);
+  const translatedTitle = await googleTranslator(newsTitle);
+  for (let i = 0; i < news.length; i++) {
+    arabicNews.push({
+      ...news[i],
+      title: translatedTitle[i].translatedText,
+      body: translatedBody[i].translatedText,
+    });
+  }
 
   return {
-    props: { ...(await serverSideTranslations(locale ? locale : "en")), news },
+    props: {
+      ...(await serverSideTranslations(locale ? locale : "en")),
+      news,
+      arabicNews,
+    },
     revalidate: 28800,
   };
 };

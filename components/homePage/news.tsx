@@ -2,18 +2,23 @@ import Link from "next/link";
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { NewsType } from "../../types";
+import { englishLocale } from "../../lib/functions";
+import { useRouter } from "next/router";
 
 type Props = {
   news: NewsType[];
+  arNews: NewsType[];
 };
 
-function News({ news }: Props) {
+function News({ news, arNews }: Props) {
   const { t } = useTranslation();
+  const router = useRouter();
+
   return (
     <div className="mb-10">
       <p className="text-4xl font-semibold m-3 text-white">{t("latestNews")}</p>
       <div className="grid grid-cols-2 lg:grid-cols-3">
-        {news.map((item, i) => (
+        {(englishLocale(router) ? news : arNews).map((item, i) => (
           <Link key={i} href={`https://gsmarena.com/${item.link}`}>
             <a target="_blank" className="m-3 flex flex-col">
               <img className="w-full" src={item.imgUrl} alt={item.imgAlt} />

@@ -1,12 +1,12 @@
-import { Review } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { englishLocale } from "../../lib/functions";
 import { useRouter } from "next/router";
+import { ReviewType } from "../../types";
 
 type Props = {
-  reviews: Review[];
+  reviews: ReviewType[];
 };
 
 function ReviewsPage({ reviews }: Props) {
@@ -26,7 +26,7 @@ function ReviewsPage({ reviews }: Props) {
               review.title.length > 35 ? "text-sm" : ""
             }`}
           >
-            {review.title}
+            {englishLocale(router) ? review.title : review.arTitle}
             <br></br> {review.title.length < 40 && <br></br>}
           </p>
           <p

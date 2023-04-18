@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { classNames } from "../../lib/functions";
 import Link from "next/link";
 import NewMenu from "./brandsMenu";
@@ -82,27 +82,34 @@ export default function Navbar() {
                   <div className="hidden lg:mx-6 lg:block">
                     <div className="flex space-x-4">
                       {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-                      {navMenu.map((nav, i) => (
-                        <Link key={i} href={nav.href}>
-                          <a
-                            className={`${
-                              nav.current
-                                ? "bg-gray-900 text-white"
-                                : "text-gray-300 hover:bg-gray-700 hover:text-white"
-                            } rounded-md ${
-                              nav.name !== "Brands" ? "px-3 py-2" : ""
-                            } text-sm font-medium text-white place-self-center`}
+                      {navMenu.map((nav, i) =>
+                        nav.name === "brands" ? (
+                          <div
+                            key={nav.name}
+                            className="rounded-md
+                          text-sm font-medium hover:bg-gray-700 text-white place-self-center"
                           >
-                            {nav.name !== "brands" && t(nav.name)}
-                            {nav.name === "brands" && <NewMenu nav={nav} />}
-                          </a>
-                        </Link>
-                      ))}
+                            <NewMenu nav={nav} />
+                          </div>
+                        ) : (
+                          <Link key={i} href={nav.href}>
+                            <a
+                              className={`${
+                                nav.current
+                                  ? "bg-gray-900 text-white"
+                                  : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                              } rounded-md px-3 py-2 text-sm font-medium text-white place-self-center`}
+                            >
+                              {t(nav.name)}
+                            </a>
+                          </Link>
+                        )
+                      )}
                     </div>
                   </div>
                 </div>
                 <div className="flex flex-1 justify-center px-2 lg:ml-6 lg:justify-between">
-                  <SearchBar/>
+                  <SearchBar />
                   <LanguageMenu />
                 </div>
                 <div className="flex lg:hidden">
@@ -118,15 +125,6 @@ export default function Navbar() {
                 </div>
                 <div className="hidden lg:ml-4 lg:block">
                   <div className="flex items-center">
-                    {/* <button
-                                            type="button"
-                                            className="flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                                        >
-                                            <span className="sr-only">View notifications</span>
-                                            <BellIcon className="h-6 w-6" aria-hidden="true" />
-                                        </button> */}
-
-                    {/* Profile dropdown */}
                     <Menu as="div" className="relative ml-4 flex-shrink-0">
                       <div>
                         <Login
@@ -145,11 +143,6 @@ export default function Navbar() {
                         {currentUser ? (
                           <Menu.Button className="flex rounded-full bg-gray-800 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span className="sr-only">Open user menu</span>
-                            {/* <img
-                                                            className="h-8 w-8 rounded-full"
-                                                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                            alt=""
-                                                        /> */}
                             <div className="flex flex-col px-2">
                               <p className="text-lg font-semibold">
                                 {currentUser.user_metadata.nickName}
@@ -248,13 +241,7 @@ export default function Navbar() {
                   </div>
                   <div className="border-t border-gray-700 pt-4 pb-3">
                     <div className="flex items-center px-5">
-                      <div className="flex-shrink-0">
-                        {/* <img
-                                            className="h-10 w-10 rounded-full"
-                                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                            alt=""
-                                        /> */}
-                      </div>
+                      <div className="flex-shrink-0"></div>
                       {currentUser !== null ? (
                         <div className="ml-3">
                           <div className="text-base font-medium text-white">
@@ -272,13 +259,6 @@ export default function Navbar() {
                           {/* <div className="text-sm font-medium text-gray-400">{user?.email}</div> */}
                         </div>
                       )}
-                      {/* <button
-                                        type="button"
-                                        className="ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                                    >
-                                        <span className="sr-only">View notifications</span>
-                                        <BellIcon className="h-6 w-6" aria-hidden="true" />
-                                    </button> */}
                     </div>
                     {currentUser ? (
                       <div className="mt-3 space-y-1 px-2">

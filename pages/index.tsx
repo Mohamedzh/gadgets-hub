@@ -11,13 +11,16 @@ import {
 import { NewsType, ReviewType } from "../types";
 import { Phone } from "@prisma/client";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { microsoftTranslator } from "../lib/rapidAPITranslation";
 
 const Home: NextPage = ({
   news,
+  arNews,
   reviews,
   latestPhones,
 }: {
   news?: NewsType[];
+  arNews?: NewsType[];
   reviews?: ReviewType[];
   latestPhones?: Phone[];
 }) => {
@@ -28,10 +31,10 @@ const Home: NextPage = ({
         <meta name="description" content="Mobile phone database" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {reviews && news && latestPhones && (
+      {reviews && news && latestPhones && arNews && (
         <div>
           <Slider reviews={reviews} news={news} latestPhones={latestPhones} />
-          <News news={news} />
+          <News news={news} arNews={arNews} />
         </div>
       )}
     </div>
@@ -41,24 +44,39 @@ const Home: NextPage = ({
 export default Home;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const latestPhones = await prisma.phone.findMany({
-    take: 5,
-    orderBy: { id: "desc" },
-  });
-  const news = await getLatestNews();
-  const latestNews = news.filter((item, i) => i < 6);
+  try {
+    const latestPhones = await prisma.phone.findMany({
+      take: 5,
+      orderBy: { id: "desc" },
+    });
+    const news = await getLatestNews();
+    const latestNews = news.filter((item, i) => i < 6);
+    const latestArNews: NewsType[] = [];
+    for (let x = 0; x < latestNews.length; x++) {
+      latestArNews.push({
+        ...latestNews[x],
+        title: await microsoftTranslator(latestNews[x].title),
+      });
+    }
 
-  const reviews = await getLatestReviews();
-  const latest = reviews.filter((subject, i) => i < 4);
-  const modified = await getLatestReviewsPics(latest);
+    const reviews = await getLatestReviews();
+    const latest = reviews.filter((subject, i) => i < 4);
+    const modified = await getLatestReviewsPics(latest);
 
-  return {
-    props: {
-      ...(await serverSideTranslations(locale ? locale : "en")),
-      news: latestNews,
-      reviews: modified,
-      latestPhones,
-    },
-    revalidate: 28800,
-  };
+    return {
+      props: {
+        ...(await serverSideTranslations(locale ? locale : "en")),
+        news: latestNews,
+        arNews: latestArNews,
+        reviews: modified,
+        latestPhones,
+      },
+      revalidate: 43200,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      redirect: { destination: "/500", permanent: false },
+    };
+  }
 };

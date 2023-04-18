@@ -72,9 +72,11 @@ export type NewsType = {
 
 export type ReviewType = {
   title: string;
+  arTitle: string;
   link: string;
   imgUrl: string;
   reviewDate: string;
+  newReviewDate: number;
   brandName?: string;
 };
 
@@ -134,4 +136,10 @@ export interface DetailedPhoneType {
   url: String;
   specDetails: SpecDetailType[];
   quickSpecs: SpecsType[];
+}
+
+export interface ComparePhoneType {
+  name: string;
+  imgUrl: string;
+  url: string;
 }

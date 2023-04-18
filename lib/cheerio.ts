@@ -2,6 +2,7 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import {
   BrandPhone,
+  NewsType,
   Page,
   PageData,
   PhoneSpec,
@@ -115,14 +116,14 @@ export const getLatestNews = async () => {
   let html = res.data;
   const $ = cheerio.load(html);
 
-  let allNews: any[] = [];
+  let allNews: NewsType[] = [];
   const news = $(".news-item");
   news.each((i, el) => {
     const title = $(el).find("h3").text();
     const body = $(el).find("p").text();
-    const link = $(el).find("a").attr("href");
-    const imgUrl = $(el).find("img").attr("src");
-    const imgAlt = $(el).find("img").attr("alt");
+    const link = $(el).find("a").attr("href") || "";
+    const imgUrl = $(el).find("img").attr("src") || "";
+    const imgAlt = $(el).find("img").attr("alt") || "";
     const newsDate = $(el).find(".meta-line").find("span").text();
     allNews.push({ title, body, link, imgUrl, imgAlt, newsDate });
   });

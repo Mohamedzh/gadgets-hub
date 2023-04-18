@@ -1,7 +1,7 @@
 import { Dispatch } from "@reduxjs/toolkit";
 import { useTranslation } from "next-i18next";
 import { addToComparison } from "../../redux/slices/compareSlice";
-import { DetailedPhone } from "../../types";
+import { DetailedPhoneType } from "../../types";
 
 const AddToComparison = ({
   dispatch,
@@ -9,7 +9,7 @@ const AddToComparison = ({
   setShow,
 }: {
   dispatch: Dispatch;
-  phone: DetailedPhone;
+  phone: DetailedPhoneType;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { t } = useTranslation();
@@ -17,7 +17,9 @@ const AddToComparison = ({
     <div className="mt-4 sm:mt-0 sm:flex-none">
       <button
         onClick={() => {
-          dispatch(addToComparison(phone));
+          dispatch(
+            addToComparison(phone)
+          );
           setShow(true);
         }}
         type="button"

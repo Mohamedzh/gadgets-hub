@@ -2,28 +2,31 @@ import React, { useEffect, useState } from "react";
 import { GetStaticProps } from "next";
 import { prisma } from "../../lib/db";
 import ReviewsPage from "../../components/reviews/reviewsPage";
-import { Review } from "@prisma/client";
 import Pagination from "../../components/reviews/reviewsPagination";
-import { getReviewDate } from "../../lib/functions";
+import { englishLocale, getReviewDate } from "../../lib/functions";
 import { getLatestReviews } from "../../lib/cheerio";
 import SearchBar from "../../components/reviews/reviewSearchBar";
 import _ from "lodash";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import axios from "axios";
+import { googleTranslator } from "../../lib/rapidAPITranslation";
+import { ReviewType } from "../../types";
+import { useRouter } from "next/router";
 
 type Props = {
-  reviews: Review[];
+  reviews: ReviewType[];
   brands: { name: string }[];
   count: number;
 };
 
 function Reviews({ reviews, brands, count }: Props) {
+  const router = useRouter();
   const { t } = useTranslation();
   const [page, setPage] = useState<number>(1);
   const [pageNo, setPageNo] = useState<number>(Math.ceil(count / 30));
 
-  const [currentReviews, setCurrentReviews] = useState<Review[]>(reviews);
+  const [currentReviews, setCurrentReviews] = useState<ReviewType[]>(reviews);
 
   const getCurrentRevs = async (page: number) => {
     const res = await axios.get(`/api/reviewsPage?page=${page}`);
@@ -42,7 +45,13 @@ function Reviews({ reviews, brands, count }: Props) {
         }}
         className="text-black flex bg-cover mx-5 lg:mx-10 h-48 lg:h-72 rounded-xl mt-10 p-5 lg:p-10 text-5xl lg:text-7xl font-bold font-serif"
       >
-        <p className="mt-auto text-gray-200">{t("reviewsTitle")}</p>
+        <p
+          className={`${
+            englishLocale(router) ? "text-gray-800" : "text-gray-200"
+          } mt-auto `}
+        >
+          {t("reviewsTitle")}
+        </p>
       </div>
       {reviews.length > 0 && (
         <div>
@@ -66,35 +75,48 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   let reviews;
   let brands;
 
-  brands = await prisma.brand.findMany({ select: { name: true } });
+  try {
+    brands = await prisma.brand.findMany({ select: { name: true } });
 
-  let latestReviews = await getLatestReviews();
-  await prisma.review.createMany({ data: latestReviews, skipDuplicates: true });
+    let latestReviews = await getLatestReviews();
+    await prisma.review.createMany({
+      data: latestReviews,
+      skipDuplicates: true,
+    });
 
-  reviews = await prisma.review.findMany({
-    orderBy: { id: "desc" },
-    take: 30,
-    select: { title: true, link: true, imgUrl: true, reviewDate: true },
-  });
+    reviews = await prisma.review.findMany({
+      orderBy: { id: "desc" },
+      take: 30,
+      select: { title: true, link: true, imgUrl: true, reviewDate: true },
+    });
+    const reviewTitles = reviews.map((review) => review.title);
+    const translatedTitle = await googleTranslator(reviewTitles);
 
-  reviews = reviews.map((review, i) => {
+    let arReviews: ReviewType[] = [];
+    for (let y = 0; y < reviews.length; y++) {
+      arReviews.push({
+        ...reviews[y],
+        newReviewDate: getReviewDate(reviews[y].reviewDate),
+        arTitle: translatedTitle[y].translatedText,
+      });
+    }
+
+    const count = await prisma.review.aggregate({
+      _count: { id: true },
+    });
+
     return {
-      ...review,
-      newReviewDate: getReviewDate(review.reviewDate),
+      props: {
+        ...(await serverSideTranslations(locale ? locale : "en")),
+        reviews: arReviews,
+        count: count._count.id,
+        brands,
+      },
+      revalidate: 86400,
     };
-  });
-
-  const count = await prisma.review.aggregate({
-    _count: { id: true },
-  });
-
-  return {
-    props: {
-      ...(await serverSideTranslations(locale ? locale : "en")),
-      reviews,
-      count: count._count.id,
-      brands,
-    },
-    revalidate: 86400,
-  };
+  } catch (error) {
+    return {
+      redirect: { destination: "/500", permanent: false },
+    };
+  }
 };

@@ -3,12 +3,10 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import AddToComparison from "./addToComparisonBtn";
 import { useAppSelector } from "../../redux/hooks";
-import { DetailedPhone, DetailedPhoneType } from "../../types";
+import { DetailedPhoneType } from "../../types";
 import Alert from "../alerts/addPhoneAlert";
 import SpecsTable from "./phoneSpecsTable";
 import SeeAlsoSection from "./seeAlsoSection";
-import { BookmarkIcon } from "@heroicons/react/24/outline";
-import { StarIcon } from "@heroicons/react/24/outline";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import FavsAlert from "../alerts/addToFavsAlert";
@@ -17,12 +15,11 @@ import axios from "axios";
 import { useTranslation } from "next-i18next";
 
 type Props = {
-  currentPhone?: DetailedPhone;
   otherPhones: Phone[];
   current: DetailedPhoneType;
 };
 
-function PhoneDetails({ currentPhone, otherPhones, current }: Props) {
+function PhoneDetails({  otherPhones, current }: Props) {
   const { t } = useTranslation();
   const [supabaseClient] = useState(() => createBrowserSupabaseClient());
   const user = useUser();
@@ -97,12 +94,12 @@ function PhoneDetails({ currentPhone, otherPhones, current }: Props) {
                   </svg>
                 </button>
                 {/* <StarIcon className='w-10 h-10 mx-3 bg-white flex' /> */}
-                {currentPhone &&
+                {
                   !comparedPhones.find((phone) => phone.url === current.url) &&
                   comparedPhones.length < 4 && (
                     <AddToComparison
                       dispatch={dispatch}
-                      phone={currentPhone}
+                      phone={current}
                       setShow={setShow}
                     />
                   )}

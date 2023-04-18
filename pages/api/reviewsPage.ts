@@ -1,5 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../lib/db";
+import { googleTranslator } from "../../lib/rapidAPITranslation";
+import { ReviewType } from "../../types";
+import { getReviewDate } from "../../lib/functions";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,7 +16,18 @@ export default async function handler(
       take: 30,
       select: { title: true, link: true, imgUrl: true, reviewDate: true },
     });
-    return res.status(200).send(currentReviews);
+    const reviewTitles = currentReviews.map((review) => review.title);
+    const translatedTitle = await googleTranslator(reviewTitles);
+
+    let arReviews: ReviewType[] = [];
+    for (let y = 0; y < currentReviews.length; y++) {
+      arReviews.push({
+        ...currentReviews[y],
+        newReviewDate: getReviewDate(currentReviews[y].reviewDate),
+        arTitle: translatedTitle[y].translatedText,
+      });
+    }
+    return res.status(200).send(arReviews);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

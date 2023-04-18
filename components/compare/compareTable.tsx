@@ -1,14 +1,18 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { AddButton, classNames } from "../../lib/functions";
+import { classNames } from "../../lib/functions";
 import { useAppSelector } from "../../redux/hooks";
-import { ArCategory, ArQuickSpec, DetailedCategory } from "../../types";
-import { IoMdCloseCircle } from "react-icons/io";
+import {
+  ArCategory,
+  ArQuickSpec,
+  DetailedPhoneType,
+  SpecDetailType,
+  SpecsType,
+} from "../../types";
 import { useDispatch } from "react-redux";
 import { removeFromComparison } from "../../redux/slices/compareSlice";
 import { AiOutlineMinusCircle } from "react-icons/ai";
 import Link from "next/link";
 import CompareSearchBar from "./comparePhonesSearchBar";
-import { PhoneQuickSpecs } from "@prisma/client";
 import { englishLocale } from "../../lib/functions";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
@@ -23,10 +27,28 @@ function CompareTable({ categories, quickSpecs }: Props) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const comparePhones = useAppSelector((state) => state.compare);
-  const [currentPhones, setCurrentPhones] = useState(comparePhones);
+  const [currentPhones, setCurrentPhones] =
+    useState<DetailedPhoneType[]>(comparePhones);
+
+  const [detailedSpecs, setDetailedSpecs] = useState<SpecDetailType[]>([]);
+
+  const [phonesQuickSpecs, setQuickSpecs] = useState<SpecsType[]>([]);
+
+  const setCurrentQuickSpecs = () => {
+    for (let y = 0; y < currentPhones.length; y++) {
+      if (currentPhones[y].quickSpecs.length > phonesQuickSpecs.length) {
+        setQuickSpecs(currentPhones[y].quickSpecs);
+      }
+      for (let z = 0; z < currentPhones[y].specDetails.length; z++) {}
+      if (currentPhones[y].specDetails.length > phonesQuickSpecs.length) {
+        setDetailedSpecs(currentPhones[y].specDetails);
+      }
+    }
+  };
 
   useEffect(() => {
     setCurrentPhones(comparePhones);
+    setCurrentQuickSpecs();
   }, [comparePhones]);
 
   const setTableColumns = (length: number) => {
@@ -44,12 +66,7 @@ function CompareTable({ categories, quickSpecs }: Props) {
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          {/* <h1 className="text-xl font-semibold text-gray-900">{currentPhone.name}</h1> */}
-          {/* <p className="mt-2 text-sm text-gray-700">
-                        A list of all the users in your account including their name, title, email and role.
-                    </p> */}
-        </div>
+        <div className="sm:flex-auto"></div>
       </div>
       <div
         // style={{ maxHeight: '84vh' }}
@@ -58,7 +75,14 @@ function CompareTable({ categories, quickSpecs }: Props) {
         <div className="-my-2 -mx-4 lg:overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
             <div className="shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-              <table className="lg:min-w-full overflow-scroll mb-10">
+              <table
+                style={{
+                  borderCollapse: "collapse",
+                  width: "100%",
+                  tableLayout: "fixed",
+                }}
+                className="lg:min-w-full overflow-scroll mb-10 border-2"
+              >
                 <thead className="bg-gray-300 sticky top-0 z-40">
                   <tr>
                     <th
@@ -80,18 +104,13 @@ function CompareTable({ categories, quickSpecs }: Props) {
                             }
                             className="w-8 h-8 self-end cursor-pointer hover:scale-125 ring-red-500 text-bold text-red-500 rounded-full"
                           />
-                          <Link href={`/${phone.name}`}>
+                          <Link href={`/${phone.url}`}>
                             <a>
                               <img
                                 className="mb-3 h-32 mx-auto"
-                                src={phone.imgUrl}
+                                src={phone.urlImg}
                               />
-                              <p>
-                                {phone.description.slice(
-                                  0,
-                                  phone.description.indexOf(".")
-                                )}
-                              </p>
+                              <p>{phone.title}</p>
                             </a>
                           </Link>
                         </div>
@@ -123,7 +142,9 @@ function CompareTable({ categories, quickSpecs }: Props) {
                       <tr
                         className={classNames(
                           i === 0 ? "border-gray-300" : "border-gray-200",
-                          "border-t divide-x-2"
+                          `border-t ${
+                            englishLocale(router) ? "" : "divide-x-reverse"
+                          } divide-x-2`
                         )}
                       >
                         <td className=" py-4 pl-4 pr-3 text-sm font-medium text-yellow-400 text-center sm:pl-6">
@@ -134,15 +155,15 @@ function CompareTable({ categories, quickSpecs }: Props) {
                             key={i}
                             className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-300 sm:pl-6 text-center"
                           >
-                            {phone.PhoneQuickSpecs.find(
-                              (x) => x.quickspecName === quickSpec.name
+                            {phone.quickSpecs.find(
+                              (x) => x.name === quickSpec.name
                             )?.value || "NA"}
                           </td>
                         ))}
                         {Array.from(
                           Array(setTableColumns(currentPhones.length)).keys()
                         ).map((item, i) => (
-                          <th key={i}></th>
+                          <td key={i}></td>
                         ))}
                       </tr>
                     </Fragment>
@@ -187,9 +208,11 @@ function CompareTable({ categories, quickSpecs }: Props) {
                               key={index}
                               className=" py-4 pl-4 pr-3 text-sm font-medium text-gray-100 sm:pl-6 text-center"
                             >
-                              {phone.PhoneSpecs.find(
-                                (x) => x.spec.alias === spec.alias
-                              )?.value || "NA"}
+                              {phone.specDetails
+                                .find((item) => item.category === category.name)
+                                ?.specs.find(
+                                  (subItem) => subItem.name === spec.name
+                                )?.value || "-"}
                             </td>
                           ))}
                           {Array.from(

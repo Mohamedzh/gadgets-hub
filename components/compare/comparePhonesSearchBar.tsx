@@ -7,6 +7,7 @@ import { addToComparison } from "../../redux/slices/compareSlice";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import { searchPhones } from "../../lib/api";
+import { ComparePhoneType } from "../../types";
 
 export default function SearchBar({ i }: { i: number }) {
   const { t } = useTranslation();
@@ -17,8 +18,8 @@ export default function SearchBar({ i }: { i: number }) {
     { name: string; url: string; imgUrl: string }[]
   >([]);
 
-  const getComparePhone = async (phoneName: string) => {
-    const res = await axios.post("/api/phone", { phoneName });
+  const getComparePhone = async (url: string) => {
+    const res = await axios.get(`/api/phone?name=${url}`);
     let current = res.data.phone;
     dispatch(addToComparison(current));
   };
@@ -70,7 +71,7 @@ export default function SearchBar({ i }: { i: number }) {
                 {({ active, selected }) => (
                   <>
                     <button
-                      onClick={() => getComparePhone(phone.name)}
+                      onClick={() => getComparePhone(phone.url)}
                       className="flex items-center"
                     >
                       <img

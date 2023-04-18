@@ -7,12 +7,12 @@ export default async function handler(
 ) {
   try {
     const { name } = req.query;
-    const currentReviews = await prisma.phone.findMany({
-      where: { name: { contains: name as string, mode:"insensitive" } },
+    const currentPhones = await prisma.phone.findMany({
+      where: { name: { contains: name as string, mode: "insensitive" } },
       take: 4,
       select: { name: true, url: true, imgUrl: true },
     });
-    return res.status(200).send(currentReviews);
+    return res.status(200).send(currentPhones);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

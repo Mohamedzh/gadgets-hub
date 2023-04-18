@@ -1,5 +1,5 @@
 import { Phone } from "@prisma/client";
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 import Loading from "../../components/loading";
@@ -10,24 +10,18 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getPhoneDetails } from "../../lib/phoneDetails";
 
 type Props = {
-  currentPhone?: any;
   otherPhones: Phone[];
-  currentNew: DetailedPhoneType;
+  current: DetailedPhoneType;
 };
 
-function Index({ currentPhone, otherPhones, currentNew }: Props) {
+function Index({ otherPhones, current }: Props) {
   const router = useRouter();
-
   if (router.isFallback) {
     return <Loading />;
   }
   return (
     <div>
-      <PhoneDetails
-        current={currentNew}
-        currentPhone={currentPhone}
-        otherPhones={otherPhones}
-      />
+      <PhoneDetails current={current} otherPhones={otherPhones} />
     </div>
   );
 }
@@ -125,10 +119,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!currentPhone) {
       return { notFound: true };
     }
-    console.log(currentPhone);
     setTimeout(() => {}, 2000);
     const current = await getPhoneDetails(currentPhone.url);
-    console.log(current);
     // newPhone = newPhone.slice(0, 1).toUpperCase() + params?.phone?.slice(1)
     if (!currentPhone) {
       return { notFound: true };
@@ -149,7 +141,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         phone: context.params?.phone,
         currentPhone,
         otherPhones,
-        currentNew: current,
+        current,
       },
     };
   } catch (error) {

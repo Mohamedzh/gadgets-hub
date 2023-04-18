@@ -1,12 +1,7 @@
-import { Category } from "@prisma/client";
 import { Fragment } from "react";
 import { useTranslation } from "next-i18next";
-import {
-  classNames,
-  createPhoneData,
-  englishLocale,
-} from "../../lib/functions";
-import { DetailedPhone, DetailedPhoneType } from "../../types";
+import { classNames, englishLocale } from "../../lib/functions";
+import { DetailedPhoneType } from "../../types";
 import { useRouter } from "next/router";
 
 export default function SpecsTable({
