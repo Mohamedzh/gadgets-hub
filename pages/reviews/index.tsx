@@ -79,6 +79,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
     brands = await prisma.brand.findMany({ select: { name: true } });
 
     let latestReviews = await getLatestReviews();
+    console.log(latestReviews)
     await prisma.review.createMany({
       data: latestReviews,
       skipDuplicates: true,
@@ -115,6 +116,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
       revalidate: 86400,
     };
   } catch (error) {
+    console.log(error)
     return {
       redirect: { destination: "/500", permanent: false },
     };

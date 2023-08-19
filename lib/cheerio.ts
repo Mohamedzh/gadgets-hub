@@ -167,7 +167,7 @@ export const getLatestReviews = async () => {
         link,
         imgUrl,
         reviewDate,
-        brandName: brandName || "",
+        brandName: brandName || undefined,
       });
   });
   return newReviews;
