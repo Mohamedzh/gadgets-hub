@@ -11,6 +11,18 @@ const nextConfig = {
         protocol: "https",
         hostname: "fdn.gsmarena.com/**",
       },
+      {
+        protocol: "https",
+        hostname: "m-cdn.phonearena.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "fdn2.gsmarena.com",
+      },
     ],
   },
 };

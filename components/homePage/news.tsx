@@ -4,6 +4,7 @@ import { useTranslation } from "next-i18next";
 import { NewsType } from "../../types";
 import { englishLocale } from "../../lib/functions";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 type Props = {
   news: NewsType[];
@@ -21,7 +22,14 @@ function News({ news, arNews }: Props) {
         {(englishLocale(router) ? news : arNews).map((item, i) => (
           <Link key={i} href={`https://gsmarena.com/${item.link}`}>
             <a target="_blank" className="m-3 flex flex-col">
-              <img className="w-full" src={item.imgUrl} alt={item.imgAlt} />
+              <div className="relative">
+                <Image
+                  width={400}
+                  height={300}
+                  src={item.imgUrl}
+                  alt={item.imgAlt}
+                />
+              </div>
               <div className="text-white text-sm lg:text-base">
                 {item.title} <br></br> {item.title.length < 45 && <br></br>}
               </div>

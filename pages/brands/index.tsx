@@ -130,6 +130,28 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
     toBeRecordedPhones.push(phone);
   }
 
+  toBeRecordedPhones.forEach(async (phone) => {
+    const brand = await prisma.brand.findFirst({
+      where: { name: phone.brandName },
+    });
+    if (!brand) {
+      const res = await axios.get("https://www.gsmarena.com/" + phone.url + ".php");
+      const $ = cheerio.load(res.data);
+      const brandLink = $("p.more a.more-news-link")
+        .attr("href")
+        ?.replace(".php", "");
+        console.log(brandLink)
+      await prisma.brand.create({
+        data: {
+          name: phone.brandName,
+          arabicName: phone.brandName,
+          gsmArenaUrl: brandLink as string,
+          phonesNum: 1,
+        },
+      });
+    }
+  });
+
   await prisma.phone.createMany({
     data: toBeRecordedPhones,
     skipDuplicates: true,

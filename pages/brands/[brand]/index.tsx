@@ -36,6 +36,7 @@ function PhoneDetails({
 export default PhoneDetails;
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
+  console.log("brands")
   const brands = await prisma.brand.findMany({ select: { name: true } });
   let paths = [];
   if (locales) {

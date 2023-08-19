@@ -61,5 +61,9 @@
     "December": "December",
     "Dec": "December",
     "long-term": "long-term",
-    "hands-on": "hands-on"
+    "hands-on": "hands-on",
+    "APPLE": "Apple",
+    "SAMSUNG": "Samsung",
+    "XIAOMI": "Xiaomi",
+    "ONE_PLUS": "OnePlus"
 }
