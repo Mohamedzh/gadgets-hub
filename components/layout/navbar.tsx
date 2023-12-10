@@ -17,6 +17,7 @@ import LanguageMenu from "./languageMenu";
 import { useTranslation } from "next-i18next";
 import { profileMenu } from "../../lib/data";
 import SearchBar from "../searchBar";
+import Image from "next/image";
 
 export default function Navbar() {
   const [supabaseClient] = useState(() => createBrowserSupabaseClient());
@@ -55,11 +56,12 @@ export default function Navbar() {
                 <div className="flex items-center px-2 lg:px-0">
                   <div className="flex-shrink-0">
                     <Link href="/">
-                      <a>
-                        <img
-                          className="block h-8 w-auto lg:hidden"
+                      <a className="relative h-8 w-auto lg:hidden">
+                        <Image
+                          className="block"
                           src="/mobileLogo.png"
-                          alt="Your Company"
+                          alt="Gadgets Hub"
+                          layout="fill"
                         />
                         <p className="lg:hidden text-sm text-gray-200 font-mono font-semibold">
                           Gadgets Hub
@@ -67,11 +69,12 @@ export default function Navbar() {
                       </a>
                     </Link>
                     <Link href="/">
-                      <a>
-                        <img
-                          className="hidden h-8 w-auto lg:block"
+                      <a className="relative hidden h-8 w-auto lg:block">
+                        <Image
+                          className=""
                           src="/mobileLogo.png"
-                          alt="Your Company"
+                          alt="Gadgets Hub"
+                          layout="fill"
                         />
                         <p className="hidden lg:block text-gray-200 font-mono font-semibold">
                           Gadgets Hub
@@ -98,7 +101,7 @@ export default function Navbar() {
                                 nav.current
                                   ? "bg-gray-900 text-white"
                                   : "text-gray-300 hover:bg-gray-700 hover:text-white"
-                              } rounded-md px-3 py-2 text-sm font-medium text-white place-self-center`}
+                              } rounded-md px-3 py-2 text-sm text-center font-medium text-white place-self-center`}
                             >
                               {t(nav.name)}
                             </a>

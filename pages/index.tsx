@@ -12,6 +12,7 @@ import { NewsType, ReviewType } from "../types";
 import { Phone } from "@prisma/client";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { microsoftTranslator } from "../lib/rapidAPITranslation";
+import { translate } from "@vitalets/google-translate-api";
 
 const Home: NextPage = ({
   news,
@@ -49,6 +50,10 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
       take: 5,
       orderBy: { id: "desc" },
     });
+    ///
+    const { text } = await translate("Привет, мир! Как дела?", { to: "en" });
+    console.log(text);
+    ///
     const news = await getLatestNews();
     const latestNews = news.filter((item, i) => i < 6);
     const latestArNews: NewsType[] = [];

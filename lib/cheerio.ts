@@ -159,6 +159,10 @@ export const getLatestReviews = async () => {
       brandName = "vivo";
     } else if (extractedBrand === "nubia") {
       brandName = "zte";
+    } else if (extractedBrand === "redmi") {
+      brandName = "xiaomi";
+    } else {
+      brandName = extractedBrand;
     }
     link &&
       imgUrl &&

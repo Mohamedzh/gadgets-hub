@@ -79,7 +79,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
     brands = await prisma.brand.findMany({ select: { name: true } });
 
     let latestReviews = await getLatestReviews();
-    console.log(latestReviews)
     await prisma.review.createMany({
       data: latestReviews,
       skipDuplicates: true,
