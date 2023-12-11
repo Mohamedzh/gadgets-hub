@@ -56,27 +56,31 @@ export default function Navbar() {
                 <div className="flex items-center px-2 lg:px-0">
                   <div className="flex-shrink-0">
                     <Link href="/">
-                      <a className="relative h-8 w-auto lg:hidden">
-                        <Image
-                          className="block"
-                          src="/mobileLogo.png"
-                          alt="Gadgets Hub"
-                          layout="fill"
-                        />
+                      <a className="block lg:hidden">
+                        <div className="relative h-8 w-auto">
+                          <Image
+                            className="block"
+                            src="/mobileLogo.png"
+                            alt="Gadgets Hub"
+                            layout="fill"
+                          />
+                        </div>
                         <p className="lg:hidden text-sm text-gray-200 font-mono font-semibold">
                           Gadgets Hub
                         </p>
                       </a>
                     </Link>
                     <Link href="/">
-                      <a className="relative hidden h-8 w-auto lg:block">
-                        <Image
-                          className=""
-                          src="/mobileLogo.png"
-                          alt="Gadgets Hub"
-                          layout="fill"
-                        />
-                        <p className="hidden lg:block text-gray-200 font-mono font-semibold">
+                      <a className="hidden lg:block">
+                        <div className="relative h-8 w-auto">
+                          <Image
+                            className=""
+                            src="/mobileLogo.png"
+                            alt="Gadgets Hub"
+                            layout="fill"
+                          />
+                        </div>
+                        <p className="text-gray-200 font-mono font-semibold">
                           Gadgets Hub
                         </p>
                       </a>
@@ -302,7 +306,7 @@ export default function Navbar() {
                         }}
                         className=" p-2 font-semibold text-white hover:text-blue-600 ml-3"
                       >
-                        t({"loginSignUp"}){" "}
+                        {t("loginSignUp")}{" "}
                       </button>
                     )}
                   </div>

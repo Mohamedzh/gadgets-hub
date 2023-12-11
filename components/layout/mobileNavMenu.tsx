@@ -32,11 +32,11 @@ function MobileNavMenu({ item, close }: Props) {
               as="button"
               className="flex rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white w-full text-left"
             >
+              {t(item.name)}
               <ChevronDownIcon
-                className="ml-2 -mr-1 h-5 w-5 text-violet-200 hover:text-violet-100"
+                className="ms-2 -mr-1 h-7 w-7 text-violet-200 hover:text-violet-100"
                 aria-hidden="true"
               />
-              {t(item.name)}
             </Disclosure.Button>
           }
 
