@@ -87,7 +87,7 @@ export default function Navbar() {
                     </Link>
                   </div>
                   <div className="hidden lg:mx-6 lg:block">
-                    <div className="flex space-x-4">
+                    <div className="flex gap-x-4">
                       {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
                       {navMenu.map((nav, i) =>
                         nav.name === "brands" ? (
@@ -105,7 +105,7 @@ export default function Navbar() {
                                 nav.current
                                   ? "bg-gray-900 text-white"
                                   : "text-gray-300 hover:bg-gray-700 hover:text-white"
-                              } rounded-md px-3 py-2 text-sm text-center font-medium text-white place-self-center`}
+                              } rounded-md px-3 py-2 text-sm text-center font-medium text-white place-self-center min-w-[80px]`}
                             >
                               {t(nav.name)}
                             </a>
@@ -115,7 +115,7 @@ export default function Navbar() {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-1 justify-center px-2 lg:ml-6 lg:justify-between">
+                <div className={`flex flex-1 justify-center px-2 ${router.locale === "en" ? "lg:ml-6" : "lg:mr-6" } lg:ml-6 lg:justify-between`}>
                   <SearchBar />
                   <LanguageMenu />
                 </div>

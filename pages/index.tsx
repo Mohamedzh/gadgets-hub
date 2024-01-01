@@ -51,8 +51,8 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
       orderBy: { id: "desc" },
     });
     ///
-    const { text } = await translate("Привет, мир! Как дела?", { to: "en" });
-    console.log(text);
+    // const { text } = await translate("Привет, мир! Как дела?", { to: "en" });
+    // console.log(text);
     ///
     const news = await getLatestNews();
     const latestNews = news.filter((item, i) => i < 6);
