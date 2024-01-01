@@ -162,7 +162,7 @@ export const getLatestReviews = async () => {
     } else if (extractedBrand === "redmi") {
       brandName = "xiaomi";
     } else {
-      brandName = extractedBrand;
+      brandName = undefined;
     }
     link &&
       imgUrl &&
