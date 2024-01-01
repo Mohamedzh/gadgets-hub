@@ -1,4 +1,5 @@
 import axios from "axios";
+import { translate } from "@vitalets/google-translate-api";
 
 export const microsoftTranslator = async (text: string) => {
   let translatedText = [];
@@ -48,4 +49,9 @@ export const googleTranslator = async (arr: string[]) => {
   const translatedText = res.data;
 
   return translatedText.data.translations;
+};
+
+export const googleTranslateApi = async (subject: string) => {
+  const { text } = await translate(subject, { to: "ar" });
+  return text;
 };

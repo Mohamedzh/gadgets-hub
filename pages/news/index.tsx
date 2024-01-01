@@ -4,7 +4,10 @@ import NewsPage from "../../components/news/newsPage";
 import { getLatestNews } from "../../lib/cheerio";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { googleTranslator } from "../../lib/rapidAPITranslation";
+import {
+  googleTranslateApi,
+  googleTranslator,
+} from "../../lib/rapidAPITranslation";
 import { NewsType } from "../../types";
 
 type Props = {
@@ -42,6 +45,8 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   for (let i = 0; i < news.length; i++) {
     arabicNews.push({
       ...news[i],
+      // title: await googleTranslateApi(news[i].title),
+      // body: await googleTranslateApi(news[i].body),
       title: translatedTitle[i].translatedText,
       body: translatedBody[i].translatedText,
     });
