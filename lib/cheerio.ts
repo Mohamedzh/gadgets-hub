@@ -161,8 +161,14 @@ export const getLatestReviews = async () => {
       brandName = "zte";
     } else if (extractedBrand === "redmi") {
       brandName = "xiaomi";
+    } else if (extractedBrand === "moto") {
+      brandName = "motorola";
+    } else if (extractedBrand === "galaxy") {
+      brandName = "samsung";
+    } else if (extractedBrand === "iphone") {
+      brandName = "apple";
     } else {
-      brandName = undefined;
+      brandName = "other";
     }
     link &&
       imgUrl &&
@@ -171,7 +177,7 @@ export const getLatestReviews = async () => {
         link,
         imgUrl,
         reviewDate,
-        brandName: brandName || undefined,
+        brandName,
       });
   });
   return newReviews;
