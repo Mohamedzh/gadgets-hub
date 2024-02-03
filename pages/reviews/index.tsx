@@ -10,7 +10,7 @@ import _ from "lodash";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import axios from "axios";
-import { googleTranslator } from "../../lib/rapidAPITranslation";
+import { googleTranslateApiArray } from "../../lib/translationsAPI";
 import { ReviewType } from "../../types";
 import { useRouter } from "next/router";
 
@@ -90,14 +90,14 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
       select: { title: true, link: true, imgUrl: true, reviewDate: true },
     });
     const reviewTitles = reviews.map((review) => review.title);
-    const translatedTitle = await googleTranslator(reviewTitles);
+    const translatedTitle = await googleTranslateApiArray(reviewTitles);
 
     let arReviews: ReviewType[] = [];
     for (let y = 0; y < reviews.length; y++) {
       arReviews.push({
         ...reviews[y],
         newReviewDate: getReviewDate(reviews[y].reviewDate),
-        arTitle: translatedTitle[y].translatedText,
+        arTitle: translatedTitle[y],
       });
     }
 
@@ -112,7 +112,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
         count: count._count.id,
         brands,
       },
-      revalidate: 86400,
+      revalidate: 172800,
     };
   } catch (error) {
     console.log(error)

@@ -4,10 +4,7 @@ import NewsPage from "../../components/news/newsPage";
 import { getLatestNews } from "../../lib/cheerio";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import {
-  googleTranslateApi,
-  googleTranslator,
-} from "../../lib/rapidAPITranslation";
+import { googleTranslateApiArray } from "../../lib/translationsAPI";
 import { NewsType } from "../../types";
 
 type Props = {
@@ -40,15 +37,15 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const arabicNews: NewsType[] = [];
   const newsBody = news.map((item) => item.body);
   const newsTitle = news.map((item) => item.title);
-  const translatedBody = await googleTranslator(newsBody);
-  const translatedTitle = await googleTranslator(newsTitle);
+  const translatedBody = await googleTranslateApiArray(newsBody);
+  const translatedTitle = await googleTranslateApiArray(newsTitle);
   for (let i = 0; i < news.length; i++) {
     arabicNews.push({
       ...news[i],
       // title: await googleTranslateApi(news[i].title),
       // body: await googleTranslateApi(news[i].body),
-      title: translatedTitle[i].translatedText,
-      body: translatedBody[i].translatedText,
+      title: translatedTitle[i],
+      body: translatedBody[i],
     });
   }
 
@@ -58,6 +55,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
       news,
       arabicNews,
     },
-    revalidate: 28800,
+    revalidate: 86400,
   };
 };

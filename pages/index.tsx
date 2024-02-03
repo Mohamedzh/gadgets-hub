@@ -11,7 +11,7 @@ import {
 import { NewsType, ReviewType } from "../types";
 import { Phone } from "@prisma/client";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { microsoftTranslator } from "../lib/rapidAPITranslation";
+import { googleTranslateApi } from "../lib/translationsAPI";
 import { translate } from "@vitalets/google-translate-api";
 
 const Home: NextPage = ({
@@ -60,7 +60,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
     for (let x = 0; x < latestNews.length; x++) {
       latestArNews.push({
         ...latestNews[x],
-        title: await microsoftTranslator(latestNews[x].title),
+        title: await googleTranslateApi(latestNews[x].title),
       });
     }
 
@@ -76,7 +76,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
         reviews: modified,
         latestPhones,
       },
-      revalidate: 43200,
+      revalidate: 86400,
     };
   } catch (error) {
     console.log(error);
